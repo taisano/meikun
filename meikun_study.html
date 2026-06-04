@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>明訓中学 合格への道</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;background:#f5f5f0;color:#1a1a1a;font-size:16px;-webkit-text-size-adjust:100%}
+#apiModal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
+.apiBox{background:#fff;border-radius:16px;padding:24px;max-width:400px;width:100%}
+.apiBox h2{font-size:18px;margin-bottom:8px;color:#04342C}
+.apiBox p{font-size:13px;color:#666;margin-bottom:16px;line-height:1.6}
+.apiBox input{width:100%;border:1px solid #ccc;border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:12px}
+.apiBox button{width:100%;padding:12px;background:#1D9E75;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}
+#app{max-width:680px;margin:0 auto;padding:12px}
+.hero{background:#04342C;border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.cdowns{display:flex;gap:6px}
+.cd2{background:#0F6E56;border-radius:10px;padding:8px 10px;text-align:center;min-width:62px}
+.cd2.b{background:#3C3489}
+.cd2 .n{font-size:24px;font-weight:700;color:#9FE1CB;display:block;line-height:1}
+.cd2 .l{font-size:10px;color:#5DCAA5;margin-top:2px}
+.cd2.b .n,.cd2.b .l{color:#CECBF6}
+.hero-t h1{font-size:16px;font-weight:700;color:#9FE1CB}
+.hero-t p{font-size:12px;color:#5DCAA5;margin-top:3px}
+.tabs{display:flex;overflow-x:auto;background:#fff;border-radius:12px;margin-bottom:14px;padding:4px;gap:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:8px 14px;font-size:13px;cursor:pointer;border:none;border-radius:9px;background:none;color:#666;white-space:nowrap;flex-shrink:0;font-weight:500;transition:all .15s}
+.tab.on{background:#1D9E75;color:#fff}
+.sec{display:none}.sec.on{display:block}
+.card{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.ctitle{font-size:13px;font-weight:600;color:#555;margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.ba{background:#E1F5EE;color:#085041}.bb{background:#EEEDFE;color:#26215C}.bc{background:#FAEEDA;color:#412402}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.sc{background:#f0f8f5;border-radius:10px;padding:10px 6px;text-align:center}
+.sc .v{font-size:20px;font-weight:700;color:#1D9E75}
+.sc .l{font-size:10px;color:#666;margin-top:2px}
+.cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:10px}
+.ch{font-size:10px;color:#999;text-align:center;padding:3px 0;font-weight:600}
+.cday{aspect-ratio:1;border-radius:7px;border:1px solid #e8e8e8;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#999;background:#fff;cursor:pointer;transition:all .1s;-webkit-tap-highlight-color:transparent}
+.cday:active{transform:scale(.95)}
+.cday.today{border-color:#1D9E75;color:#1D9E75;font-weight:700;border-width:2px}
+.cday.done{background:#E1F5EE;border-color:#1D9E75}
+.cday.done::after{content:'⭐';font-size:12px;display:block}
+.cday.done .dn{font-size:9px;color:#085041}
+.cday.xa{border-color:#E24B4A;background:#fff0f0}
+.cday.xb{border-color:#534AB7;background:#f0efff}
+.cday.ex{border:none;background:none;cursor:default}
+.stbtn{display:block;width:100%;padding:14px;background:#1D9E75;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;margin-bottom:8px;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.stbtn:active{background:#085041}
+.stbtn:disabled{background:#ccc;cursor:default}
+.monnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.monnav span{font-size:15px;font-weight:700;color:#1a1a1a}
+.bp{padding:12px 18px;background:#1D9E75;color:#fff;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.bp:active{background:#085041}
+.bp:disabled{opacity:.5;cursor:not-allowed}
+.bs{padding:12px 18px;background:#fff;color:#1D9E75;border:1.5px solid #1D9E75;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600}
+.bpurp{padding:12px 18px;background:#534AB7;color:#fff;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600;transition:background .15s}
+.bpurp:active{background:#3C3489}
+.bpurp:disabled{opacity:.5}
+.bamb{padding:12px 18px;background:#BA7517;color:#fff;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600}
+.brow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.ta{width:100%;border:1.5px solid #e0e0e0;border-radius:10px;padding:12px;font-size:15px;font-family:inherit;resize:vertical;color:#1a1a1a;background:#fff;line-height:1.8;-webkit-appearance:none}
+.ta:focus{outline:none;border-color:#1D9E75}
+.cc{font-size:12px;color:#999;text-align:right;margin-top:4px}
+.cc.ok{color:#1D9E75;font-weight:600}.cc.mid{color:#BA7517}
+.fbox{background:#f8f8f8;border-radius:12px;padding:14px;margin-top:10px;border-left:4px solid #1D9E75}
+.fbox p{font-size:14px;line-height:1.75;color:#1a1a1a;white-space:pre-wrap}
+.fbox.purp{border-left-color:#534AB7}
+.fbox.amb{border-left-color:#BA7517}
+.pills{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.pill{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.pila{background:#E1F5EE;color:#085041}.pilb{background:#FAEEDA;color:#412402}.pilc{background:#EEEDFE;color:#26215C}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tchip{padding:10px 12px;border-radius:10px;border:1.5px solid #e0e0e0;font-size:13px;cursor:pointer;background:#fafafa;color:#1a1a1a;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.tchip.sel{background:#E1F5EE;border-color:#1D9E75;color:#085041}
+.tchip:active{transform:scale(.97)}
+.tchip .yr{font-size:10px;color:#999;margin-bottom:2px}
+.tchip.sel .yr{color:#1D9E75}
+.qbox{background:#f8f8f8;border-radius:10px;padding:14px;margin-bottom:10px;font-size:14px;line-height:1.75;color:#1a1a1a}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.qopt{padding:12px 10px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;cursor:pointer;background:#fff;color:#1a1a1a;text-align:left;-webkit-tap-highlight-color:transparent;transition:all .1s}
+.qopt:active{transform:scale(.97)}
+.qopt.ok{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:700}
+.qopt.ng{background:#fff0f0;border-color:#E24B4A;color:#501313}
+.qans{font-size:13px;padding:10px 12px;border-radius:10px;margin-top:6px;line-height:1.6}
+.qans.ok{background:#E1F5EE;color:#085041}
+.qans.ng{background:#fff0f0;color:#501313}
+.kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.kcard{border:1.5px solid #e0e0e0;border-radius:10px;padding:12px 6px;text-align:center;cursor:pointer;background:#fff;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.kcard:active{transform:scale(.95)}
+.kcard .kj{font-size:30px;font-weight:500;color:#1a1a1a}
+.kcard .kr{font-size:11px;color:#555;margin-top:4px;display:none;line-height:1.4}
+.kcard.show .kr{display:block}
+.kcard.done{background:#E1F5EE;border-color:#1D9E75}
+.kcard.miss{background:#fff0f0;border-color:#E24B4A}
+.iq{padding:12px 14px;border-radius:10px;border:1.5px solid #e0e0e0;margin-bottom:8px;cursor:pointer;font-size:14px;background:#fff;color:#1a1a1a;-webkit-tap-highlight-color:transparent;transition:all .1s}
+.iq:active{background:#E1F5EE}
+.iq .iqc{font-size:11px;color:#999;margin-bottom:3px;font-weight:600}
+.subtabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.stab{padding:8px 14px;border-radius:20px;font-size:13px;border:1.5px solid #e0e0e0;cursor:pointer;background:#fafafa;color:#666;font-weight:500;-webkit-tap-highlight-color:transparent}
+.stab.on{background:#534AB7;color:#fff;border-color:#534AB7}
+.type-sel{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.tsbtn{padding:14px 8px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;cursor:pointer;background:#fafafa;color:#1a1a1a;text-align:center;font-weight:600;-webkit-tap-highlight-color:transparent;transition:all .1s}
+.tsbtn:active,.tsbtn.on{background:#534AB7;color:#fff;border-color:#534AB7}
+.loading{font-size:14px;color:#666;padding:12px;text-align:center}
+.loading::after{content:'';animation:dt 1.2s steps(4,end) infinite}
+@keyframes dt{0%,20%{content:'.'}40%{content:'..'}60%,80%{content:'...'}100%{content:''}}
+.tips-item{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:10px;margin-bottom:6px}
+.tips-icon{font-size:16px;font-weight:700;min-width:22px;text-align:center}
+.tips-label{font-size:13px;font-weight:700}
+.tips-desc{font-size:12px;margin-top:3px;line-height:1.5}
+</style>
+</head>
+<body>
+
+<!-- APIキー入力モーダル -->
+<div id="apiModal">
+  <div class="apiBox">
+    <h2>🌷 明訓中学 合格への道</h2>
+    <p>はじめにAnthropicのAPIキーを入力してください。<br>入力したキーはこの端末のみに保存されます。</p>
+    <input type="password" id="apiKeyInput" placeholder="sk-ant-..." autocomplete="off">
+    <button onclick="saveKey()">スタート！</button>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+<div class="hero">
+  <div class="cdowns">
+    <div class="cd2"><span class="n" id="dA">—</span><span class="l">A方式まで</span></div>
+    <div class="cd2 b"><span class="n" id="dB">—</span><span class="l">B方式まで</span></div>
+  </div>
+  <div class="hero-t">
+    <h1>明訓中学 合格への道</h1>
+    <p>A方式11/15・B方式12/13 がんばろう！</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="sw('cal')">📅 カレンダー</button>
+  <button class="tab" onclick="sw('sakubun')">✏️ 作文</button>
+  <button class="tab" onclick="sw('kokugo')">📖 国語</button>
+  <button class="tab" onclick="sw('kanji')">漢字</button>
+  <button class="tab" onclick="sw('sansu')">🔢 算数</button>
+  <button class="tab" onclick="sw('mensetsu')">🎤 面接</button>
+  <button class="tab" onclick="sw('tips')">💡 コツ</button>
+</div>
+
+<!-- カレンダー -->
+<div id="s-cal" class="sec on">
+  <div class="stats">
+    <div class="sc"><div class="v" id="st1">0</div><div class="l">練習日</div></div>
+    <div class="sc"><div class="v" id="st2">0</div><div class="l">連続🔥</div></div>
+    <div class="sc"><div class="v" id="st3">0</div><div class="l">作文</div></div>
+    <div class="sc"><div class="v" id="st4">0</div><div class="l">問題数</div></div>
+  </div>
+  <div class="card">
+    <div class="monnav">
+      <button class="bs" onclick="cm(-1)" style="padding:8px 14px">◀</button>
+      <span id="mlbl"></span>
+      <button class="bs" onclick="cm(1)" style="padding:8px 14px">▶</button>
+    </div>
+    <div class="cgrid" id="cgrid"></div>
+    <div style="display:flex;gap:10px;font-size:12px;color:#666;margin-bottom:10px;flex-wrap:wrap">
+      <span>⭐練習日</span><span style="color:#E24B4A">🔴A方式 11/15</span><span style="color:#534AB7">🔵B方式 12/13</span>
+    </div>
+    <button class="stbtn" id="stbtn" onclick="stamp()">⭐ 今日の練習スタンプを押す！</button>
+    <p style="font-size:12px;color:#999;text-align:center">何か練習したら押してね</p>
+  </div>
+</div>
+
+<!-- 作文 -->
+<div id="s-sakubun" class="sec">
+  <div class="card">
+    <div class="ctitle">📋 テーマを選ぼう <span class="badge ba">A方式</span></div>
+    <p style="font-size:12px;color:#666;margin-bottom:10px">400字詰め×3枚程度。テーマは毎年10月1日にHP発表</p>
+    <div class="tgrid" id="tgrid"></div>
+  </div>
+  <div class="card" id="wcard" style="display:none">
+    <div class="ctitle">✏️ <span id="stt"></span></div>
+    <p style="font-size:12px;color:#666;margin-bottom:8px;line-height:1.6" id="tdesc"></p>
+    <div style="font-size:13px;background:#f0f8f5;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.6">
+      <strong style="color:#085041">書き方：</strong> ①意見 → ②理由 → ③体験（オランダ生活！） → ④まとめ
+    </div>
+    <textarea class="ta" id="ein" style="min-height:220px" placeholder="ここに作文を書こう。400字程度から始めてOK！" oninput="ucc()"></textarea>
+    <div class="cc" id="ccnt">0字</div>
+    <div class="brow">
+      <button class="bp" id="fbtn" onclick="getFB()">AI先生に添削してもらう</button>
+      <button class="bs" onclick="document.getElementById('ein').value='';ucc()">クリア</button>
+    </div>
+  </div>
+  <div id="farea" style="display:none">
+    <div class="fbox"><div class="pills" id="pills"></div><p id="ftxt"></p></div>
+  </div>
+</div>
+
+<!-- 国語 -->
+<div id="s-kokugo" class="sec">
+  <div class="subtabs">
+    <button class="stab on" onclick="ksw('read')">読解問題</button>
+    <button class="stab" onclick="ksw('write')">記述練習</button>
+    <button class="stab" onclick="ksw('vocab')">語彙・慣用句</button>
+  </div>
+  <div id="k-read">
+    <div class="card">
+      <div class="ctitle">📚 読解問題 <span class="badge bb">B方式</span></div>
+      <div class="type-sel">
+        <button class="tsbtn" onclick="genQ('ronsetsu')">論説文・説明文</button>
+        <button class="tsbtn" onclick="genQ('shosetsu')">物語・小説</button>
+      </div>
+      <div id="qloading" style="display:none" class="loading">問題を作っています</div>
+      <div id="qarea" style="display:none">
+        <div class="qbox" id="qbox"></div>
+        <div class="qopts" id="qopts"></div>
+        <div id="qresult" style="display:none"></div>
+        <div style="margin-top:10px"><button class="bpurp" id="nxtq" style="display:none" onclick="genQ(window._lastQT)">次の問題</button></div>
+      </div>
+    </div>
+  </div>
+  <div id="k-write" style="display:none">
+    <div class="card">
+      <div class="ctitle">✍️ 記述練習 <span class="badge bb">B方式</span></div>
+      <button class="bpurp" onclick="genBun()">文章問題を作ってもらう</button>
+      <div id="bunarea" style="display:none;margin-top:12px">
+        <div class="qbox" id="bunbox"></div>
+        <textarea class="ta" id="bunin" style="min-height:100px" placeholder="答えを書こう"></textarea>
+        <div class="brow"><button class="bpurp" onclick="getBunFB()">添削してもらう</button></div>
+        <div id="bunfb" style="display:none"><div class="fbox purp"><p id="bunft"></p></div></div>
+      </div>
+    </div>
+  </div>
+  <div id="k-vocab" style="display:none">
+    <div class="card">
+      <div class="ctitle">💬 語彙・慣用句・ことわざ <span class="badge bb">B方式</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+        <button class="bpurp" style="font-size:13px;padding:10px 14px" onclick="genVQ('kanyou')">慣用句</button>
+        <button class="bpurp" style="font-size:13px;padding:10px 14px" onclick="genVQ('kotowaza')">ことわざ</button>
+        <button class="bpurp" style="font-size:13px;padding:10px 14px" onclick="genVQ('jukugo')">熟語・語彙</button>
+      </div>
+      <div id="vqloading" style="display:none" class="loading">問題を作っています</div>
+      <div id="vqarea" style="display:none">
+        <div class="qbox" id="vqbox"></div>
+        <div class="qopts" id="vqopts"></div>
+        <div id="vqresult" style="display:none"></div>
+        <div style="margin-top:10px"><button class="bpurp" id="nvq" style="display:none" onclick="genVQ(window._lastVQT)">次の問題</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 漢字 -->
+<div id="s-kanji" class="sec">
+  <div class="card">
+    <div class="ctitle">漢字フラッシュカード <span class="badge bc">5・6年生</span></div>
+    <p style="font-size:13px;color:#666;margin-bottom:12px">タップ→読み方表示 → もう1回タップ→✅覚えた → もう1回→❌苦手</p>
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+      <button class="bamb" style="font-size:13px" onclick="loadKanji(5)">5年生漢字</button>
+      <button class="bamb" style="font-size:13px" onclick="loadKanji(6)">6年生漢字</button>
+      <button class="bs" style="font-size:13px" onclick="loadKanji('miss')">苦手だけ</button>
+      <button class="bp" style="font-size:13px" onclick="genKanjiQ()">書き取りクイズ</button>
+    </div>
+    <div style="display:flex;gap:12px;font-size:13px;margin-bottom:10px;background:#f0f8f5;padding:10px;border-radius:10px">
+      <span>✅ <strong id="kdone">0</strong>字</span>
+      <span>❌ <strong id="kmiss">0</strong>字苦手</span>
+      <span style="color:#666">残り <strong id="kleft">—</strong>字</span>
+    </div>
+    <div class="kgrid" id="kgrid"></div>
+  </div>
+  <div class="card" id="kquizcard" style="display:none">
+    <div class="ctitle">✍️ 書き取りクイズ</div>
+    <div id="kqbox" class="qbox" style="font-size:15px;line-height:1.8"></div>
+    <textarea class="ta" id="kqin" style="min-height:80px" placeholder="漢字で書いてみよう"></textarea>
+    <div class="brow"><button class="bamb" onclick="checkKanjiQ()">答え合わせ</button></div>
+    <div id="kqresult" style="display:none;margin-top:8px"></div>
+  </div>
+</div>
+
+<!-- 算数 -->
+<div id="s-sansu" class="sec">
+  <div class="card">
+    <div class="ctitle">🔢 算数練習 <span class="badge bb">B方式 50分・22〜26問</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      <button class="tsbtn" onclick="genMath('keisan')">計算・分数・小数</button>
+      <button class="tsbtn" onclick="genMath('bunshoudai')">文章題・速さ</button>
+      <button class="tsbtn" onclick="genMath('zukei')">図形・面積・体積</button>
+      <button class="tsbtn" onclick="genMath('wariai')">割合・比・百分率</button>
+    </div>
+    <div id="mloading" style="display:none" class="loading">問題を作っています</div>
+    <div id="marea" style="display:none">
+      <div class="qbox" id="mbox" style="font-size:14px;line-height:1.9"></div>
+      <textarea class="ta" id="mansin" style="min-height:100px" placeholder="式と答えを書こう"></textarea>
+      <div class="brow">
+        <button class="bamb" onclick="getMathFB()">解説してもらう</button>
+        <button class="bs" onclick="genMath(window._lastMT)">別の問題</button>
+      </div>
+      <div id="mfb" style="display:none"><div class="fbox amb"><p id="mft"></p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 面接 -->
+<div id="s-mensetsu" class="sec">
+  <div class="card">
+    <div class="ctitle">🎤 面接練習 <span class="badge ba">A・B方式（親子面接）</span></div>
+    <p style="font-size:13px;color:#666;margin-bottom:10px">質問をタップして答えを書く → AIにアドバイスをもらおう</p>
+    <div id="iqlist"></div>
+  </div>
+  <div class="card" id="ipcard" style="display:none">
+    <div class="ctitle">🎤 <span id="iqdisplay"></span></div>
+    <textarea class="ta" id="ians" style="min-height:120px" placeholder="答えを書いてみよう。声に出して練習するのが一番！"></textarea>
+    <div class="brow">
+      <button class="bp" onclick="getIFB()">アドバイスをもらう</button>
+      <button class="bs" onclick="document.getElementById('ipcard').style.display='none'">閉じる</button>
+    </div>
+    <div id="ifarea" style="display:none"><div class="fbox"><p id="ift"></p></div></div>
+  </div>
+</div>
+
+<!-- コツ -->
+<div id="s-tips" class="sec">
+  <div class="card">
+    <div class="ctitle">📝 作文「いりたまご」の法則 <span class="badge ba">A方式</span></div>
+    <div style="display:grid;gap:8px">
+      <div class="tips-item" style="background:#E1F5EE">
+        <span class="tips-icon" style="color:#085041">い</span>
+        <div><div class="tips-label" style="color:#085041">意見</div><div class="tips-desc" style="color:#0F6E56">「〜だと思います」ではっきり書く</div></div>
+      </div>
+      <div class="tips-item" style="background:#f5f5f0">
+        <span class="tips-icon">り</span>
+        <div><div class="tips-label">理由</div><div class="tips-desc" style="color:#555">「なぜなら〜だからです」</div></div>
+      </div>
+      <div class="tips-item" style="background:#FAEEDA;border-left:4px solid #BA7517">
+        <span class="tips-icon" style="color:#633806">た</span>
+        <div><div class="tips-label" style="color:#633806">体験（ここが最大の武器！）</div><div class="tips-desc" style="color:#854F0B">オランダ・補習校・現地校での体験。日本の子にはない視点が採点官の印象に残る！</div></div>
+      </div>
+      <div class="tips-item" style="background:#f5f5f0">
+        <span class="tips-icon">ま</span>
+        <div><div class="tips-label">まとめ</div><div class="tips-desc" style="color:#555">「これから〇〇していきたいです」と締める</div></div>
+      </div>
+      <div class="tips-item" style="background:#f5f5f0">
+        <span class="tips-icon">ご</span>
+        <div><div class="tips-label">誤字脱字チェック</div><div class="tips-desc" style="color:#555">自筆・縦書き・400字詰め×3枚程度</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctitle">🔢 B方式 国語・算数ポイント</div>
+    <div style="display:grid;gap:8px;font-size:13px">
+      <div style="padding:12px;background:#EEEDFE;border-radius:10px;border-left:4px solid #534AB7">
+        <strong style="color:#26215C">国語 50分・28〜30問</strong><br>
+        <span style="color:#3C3489;font-size:12px">速く正確に読む練習を。根拠は必ず本文から。漢字は5・6年生レベルを完璧に</span>
+      </div>
+      <div style="padding:12px;background:#FAEEDA;border-radius:10px;border-left:4px solid #BA7517">
+        <strong style="color:#633806">算数 50分・22〜26問</strong><br>
+        <span style="color:#854F0B;font-size:12px">1点差で合否が決まることも。ケアレスミスゼロへ。文章題・速さ・比・図形を優先</span>
+      </div>
+      <div style="padding:12px;background:#f5f5f0;border-radius:10px">
+        <strong>毎日メニュー例</strong><br>
+        <span style="color:#555;font-size:12px">月水：作文+AI添削 ／ 火木：国語読解+漢字 ／ 金：算数+面接練習 ／ 土：清書・見直し</span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctitle">⚙️ 設定</div>
+    <button class="bs" style="font-size:13px;padding:10px 16px" onclick="resetKey()">APIキーを変更する</button>
+  </div>
+</div>
+</div>
+
+<script>
+const THEMES=[
+  {yr:'令和4年度（過去問）',title:'未来の自分からの手紙',desc:'未来の自分から今の自分へ宛てた手紙という形で、今大切にしていることや夢・目標について書きなさい。（400字詰め×3枚程度）'},
+  {yr:'令和3年度（過去問）',title:'友だちからの元気をもらった言葉',desc:'小学校時代に友だちからかけてもらった言葉で、元気や勇気が出た体験について書きなさい。（400字詰め×3枚程度）'},
+  {yr:'令和2年度（過去問）',title:'人はなぜあいさつをするのか',desc:'あいさつをすることの意味について、自分の体験をふまえながら考えを書きなさい。（400字詰め×3枚程度）'},
+  {yr:'平成31年度（過去問）',title:'ほめられたこととしかられたこと',desc:'学校や家でほめられたこと・しかられたことを通じて学んだことを書きなさい。（400字詰め×3枚程度）'},
+  {yr:'平成30年度（過去問）',title:'友だちと協力してやりとげたこと',desc:'小学校生活で友だちと力を合わせてやりとげたことと、そこから学んだことを書きなさい。（400字詰め×3枚程度）'},
+  {yr:'練習①（帰国向け）',title:'海外生活で成長したこと',desc:'オランダでの生活を通じて自分がどのように成長したか、具体的な体験とともに書きなさい。（400字以上）'},
+  {yr:'練習②（帰国向け）',title:'日本とオランダで気づいた違い',desc:'日本とオランダの違いを通じて気づいたことと、それについての考えを書きなさい。（400字以上）'},
+  {yr:'練習③（C方式）',title:'明訓中学でがんばりたいこと',desc:'なぜ明訓中学を志望するのか、中学でどんなことにチャレンジしたいかを書きなさい。（400字以上）'},
+];
+const IQS=[
+  {c:'自己紹介・海外生活',q:'オランダではどんな学校に通っていましたか？'},
+  {c:'自己紹介・海外生活',q:'海外で一番大変だったことと、どう乗り越えましたか？'},
+  {c:'自己紹介・海外生活',q:'日本語補習校ではどんなことを頑張りましたか？'},
+  {c:'志望動機',q:'なぜ明訓中学校を志望しましたか？'},
+  {c:'志望動機',q:'中学校に入ったらどんなことに取り組みたいですか？'},
+  {c:'自分について',q:'あなたの長所と短所を教えてください。'},
+  {c:'自分について',q:'最近感動したことはありますか？'},
+  {c:'社会・時事',q:'最近ニュースで気になったことはありますか？'},
+  {c:'保護者（親子面接）',q:'（保護者へ）お子さんのどんなところを伸ばしてほしいですか？'},
+  {c:'保護者（親子面接）',q:'（保護者へ）海外生活でお子さんはどのように成長されましたか？'},
+];
+const K5=['因','快','賀','解','格','確','額','刊','幹','慣','眼','紀','規','義','逆','久','旧','救','居','許','境','均','禁','句','型','経','潔','件','険','検','限','護','鉱','構','興','講','告','混','査','再','災','妻','採','財','罪','殺','酸','賛','士','支','史','志','師','資','飼','似','示','識','質','舎','謝','授','術','準','序','招','承','証','常','情','象','条','状','織','職','制','勢','性','政','精','製','税','績','絶','設','銭','祖','素','総','造','則','属','率','損','貸','退','団','断','暖','値','著','貯','庁','腸','潮','張','停','提','程','適','統','銅','導','独','任','燃','能','破','犯','版','比','評','貧','布','婦','武','複','仏','編','弁','報','豊','暴','務','夢','迷','綿','輸','余','容','略','留','領'];
+const K6=['異','遺','域','宇','映','延','沿','恩','我','灰','拡','革','閣','割','株','干','巻','看','簡','危','机','揮','貴','疑','吸','供','胸','郷','勤','筋','系','敬','警','劇','激','穴','券','絹','権','憲','源','厳','己','呼','誤','孝','皇','紅','降','鋼','刻','穀','骨','困','砂','済','裁','策','蚕','至','私','姿','視','詞','誌','磁','射','捨','尺','若','樹','収','宗','就','衆','従','縦','縮','熟','純','処','署','諸','除','承','将','傷','障','蒸','針','仁','垂','推','寸','盛','聖','誠','舌','宣','専','泉','洗','染','善','奏','窓','創','装','層','操','蔵','臓','存','尊','退','宅','担','探','誕','段','暖','値','宙','忠','著','庁','頂','腸','潮','賃','痛','敵','展','討','党','糖','乳','認','納','脳','派','拝','背','肺','俳','班','晩','否','批','秘','俵','腹','奮','並','陛','閉','片','補','暮','宝','訪','亡','忘','棒','枚','幕','密','盟','模','訳','郵','優','預','幼','欲','翌','乱','卵','覧','裏','律','臨','朗','論'];
+const KR5={因:'いん・よる',快:'かい・こころよい',賀:'が',解:'かい・とく',格:'かく',確:'かく・たしか',額:'がく・ひたい',刊:'かん',幹:'かん・みき',慣:'かん・なれる',眼:'がん・め',紀:'き',規:'き',義:'ぎ',逆:'ぎゃく',久:'きゅう・ひさしい',旧:'きゅう',救:'きゅう・すくう',居:'きょ・いる',許:'きょ・ゆるす',境:'きょう・さかい',均:'きん',禁:'きん',句:'く',型:'けい・かた',経:'けい・へる',潔:'けつ・いさぎよい',件:'けん',険:'けん',検:'けん',限:'げん・かぎる',護:'ご',鉱:'こう',構:'こう',興:'こう・おこる',講:'こう',告:'こく・つげる',混:'こん・まぜる',査:'さ',再:'さい・また',災:'さい・わざわい',妻:'さい・つま',採:'さい・とる',財:'ざい',罪:'ざい・つみ',殺:'さつ・ころす',酸:'さん・すい',賛:'さん',士:'し',支:'し・ささえる',史:'し',志:'し・こころざし',師:'し',資:'し',飼:'し・かう',似:'に・にる',示:'じ・しめす',識:'しき',質:'しつ',舎:'しゃ',謝:'しゃ・あやまる',授:'じゅ・さずける',術:'じゅつ',準:'じゅん',序:'じょ',招:'しょう・まねく',承:'しょう',証:'しょう',常:'じょう・つね',情:'じょう・なさけ',象:'しょう・ぞう',条:'じょう',状:'じょう',織:'しょく・おる',職:'しょく',制:'せい',勢:'せい・いきおい',性:'せい',政:'せい',精:'せい',製:'せい',税:'ぜい',績:'せき',絶:'ぜつ・たつ',設:'せつ・もうける',銭:'せん・ぜに',祖:'そ',素:'そ',総:'そう',造:'ぞう・つくる',則:'そく・のり',属:'ぞく',率:'そつ・りつ',損:'そん',貸:'たい・かす',退:'たい・しりぞく',団:'だん',断:'だん・ことわる',暖:'だん・あたかい',値:'ち・ね',著:'ちょ・あらわす',貯:'ちょ・たくわえる',庁:'ちょう',腸:'ちょう',潮:'ちょう・しお',張:'ちょう・はる',停:'てい・とまる',提:'てい・さげる',程:'てい・ほど',適:'てき',統:'とう・すべる',銅:'どう',導:'どう・みちびく',独:'どく・ひとり',任:'にん・まかせる',燃:'ねん・もえる',能:'のう',破:'は・やぶる',犯:'はん・おかす',版:'はん',比:'ひ・くらべる',評:'ひょう',貧:'ひん・まずしい',布:'ふ・ぬの',婦:'ふ',武:'ぶ',複:'ふく',仏:'ぶつ・ほとけ',編:'へん・あむ',弁:'べん',報:'ほう',豊:'ほう・ゆたか',暴:'ぼう・あばれる',務:'む・つとめる',夢:'む・ゆめ',迷:'めい・まよう',綿:'めん・わた',輸:'ゆ',余:'よ・あまる',容:'よう',略:'りゃく',留:'りゅう',領:'りょう'};
+const KR6={異:'い・ことなる',遺:'い',域:'いき',宇:'う',映:'えい・うつる',延:'えん・のびる',沿:'えん・そう',恩:'おん',我:'が・われ',灰:'かい・はい',拡:'かく',革:'かく・かわ',閣:'かく',割:'かつ・わる',株:'かぶ',干:'かん・ほす',巻:'かん・まく',看:'かん',簡:'かん',危:'き・あぶない',机:'き・つくえ',揮:'き',貴:'き・たっとい',疑:'ぎ・うたがう',吸:'きゅう・すう',供:'きょう',胸:'きょう・むね',郷:'きょう',勤:'きん・つとめる',筋:'きん・すじ',系:'けい',敬:'けい・うやまう',警:'けい',劇:'げき',激:'げき・はげしい',穴:'けつ・あな',券:'けん',絹:'けん・きぬ',権:'けん',憲:'けん',源:'げん・みなもと',厳:'げん・きびしい',己:'こ・おのれ',呼:'こ・よぶ',誤:'ご・あやまる',孝:'こう',皇:'こう',紅:'こう・べに',降:'こう・おりる',鋼:'こう・はがね',刻:'こく・きざむ',穀:'こく',骨:'こつ・ほね',困:'こん・こまる',砂:'さ・すな',済:'さい・すむ',裁:'さい・さばく',策:'さく',蚕:'さん・かいこ',至:'し・いたる',私:'し・わたし',姿:'し・すがた',視:'し',詞:'し',誌:'し',磁:'じ',射:'しゃ・いる',捨:'しゃ・すてる',尺:'しゃく',若:'じゃく・わかい',樹:'じゅ',収:'しゅう・おさめる',宗:'しゅう',就:'しゅう・つく',衆:'しゅう',従:'じゅう・したがう',縦:'じゅう・たて',縮:'しゅく・ちぢむ',熟:'じゅく',純:'じゅん',処:'しょ',署:'しょ',諸:'しょ',除:'じょ・のぞく',承:'しょう',将:'しょう',傷:'しょう・きず',障:'しょう',蒸:'じょう・むす',針:'しん・はり',仁:'じん',垂:'すい・たれる',推:'すい・おす',寸:'すん',盛:'せい・もる',聖:'せい',誠:'せい・まこと',舌:'ぜつ・した',宣:'せん',専:'せん',泉:'せん・いずみ',洗:'せん・あらう',染:'せん・そめる',善:'ぜん・よい',奏:'そう・かなでる',窓:'そう・まど',創:'そう・つくる',装:'そう',層:'そう',操:'そう・あやつる',蔵:'ぞう・くら',臓:'ぞう',存:'そん',尊:'そん・たっとい',退:'たい・しりぞく',宅:'たく',担:'たん・になう',探:'たん・さがす',誕:'たん',段:'だん',暖:'だん・あたかい',値:'ち・ね',宙:'ちゅう',忠:'ちゅう',著:'ちょ・あらわす',庁:'ちょう',頂:'ちょう・いただく',腸:'ちょう',潮:'ちょう・しお',賃:'ちん',痛:'つう・いたい',敵:'てき',展:'てん',討:'とう・うつ',党:'とう',糖:'とう',乳:'にゅう・ちち',認:'にん・みとめる',納:'のう・おさめる',脳:'のう',派:'は',拝:'はい・おがむ',背:'はい・せ',肺:'はい',俳:'はい',班:'はん',晩:'ばん',否:'ひ・いな',批:'ひ',秘:'ひ・ひめる',俵:'ひょう・たわら',腹:'ふく・はら',奮:'ふん・ふるう',並:'へい・ならぶ',陛:'へい',閉:'へい・とじる',片:'へん・かた',補:'ほ・おぎなう',暮:'ぼ・くれる',宝:'ほう・たから',訪:'ほう・たずねる',亡:'ぼう・ない',忘:'ぼう・わすれる',棒:'ぼう',枚:'まい',幕:'まく・ばく',密:'みつ',盟:'めい',模:'も',訳:'やく・わけ',郵:'ゆう',優:'ゆう・やさしい',預:'よ・あずける',幼:'よう・おさない',欲:'よく・ほしい',翌:'よく',乱:'らん・みだれる',卵:'らん・たまご',覧:'らん',裏:'り・うら',律:'りつ',臨:'りん',朗:'ろう・ほがらか',論:'ろん'};
+
+let cal={},cY=2025,cM=new Date().getMonth()+1,kanjiData=[],kanjiState={};
+let API_KEY='';
+
+function saveKey(){
+  const k=document.getElementById('apiKeyInput').value.trim();
+  if(!k.startsWith('sk-')){alert('正しいAPIキーを入力してください（sk-ant-... で始まるもの）');return}
+  API_KEY=k;localStorage.setItem('mk_apikey',k);
+  document.getElementById('apiModal').style.display='none';
+  document.getElementById('app').style.display='block';
+  init();
+}
+function resetKey(){localStorage.removeItem('mk_apikey');location.reload()}
+
+function init(){
+  try{cal=JSON.parse(localStorage.getItem('mk_cal')||'{}');kanjiState=JSON.parse(localStorage.getItem('mk_kstate')||'{}')}catch(e){cal={};kanjiState={}}
+  const t=new Date();cY=t.getFullYear();cM=t.getMonth()+1;
+  countdown();renderCal();renderThemes();renderIQ();upStats();
+}
+
+async function callAPI(prompt,maxTokens=800){
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:maxTokens,messages:[{role:'user',content:prompt}]})
+  });
+  if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'APIエラー')}
+  const data=await res.json();
+  return data.content.map(b=>b.text||'').join('');
+}
+
+function countdown(){
+  const now=new Date();
+  document.getElementById('dA').textContent=Math.max(0,Math.ceil((new Date(2025,10,15)-now)/86400000))+'日';
+  document.getElementById('dB').textContent=Math.max(0,Math.ceil((new Date(2025,11,13)-now)/86400000))+'日';
+}
+function upStats(){
+  const keys=Object.keys(cal).filter(k=>cal[k]);
+  document.getElementById('st1').textContent=keys.length;
+  document.getElementById('st3').textContent=parseInt(localStorage.getItem('mk_essays')||'0');
+  document.getElementById('st4').textContent=parseInt(localStorage.getItem('mk_qs')||'0');
+  let str=0;const t=new Date();
+  for(let i=0;i<365;i++){const d=new Date(t);d.setDate(d.getDate()-i);const k=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();if(cal[k])str++;else if(i>0)break;}
+  document.getElementById('st2').textContent=str;
+}
+function sv(){try{localStorage.setItem('mk_cal',JSON.stringify(cal));localStorage.setItem('mk_kstate',JSON.stringify(kanjiState))}catch(e){}}
+
+function sw(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s-'+id).classList.add('on');
+  event.currentTarget.classList.add('on');
+}
+function ksw(id){
+  document.querySelectorAll('.subtabs .stab').forEach(t=>t.classList.remove('on'));
+  ['read','write','vocab'].forEach(k=>{document.getElementById('k-'+k).style.display='none'});
+  document.getElementById('k-'+id).style.display='block';
+  event.currentTarget.classList.add('on');
+}
+
+function cm(d){cM+=d;if(cM>12){cM=1;cY++}if(cM<1){cM=12;cY--}renderCal()}
+function renderCal(){
+  const mn=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  document.getElementById('mlbl').textContent=cY+'年 '+mn[cM-1];
+  const g=document.getElementById('cgrid');g.innerHTML='';
+  ['日','月','火','水','木','金','土'].forEach(d=>{const h=document.createElement('div');h.className='ch';h.textContent=d;g.appendChild(h)});
+  const fd=new Date(cY,cM-1,1).getDay(),dim=new Date(cY,cM,0).getDate(),t=new Date();
+  for(let i=0;i<fd;i++){const e=document.createElement('div');e.className='cday ex';g.appendChild(e)}
+  for(let d=1;d<=dim;d++){
+    const k=cY+'-'+cM+'-'+d,el=document.createElement('div');el.className='cday';
+    const isT=t.getFullYear()===cY&&t.getMonth()+1===cM&&t.getDate()===d;
+    const isA=cY===2025&&cM===11&&d===15,isB=cY===2025&&cM===12&&d===13;
+    if(isA){el.classList.add('xa');el.innerHTML='<span style="font-size:9px;color:#E24B4A;text-align:center">'+d+'<br>A試験</span>'}
+    else if(isB){el.classList.add('xb');el.innerHTML='<span style="font-size:9px;color:#534AB7;text-align:center">'+d+'<br>B試験</span>'}
+    else if(cal[k]){el.classList.add('done');const dn=document.createElement('span');dn.className='dn';dn.textContent=d;el.appendChild(dn)}
+    else{if(isT)el.classList.add('today');el.textContent=d}
+    g.appendChild(el);
+  }
+  const tk=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate(),btn=document.getElementById('stbtn');
+  btn.textContent=cal[tk]?'⭐ 今日はスタンプ済み！':'⭐ 今日の練習スタンプを押す！';
+  btn.disabled=!!cal[tk];
+}
+function stamp(){const t=new Date(),k=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();cal[k]=true;sv();renderCal();upStats()}
+
+function renderThemes(){
+  const g=document.getElementById('tgrid');
+  THEMES.forEach(th=>{
+    const el=document.createElement('div');el.className='tchip';
+    el.innerHTML='<div class="yr">'+th.yr+'</div>'+th.title;
+    el.onclick=()=>{document.querySelectorAll('.tchip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');selTheme(th)};
+    g.appendChild(el);
+  });
+}
+function selTheme(th){
+  document.getElementById('stt').textContent=th.title;
+  document.getElementById('tdesc').textContent=th.desc;
+  document.getElementById('wcard').style.display='block';
+  document.getElementById('farea').style.display='none';
+  document.getElementById('ein').value='';ucc();
+  document.getElementById('wcard').scrollIntoView({behavior:'smooth'});
+}
+function ucc(){const l=document.getElementById('ein').value.length,el=document.getElementById('ccnt');el.textContent=l+'字';el.className='cc'+(l>=350?' ok':l>150?' mid':'')}
+
+async function getFB(){
+  const txt=document.getElementById('ein').value.trim();if(txt.length<50){alert('もう少し書いてから！（50字以上）');return}
+  const t=document.getElementById('stt').textContent,btn=document.getElementById('fbtn');
+  btn.disabled=true;btn.textContent='添削中…';document.getElementById('farea').style.display='none';
+  try{
+    const reply=await callAPI(`新潟明訓中学A方式入試作文添削。11歳・小6・帰国子女（オランダ在住）。\nテーマ：「${t}」\n作文：${txt}\n\n【総合評価】A/B/Cのどれか1字＋一言コメント\n【良かった点】2〜3つ（箇条書き）\n【改善のヒント】2〜3つ（具体的・小6向けの言葉で）\n【書き直しのヒント】1〜2文だけ改善例を示す\n\n帰国子女ならではの体験を活かしているかも評価してください。励ます口調で！`,1000);
+    const sm=reply.match(/【総合評価】([ABC])/),sp=document.getElementById('pills');sp.innerHTML='';
+    if(sm){const p=document.createElement('span');p.className='pill pila';p.textContent='評価：'+sm[1];sp.appendChild(p)}
+    const lp=document.createElement('span');lp.className='pill pilb';lp.textContent=document.getElementById('ein').value.length+'字';sp.appendChild(lp);
+    document.getElementById('ftxt').textContent=reply;document.getElementById('farea').style.display='block';
+    const c=parseInt(localStorage.getItem('mk_essays')||'0')+1;localStorage.setItem('mk_essays',c);upStats();
+    document.getElementById('farea').scrollIntoView({behavior:'smooth'});
+  }catch(e){alert('エラー：'+e.message)}
+  btn.disabled=false;btn.textContent='AI先生に添削してもらう';
+}
+
+window._lastQT='ronsetsu';
+async function genQ(type){
+  window._lastQT=type;
+  document.getElementById('qarea').style.display='none';document.getElementById('qloading').style.display='block';document.getElementById('nxtq').style.display='none';
+  const tp={ronsetsu:'論説文・説明文（科学・自然・社会テーマ）',shosetsu:'物語・小説（人物の心情読み取り）'};
+  try{
+    const reply=await callAPI(`中学入試国語（小6〜中1レベル・${tp[type]}）の選択問題を1問作成。\n形式：\n【文章】（5〜8行）\n【問題】（問い）\n【選択肢】\nア（選択肢）\nイ（選択肢）\nウ（選択肢）\nエ（選択肢）\n【正解】アイウエのどれか1字のみ\n【解説】（2〜3文で丁寧に）`);
+    renderQUI(reply,'qbox','qopts','qresult','nxtq');
+    document.getElementById('qarea').style.display='block';
+  }catch(e){alert('エラー：'+e.message)}
+  document.getElementById('qloading').style.display='none';
+}
+
+window._lastVQT='kanyou';
+async function genVQ(type){
+  window._lastVQT=type;
+  document.getElementById('vqarea').style.display='none';document.getElementById('vqloading').style.display='block';document.getElementById('nvq').style.display='none';
+  const tp={kanyou:'慣用句（体の一部を使ったもの）',kotowaza:'ことわざ・四字熟語',jukugo:'熟語の意味・対義語・類義語'};
+  try{
+    const reply=await callAPI(`小学6年生向け${tp[type]}の選択問題を1問作成。\n形式：\n【問題】（問い文）\n【選択肢】\nア（選択肢）\nイ（選択肢）\nウ（選択肢）\nエ（選択肢）\n【正解】1字のみ\n【解説】（短く丁寧に）`);
+    renderQUI(reply,'vqbox','vqopts','vqresult','nvq');
+    document.getElementById('vqarea').style.display='block';
+  }catch(e){alert('エラー：'+e.message)}
+  document.getElementById('vqloading').style.display='none';
+}
+
+function renderQUI(reply,boxId,optsId,resId,nxtId){
+  const qm=reply.match(/【問題】([\s\S]*?)(?:【選択肢】|$)/),om=reply.match(/【選択肢】([\s\S]*?)(?:【正解】|$)/),am=reply.match(/【正解】([アイウエ])/),bm=reply.match(/【解説】([\s\S]*?)$/),tm=reply.match(/【文章】([\s\S]*?)(?:【問題】|$)/);
+  const qb=document.getElementById(boxId);let html='';
+  if(tm)html+='<p style="font-size:13px;color:#555;margin-bottom:10px;border-bottom:1px solid #e0e0e0;padding-bottom:10px">'+tm[1].trim().replace(/\n/g,'<br>')+'</p>';
+  if(qm)html+='<p style="font-weight:700;font-size:14px">'+qm[1].trim()+'</p>';
+  qb.innerHTML=html||reply;
+  const opts=document.getElementById(optsId);opts.innerHTML='';
+  document.getElementById(resId).style.display='none';
+  if(om&&am){
+    om[1].trim().split('\n').filter(l=>l.trim()).forEach(line=>{
+      const lt=line.match(/^([アイウエ])/);if(!lt)return;
+      const btn=document.createElement('button');btn.className='qopt';btn.textContent=line.trim();
+      btn.onclick=()=>{
+        document.querySelectorAll('#'+optsId+' .qopt').forEach(b=>b.disabled=true);
+        const ok=lt[1]===am[1];btn.classList.add(ok?'ok':'ng');
+        const r=document.getElementById(resId);r.className='qans '+(ok?'ok':'ng');
+        r.innerHTML=(ok?'✅ 正解！':'❌ 不正解。正解は '+am[1])+(bm?'<br><br>'+bm[1].trim():'');
+        r.style.display='block';document.getElementById(nxtId).style.display='block';
+        const qc=parseInt(localStorage.getItem('mk_qs')||'0')+1;localStorage.setItem('mk_qs',qc);upStats();
+      };
+      opts.appendChild(btn);
+    });
+  }
+}
+
+async function genBun(){
+  const btn=event.currentTarget;btn.disabled=true;btn.textContent='作成中…';document.getElementById('bunarea').style.display='none';
+  try{
+    const reply=await callAPI('小6向け短文（100〜150字）と記述問題（体験をまじえて3〜4文で答える）を作成。形式：【文章】（文章）【設問】（問い）');
+    document.getElementById('bunbox').textContent=reply;document.getElementById('bunarea').style.display='block';
+    document.getElementById('bunfb').style.display='none';document.getElementById('bunin').value='';
+  }catch(e){alert('エラー：'+e.message)}
+  btn.disabled=false;btn.textContent='文章問題を作ってもらう';
+}
+async function getBunFB(){
+  const txt=document.getElementById('bunin').value.trim();if(!txt){alert('まず答えを書こう！');return}
+  const q=document.getElementById('bunbox').textContent,btn=event.currentTarget;
+  btn.disabled=true;btn.textContent='添削中…';
+  try{
+    const reply=await callAPI(`小6帰国子女（オランダ）の記述練習。\n問題：${q}\n答え：${txt}\n良かった点と改善点をやさしく短く教えてください。`);
+    document.getElementById('bunft').textContent=reply;document.getElementById('bunfb').style.display='block';
+  }catch(e){alert('エラー：'+e.message)}
+  btn.disabled=false;btn.textContent='添削してもらう';
+}
+
+function loadKanji(grade){
+  let arr=[];
+  if(grade===5)arr=K5.map(k=>({k,r:KR5[k]||''}));
+  else if(grade===6)arr=K6.map(k=>({k,r:KR6[k]||''}));
+  else arr=[...K5.map(k=>({k,r:KR5[k]||''})),...K6.map(k=>({k,r:KR6[k]||''}))].filter(x=>kanjiState[x.k]==='miss');
+  kanjiData=arr;renderKanji();
+}
+function renderKanji(){
+  const g=document.getElementById('kgrid');g.innerHTML='';
+  let done=0,miss=0;
+  kanjiData.forEach(item=>{
+    const el=document.createElement('div');el.className='kcard';
+    if(kanjiState[item.k]==='done'){el.classList.add('done')}
+    else if(kanjiState[item.k]==='miss'){el.classList.add('miss')}
+    el.innerHTML='<div class="kj">'+item.k+'</div><div class="kr">'+item.r+'</div>';
+    let phase=kanjiState[item.k]==='done'?2:kanjiState[item.k]==='miss'?0:0;
+    el.onclick=()=>{
+      if(phase===0){el.classList.add('show');phase=1}
+      else if(phase===1){kanjiState[item.k]='done';el.classList.add('done');el.classList.remove('miss');sv();phase=2;updateKStats()}
+      else{kanjiState[item.k]='miss';el.classList.add('miss');el.classList.remove('done');el.classList.remove('show');sv();phase=0;updateKStats()}
+    };
+    if(kanjiState[item.k]==='done')done++;
+    if(kanjiState[item.k]==='miss')miss++;
+    g.appendChild(el);
+  });
+  document.getElementById('kdone').textContent=done;
+  document.getElementById('kmiss').textContent=miss;
+  document.getElementById('kleft').textContent=kanjiData.length-done;
+}
+function updateKStats(){
+  let done=0,miss=0;kanjiData.forEach(x=>{if(kanjiState[x.k]==='done')done++;if(kanjiState[x.k]==='miss')miss++;});
+  document.getElementById('kdone').textContent=done;document.getElementById('kmiss').textContent=miss;document.getElementById('kleft').textContent=kanjiData.length-done;
+}
+async function genKanjiQ(){
+  if(!kanjiData.length){alert('まず5年生か6年生の漢字を選んでね！');return}
+  document.getElementById('kquizcard').style.display='block';
+  document.getElementById('kqbox').textContent='問題を作っています…';
+  document.getElementById('kqresult').style.display='none';document.getElementById('kqin').value='';
+  const sample=kanjiData.sort(()=>Math.random()-.5).slice(0,5).map(x=>x.k).join('・');
+  try{
+    const reply=await callAPI(`以下の漢字を使って小6向け書き取り問題を5問作成。ひらがなの語を漢字に直す問題。\n使用漢字：${sample}\n形式（番号付きリスト）：\n1. ○○（ひらがな）→ （漢字）\n2. ...\n答えも含めて書いてください。`);
+    document.getElementById('kqbox').innerHTML=reply.replace(/\n/g,'<br>');
+    document.getElementById('kquizcard').scrollIntoView({behavior:'smooth'});
+  }catch(e){document.getElementById('kqbox').textContent='エラー：'+e.message}
+}
+async function checkKanjiQ(){
+  const txt=document.getElementById('kqin').value.trim();if(!txt){alert('答えを書いてね！');return}
+  const q=document.getElementById('kqbox').innerText,btn=event.currentTarget;
+  btn.disabled=true;btn.textContent='確認中…';
+  try{
+    const reply=await callAPI(`漢字書き取り採点。\n問題：${q}\n生徒の答え：${txt}\n何問正解か教えて。間違えた問題は正しい答えを示してやさしく説明してください。`);
+    const r=document.getElementById('kqresult');r.className='qans ok';r.innerHTML=reply.replace(/\n/g,'<br>');r.style.display='block';
+  }catch(e){alert('エラー：'+e.message)}
+  btn.disabled=false;btn.textContent='答え合わせ';
+}
+
+window._lastMT='keisan';
+const MPROMPTS={
+  keisan:'小学6年生向け計算問題（分数・小数・四則混合計算）を1問。式と答えを書かせる問題形式で。解答と丁寧な解説付き。',
+  bunshoudai:'小学6年生向け文章題（速さ・時間・距離またはつるかめ算）を1問。解答と丁寧な解説付き。',
+  zukei:'小学6年生向け図形問題（面積・体積・円の計算）を1問。解答と丁寧な解説付き。',
+  wariai:'小学6年生向け割合・比・百分率の問題を1問。解答と丁寧な解説付き。'
+};
+async function genMath(type){
+  window._lastMT=type;
+  document.getElementById('marea').style.display='none';document.getElementById('mloading').style.display='block';
+  document.getElementById('mfb').style.display='none';document.getElementById('mansin').value='';
+  try{
+    const reply=await callAPI(MPROMPTS[type]);
+    document.getElementById('mbox').innerHTML=reply.replace(/\n/g,'<br>');
+    document.getElementById('marea').style.display='block';
+  }catch(e){alert('エラー：'+e.message)}
+  document.getElementById('mloading').style.display='none';
+}
+async function getMathFB(){
+  const txt=document.getElementById('mansin').value.trim();if(!txt){alert('式と答えを書こう！');return}
+  const q=document.getElementById('mbox').innerText,btn=event.currentTarget;
+  btn.disabled=true;btn.textContent='確認中…';
+  try{
+    const reply=await callAPI(`小学6年生の算数採点。\n問題：${q}\n生徒の答え：${txt}\n正誤判定と解き方の解説を丁寧にやさしくお願いします。`);
+    document.getElementById('mft').textContent=reply;document.getElementById('mfb').style.display='block';
+    document.getElementById('mfb').scrollIntoView({behavior:'smooth'});
+  }catch(e){alert('エラー：'+e.message)}
+  btn.disabled=false;btn.textContent='解説してもらう';
+}
+
+function renderIQ(){
+  const c=document.getElementById('iqlist');
+  IQS.forEach(q=>{
+    const el=document.createElement('div');el.className='iq';
+    el.innerHTML='<div class="iqc">'+q.c+'</div>'+q.q;
+    el.onclick=()=>{
+      document.getElementById('iqdisplay').textContent=q.q;
+      document.getElementById('ipcard').style.display='block';
+      document.getElementById('ians').value='';
+      document.getElementById('ifarea').style.display='none';
+      window._curQ=q.q;
+      document.getElementById('ipcard').scrollIntoView({behavior:'smooth'});
+    };
+    c.appendChild(el);
+  });
+}
+async function getIFB(){
+  const txt=document.getElementById('ians').value.trim();if(!txt){alert('まず答えを書こう！');return}
+  const btn=event.currentTarget;btn.disabled=true;btn.textContent='確認中…';
+  try{
+    const reply=await callAPI(`明訓中学受験面接練習（11歳・小6・帰国子女・オランダ在住）。\n質問：「${window._curQ}」\n生徒の答え：「${txt}」\n【良かった点】【改善のヒント】【答えの例（50字程度）】を、やさしく短く教えてください。`);
+    document.getElementById('ift').textContent=reply;document.getElementById('ifarea').style.display='block';
+  }catch(e){alert('エラー：'+e.message)}
+  btn.disabled=false;btn.textContent='アドバイスをもらう';
+}
+
+// 起動時：保存済みキーがあればすぐ開始
+window.onload=()=>{
+  const saved=localStorage.getItem('mk_apikey');
+  if(saved){API_KEY=saved;document.getElementById('apiModal').style.display='none';document.getElementById('app').style.display='block';init()}
+};
+</script>
+</body>
+</html>
