@@ -6,152 +6,152 @@
 <title>明訓中学 合格への道</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;background:#EEF4FA;color:#1a1a1a;font-size:16px;-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;background:#EEF4FA;color:#1a1a1a;font-size:17px;-webkit-text-size-adjust:100%}
 #apiModal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
 .apiBox{background:#fff;border-radius:16px;padding:24px;max-width:400px;width:100%}
-.apiBox h2{font-size:18px;margin-bottom:8px;color:#2D7DB3}
-.apiBox p{font-size:13px;color:#666;margin-bottom:16px;line-height:1.6}
-.apiBox input{width:100%;border:1px solid #ccc;border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:12px}
-.apiBox button{width:100%;padding:12px;background:#5BA4CF;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}
-#app{max-width:820px;margin:0 auto;padding:10px}
+.apiBox h2{font-size:20px;margin-bottom:8px;color:#2D7DB3}
+.apiBox p{font-size:14px;color:#666;margin-bottom:16px;line-height:1.6}
+.apiBox input{width:100%;border:1px solid #ccc;border-radius:8px;padding:10px 12px;font-size:15px;margin-bottom:12px}
+.apiBox button{width:100%;padding:12px;background:#5BA4CF;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer}
+#app{max-width:920px;margin:0 auto;padding:8px}
 .hero{background:linear-gradient(135deg,#3A7BD5 0%,#5BA4CF 100%);border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
 .cdowns{display:flex;gap:6px}
 .cd2{background:rgba(255,255,255,.22);border-radius:10px;padding:8px 10px;text-align:center;min-width:62px}
 .cd2.b{background:rgba(155,143,212,.45)}
 .cd2 .n{font-size:24px;font-weight:700;color:#fff;display:block;line-height:1}
-.cd2 .l{font-size:10px;color:rgba(255,255,255,.8);margin-top:2px}
+.cd2 .l{font-size:11px;color:rgba(255,255,255,.8);margin-top:2px}
 .cd2.b .n,.cd2.b .l{color:#fff}
-.hero-t h1{font-size:16px;font-weight:700;color:#fff}
-.hero-t p{font-size:12px;color:rgba(255,255,255,.8);margin-top:3px}
+.hero-t h1{font-size:17px;font-weight:700;color:#fff}
+.hero-t p{font-size:13px;color:rgba(255,255,255,.8);margin-top:3px}
 .tabs{display:flex;overflow-x:auto;background:#fff;border-radius:12px;margin-bottom:14px;padding:4px;gap:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none;box-shadow:0 2px 8px rgba(58,123,213,.13)}
 .tabs::-webkit-scrollbar{display:none}
-.tab{padding:8px 14px;font-size:14px;cursor:pointer;border:none;border-radius:9px;background:none;color:#666;white-space:nowrap;flex-shrink:0;font-weight:500;transition:all .15s}
+.tab{padding:8px 14px;font-size:15px;cursor:pointer;border:none;border-radius:9px;background:none;color:#666;white-space:nowrap;flex-shrink:0;font-weight:500;transition:all .15s}
 .tab.on{background:#5BA4CF;color:#fff}
 .sec{display:none}.sec.on{display:block}
 .card{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(58,123,213,.1)}
-.ctitle{font-size:16px;font-weight:600;color:#555;margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.ctitle{font-size:17px;font-weight:600;color:#555;margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:12px;font-weight:600}
 .ba{background:#EBF5FF;color:#1A5B8A}.bb{background:#EDE9FE;color:#4C1D95}.bc{background:#FFF3CD;color:#412402}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
 .sc{background:#EBF5FF;border-radius:10px;padding:10px 6px;text-align:center}
-.sc .v{font-size:20px;font-weight:700;color:#5BA4CF}
-.sc .l{font-size:10px;color:#666;margin-top:2px}
+.sc .v{font-size:22px;font-weight:700;color:#5BA4CF}
+.sc .l{font-size:11px;color:#666;margin-top:2px}
 /* ===== ゲーミフィケーション ===== */
 .earn-banner{background:linear-gradient(135deg,#2D7DB3 0%,#5BA4CF 100%);border-radius:14px;padding:14px 16px;margin-bottom:12px;color:#fff}
 .earn-banner .earn-total{font-size:32px;font-weight:800;color:#fff;letter-spacing:-1px}
-.earn-banner .earn-label{font-size:11px;color:rgba(255,255,255,.85);margin-bottom:2px}
-.earn-banner .earn-sub{font-size:12px;color:rgba(255,255,255,.9);margin-top:4px}
+.earn-banner .earn-label{font-size:12px;color:rgba(255,255,255,.85);margin-bottom:2px}
+.earn-banner .earn-sub{font-size:13px;color:rgba(255,255,255,.9);margin-top:4px}
 .earn-banner .earn-bar-wrap{background:rgba(255,255,255,.15);border-radius:10px;height:8px;margin-top:8px;overflow:hidden}
 .earn-banner .earn-bar{height:100%;border-radius:10px;background:#fff;transition:width .5s ease}
-.earn-banner .earn-cap{font-size:10px;color:rgba(255,255,255,.75);margin-top:3px;text-align:right}
+.earn-banner .earn-cap{font-size:11px;color:rgba(255,255,255,.75);margin-top:3px;text-align:right}
 .month-bonus-bar{background:#fff;border-radius:12px;padding:10px 14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(58,123,213,.1)}
-.month-bonus-bar .mbb-title{font-size:12px;color:#555;font-weight:600;margin-bottom:6px}
+.month-bonus-bar .mbb-title{font-size:13px;color:#555;font-weight:600;margin-bottom:6px}
 .month-bonus-chips{display:flex;gap:6px;flex-wrap:wrap}
-.mbc{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;background:#EBF5FF;color:#888}
+.mbc{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;background:#EBF5FF;color:#888}
 .mbc.on{background:#EBF5FF;color:#1A5B8A}
 .mbc.bonus{background:#FFF3CD;color:#856404}
-.pt-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#5BA4CF;color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;font-weight:700;z-index:999;pointer-events:none;opacity:0;transition:opacity .3s}
+.pt-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#5BA4CF;color:#fff;padding:10px 20px;border-radius:20px;font-size:15px;font-weight:700;z-index:999;pointer-events:none;opacity:0;transition:opacity .3s}
 .pt-toast.show{opacity:1}
 .cday.done{background:#EBF5FF;border-color:#5BA4CF}
-.cday.done .cday-pt{font-size:8px;color:#1A5B8A;font-weight:700;line-height:1}
-.cday.done .cday-num{font-size:10px;color:#1A5B8A;line-height:1}
+.cday.done .cday-pt{font-size:9px;color:#1A5B8A;font-weight:700;line-height:1}
+.cday.done .cday-num{font-size:11px;color:#1A5B8A;line-height:1}
 .cday.combo{background:linear-gradient(135deg,#EBF5FF,#d4f5e0);border-color:#3A7BD5;border-width:2px}
 .cday.bonus-day{background:linear-gradient(135deg,#FFF3CD,#FFE69C);border-color:#F0A030;border-width:2px}
-.week-bonus-badge{display:inline-block;background:#F0A030;color:#fff;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;margin-left:6px}
-.mon-earn-lbl{font-size:13px;color:#5BA4CF;font-weight:700}
+.week-bonus-badge{display:inline-block;background:#F0A030;color:#fff;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700;margin-left:6px}
+.mon-earn-lbl{font-size:14px;color:#5BA4CF;font-weight:700}
 .cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:10px}
-.ch{font-size:10px;color:#999;text-align:center;padding:3px 0;font-weight:600}
-.cday{aspect-ratio:1;border-radius:7px;border:1px solid #e8e8e8;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#999;background:#fff;cursor:pointer;transition:all .1s;-webkit-tap-highlight-color:transparent}
+.ch{font-size:11px;color:#999;text-align:center;padding:3px 0;font-weight:600}
+.cday{aspect-ratio:1;border-radius:7px;border:1px solid #e8e8e8;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;color:#999;background:#fff;cursor:pointer;transition:all .1s;-webkit-tap-highlight-color:transparent}
 .cday:active{transform:scale(.95)}
 .cday.today{border-color:#5BA4CF;color:#5BA4CF;font-weight:700;border-width:2px}
 .cday.done{background:#EBF5FF;border-color:#5BA4CF}
-.cday.done::after{content:'⭐';font-size:12px;display:block}
-.cday.done .dn{font-size:9px;color:#1A5B8A}
+.cday.done::after{content:'⭐';font-size:13px;display:block}
+.cday.done .dn{font-size:10px;color:#1A5B8A}
 .cday.xa{border-color:#E24B4A;background:#fff0f0}
 .cday.xb{border-color:#9B8FD4;background:#f0efff}
 .cday.ex{border:none;background:none;cursor:default}
-.stbtn{display:block;width:100%;padding:14px;background:#5BA4CF;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;margin-bottom:8px;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.stbtn{display:block;width:100%;padding:14px;background:#5BA4CF;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;text-align:center;margin-bottom:8px;-webkit-tap-highlight-color:transparent;transition:background .15s}
 .stbtn:active{background:#1A5B8A}
 .stbtn:disabled{background:#ccc;cursor:default}
 .monnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.monnav span{font-size:15px;font-weight:700;color:#1a1a1a}
-.bp{padding:12px 18px;background:#5BA4CF;color:#fff;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.monnav span{font-size:16px;font-weight:700;color:#1a1a1a}
+.bp{padding:12px 18px;background:#5BA4CF;color:#fff;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-weight:600;-webkit-tap-highlight-color:transparent;transition:background .15s}
 .bp:active{background:#1A5B8A}
 .bp:disabled{opacity:.5;cursor:not-allowed}
-.bs{padding:12px 18px;background:#fff;color:#5BA4CF;border:1.5px solid #5BA4CF;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600}
-.bpurp{padding:12px 18px;background:#9B8FD4;color:#fff;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600;transition:background .15s}
+.bs{padding:12px 18px;background:#fff;color:#5BA4CF;border:1.5px solid #5BA4CF;border-radius:10px;font-size:15px;cursor:pointer;font-weight:600}
+.bpurp{padding:12px 18px;background:#9B8FD4;color:#fff;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-weight:600;transition:background .15s}
 .bpurp:active{background:#7B6FC4}
 .bpurp:disabled{opacity:.5}
-.bamb{padding:12px 18px;background:#F0A030;color:#fff;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600}
+.bamb{padding:12px 18px;background:#F0A030;color:#fff;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-weight:600}
 .brow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.ta{width:100%;border:1.5px solid #e0e0e0;border-radius:10px;padding:12px;font-size:15px;font-family:inherit;resize:vertical;color:#1a1a1a;background:#fff;line-height:1.8;-webkit-appearance:none}
+.ta{width:100%;border:1.5px solid #e0e0e0;border-radius:10px;padding:12px;font-size:16px;font-family:inherit;resize:vertical;color:#1a1a1a;background:#fff;line-height:1.8;-webkit-appearance:none}
 .ta:focus{outline:none;border-color:#5BA4CF}
-.cc{font-size:12px;color:#999;text-align:right;margin-top:4px}
+.cc{font-size:13px;color:#999;text-align:right;margin-top:4px}
 .cc.ok{color:#5BA4CF;font-weight:600}.cc.mid{color:#F0A030}
 .fbox{background:#F4F8FC;border-radius:12px;padding:14px;margin-top:10px;border-left:4px solid #5BA4CF}
-.fbox p{font-size:14px;line-height:1.75;color:#1a1a1a;white-space:pre-wrap}
+.fbox p{font-size:15px;line-height:1.75;color:#1a1a1a;white-space:pre-wrap}
 .fbox.purp{border-left-color:#9B8FD4}
 .fbox.amb{border-left-color:#F0A030}
 .pills{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
-.pill{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.pill{padding:3px 10px;border-radius:20px;font-size:13px;font-weight:600}
 .pila{background:#EBF5FF;color:#1A5B8A}.pilb{background:#FFF3CD;color:#412402}.pilc{background:#EDE9FE;color:#4C1D95}
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tchip{padding:10px 12px;border-radius:10px;border:1.5px solid #e0e0e0;font-size:13px;cursor:pointer;background:#F8FBFF;color:#1a1a1a;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.tchip{padding:10px 12px;border-radius:10px;border:1.5px solid #e0e0e0;font-size:14px;cursor:pointer;background:#F8FBFF;color:#1a1a1a;transition:all .15s;-webkit-tap-highlight-color:transparent}
 .tchip.sel{background:#EBF5FF;border-color:#5BA4CF;color:#1A5B8A}
 .tchip:active{transform:scale(.97)}
-.tchip .yr{font-size:10px;color:#999;margin-bottom:2px}
+.tchip .yr{font-size:11px;color:#999;margin-bottom:2px}
 .tchip.sel .yr{color:#5BA4CF}
-.qbox{background:#F4F8FC;border-radius:10px;padding:14px;margin-bottom:10px;font-size:14px;line-height:1.75;color:#1a1a1a}
+.qbox{background:#F4F8FC;border-radius:10px;padding:14px;margin-bottom:10px;font-size:15px;line-height:1.75;color:#1a1a1a}
 .qopts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.qopt{padding:12px 10px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;cursor:pointer;background:#fff;color:#1a1a1a;text-align:left;-webkit-tap-highlight-color:transparent;transition:all .1s}
+.qopt{padding:12px 10px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;cursor:pointer;background:#fff;color:#1a1a1a;text-align:left;-webkit-tap-highlight-color:transparent;transition:all .1s}
 .qopt:active{transform:scale(.97)}
 .qopt.ok{background:#EBF5FF;border-color:#5BA4CF;color:#1A5B8A;font-weight:700}
 .qopt.ng{background:#fff0f0;border-color:#E24B4A;color:#501313}
-.qans{font-size:13px;padding:10px 12px;border-radius:10px;margin-top:6px;line-height:1.6}
+.qans{font-size:14px;padding:10px 12px;border-radius:10px;margin-top:6px;line-height:1.6}
 .qans.ok{background:#EBF5FF;color:#1A5B8A}
 .qans.ng{background:#fff0f0;color:#501313}
 .kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
 .kcard{border:1.5px solid #e0e0e0;border-radius:10px;padding:12px 6px;text-align:center;cursor:pointer;background:#fff;-webkit-tap-highlight-color:transparent;transition:all .15s}
 .kcard:active{transform:scale(.95)}
 .kcard .kj{font-size:30px;font-weight:500;color:#1a1a1a}
-.kcard .kr{font-size:11px;color:#555;margin-top:4px;display:none;line-height:1.4}
+.kcard .kr{font-size:12px;color:#555;margin-top:4px;display:none;line-height:1.4}
 .kcard.show .kr{display:block}
 .kcard.done{background:#EBF5FF;border-color:#5BA4CF}
 .kcard.miss{background:#fff0f0;border-color:#E24B4A}
-.iq{padding:12px 14px;border-radius:10px;border:1.5px solid #e0e0e0;margin-bottom:8px;cursor:pointer;font-size:14px;background:#fff;color:#1a1a1a;-webkit-tap-highlight-color:transparent;transition:all .1s}
+.iq{padding:12px 14px;border-radius:10px;border:1.5px solid #e0e0e0;margin-bottom:8px;cursor:pointer;font-size:15px;background:#fff;color:#1a1a1a;-webkit-tap-highlight-color:transparent;transition:all .1s}
 .iq:active{background:#EBF5FF}
-.iq .iqc{font-size:11px;color:#999;margin-bottom:3px;font-weight:600}
+.iq .iqc{font-size:12px;color:#999;margin-bottom:3px;font-weight:600}
 .subtabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.stab{padding:8px 14px;border-radius:20px;font-size:13px;border:1.5px solid #e0e0e0;cursor:pointer;background:#F8FBFF;color:#666;font-weight:500;-webkit-tap-highlight-color:transparent}
+.stab{padding:8px 14px;border-radius:20px;font-size:14px;border:1.5px solid #e0e0e0;cursor:pointer;background:#F8FBFF;color:#666;font-weight:500;-webkit-tap-highlight-color:transparent}
 .stab.on{background:#9B8FD4;color:#fff;border-color:#9B8FD4}
 .type-sel{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.tsbtn{padding:14px 8px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;cursor:pointer;background:#F8FBFF;color:#1a1a1a;text-align:center;font-weight:600;-webkit-tap-highlight-color:transparent;transition:all .1s}
+.tsbtn{padding:14px 8px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;cursor:pointer;background:#F8FBFF;color:#1a1a1a;text-align:center;font-weight:600;-webkit-tap-highlight-color:transparent;transition:all .1s}
 .tsbtn:active,.tsbtn.on{background:#9B8FD4;color:#fff;border-color:#9B8FD4}
-.loading{font-size:14px;color:#666;padding:12px;text-align:center}
+.loading{font-size:15px;color:#666;padding:12px;text-align:center}
 .loading::after{content:'';animation:dt 1.2s steps(4,end) infinite}
 @keyframes dt{0%,20%{content:'.'}40%{content:'..'}60%,80%{content:'...'}100%{content:''}}
 .tips-item{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:10px;margin-bottom:6px}
-.tips-icon{font-size:16px;font-weight:700;min-width:22px;text-align:center}
-.tips-label{font-size:13px;font-weight:700}
-.tips-desc{font-size:12px;margin-top:3px;line-height:1.5}
+.tips-icon{font-size:17px;font-weight:700;min-width:22px;text-align:center}
+.tips-label{font-size:14px;font-weight:700}
+.tips-desc{font-size:13px;margin-top:3px;line-height:1.5}
 
 /* ===== 7ステップ 作文タブ ===== */
 .step-bar{display:flex;gap:0;margin-bottom:14px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(58,123,213,.13)}
-.step-btn{flex:1;padding:10px 4px;border:none;background:none;cursor:pointer;text-align:center;font-size:10px;color:#aaa;font-weight:600;border-right:1px solid #EBF5FF;transition:all .15s;position:relative;-webkit-tap-highlight-color:transparent}
+.step-btn{flex:1;padding:10px 4px;border:none;background:none;cursor:pointer;text-align:center;font-size:11px;color:#aaa;font-weight:600;border-right:1px solid #EBF5FF;transition:all .15s;position:relative;-webkit-tap-highlight-color:transparent}
 .step-btn:last-child{border-right:none}
-.step-btn .snum{display:block;font-size:16px;margin-bottom:2px}
+.step-btn .snum{display:block;font-size:17px;margin-bottom:2px}
 .step-btn.on{background:#5BA4CF;color:#fff}
 .step-btn.done{background:#EBF5FF;color:#1A5B8A}
-.step-btn.done::after{content:'✓';position:absolute;top:4px;right:4px;font-size:9px}
+.step-btn.done::after{content:'✓';position:absolute;top:4px;right:4px;font-size:10px}
 
 .essay-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .essay-card{border:1.5px solid #e0e0e0;border-radius:10px;padding:10px;cursor:pointer;background:#F8FBFF;-webkit-tap-highlight-color:transparent;transition:all .15s}
 .essay-card:active{transform:scale(.97)}
 .essay-card.sel{background:#EBF5FF;border-color:#5BA4CF}
-.essay-card .ec-grade{font-size:10px;color:#999;font-weight:600;margin-bottom:3px}
-.essay-card .ec-title{font-size:14px;font-weight:700;color:#1a1a1a;line-height:1.3;margin-bottom:4px}
+.essay-card .ec-grade{font-size:11px;color:#999;font-weight:600;margin-bottom:3px}
+.essay-card .ec-title{font-size:15px;font-weight:700;color:#1a1a1a;line-height:1.3;margin-bottom:4px}
 .essay-card .ec-tags{display:flex;flex-wrap:wrap;gap:3px}
-.essay-card .ec-tag{font-size:10px;padding:1px 6px;border-radius:10px;background:#EBF5FF;color:#666}
+.essay-card .ec-tag{font-size:11px;padding:1px 6px;border-radius:10px;background:#EBF5FF;color:#666}
 .essay-card.sel .ec-grade{color:#5BA4CF}
 .essay-card.sel .ec-tag{background:#c8efe3;color:#1A5B8A}
 .ec-fit-A{border-left:3px solid #5BA4CF}
@@ -159,12 +159,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .ec-fit-C{border-left:3px solid #F0A030}
 
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.fchip{padding:5px 10px;border-radius:20px;font-size:12px;border:1.5px solid #e0e0e0;cursor:pointer;background:#F8FBFF;color:#666;font-weight:500;-webkit-tap-highlight-color:transparent;transition:all .1s}
+.fchip{padding:5px 10px;border-radius:20px;font-size:13px;border:1.5px solid #e0e0e0;cursor:pointer;background:#F8FBFF;color:#666;font-weight:500;-webkit-tap-highlight-color:transparent;transition:all .1s}
 .fchip.on{background:#5BA4CF;color:#fff;border-color:#5BA4CF}
 
-.essay-body{font-size:16px;line-height:2;color:#1a1a1a;white-space:pre-wrap;background:#fafffe;border-radius:10px;padding:14px;border:1px solid #e8f5f0;margin-bottom:10px;max-height:380px;overflow-y:auto}
-.para-block{padding:10px 12px;border-radius:8px;margin-bottom:8px;font-size:14px;line-height:1.9;position:relative}
-.para-block .para-label{font-size:10px;font-weight:700;margin-bottom:4px;opacity:.8}
+.essay-body{font-size:17px;line-height:2;color:#1a1a1a;white-space:pre-wrap;background:#fafffe;border-radius:10px;padding:14px;border:1px solid #e8f5f0;margin-bottom:10px;max-height:380px;overflow-y:auto}
+.para-block{padding:10px 12px;border-radius:8px;margin-bottom:8px;font-size:15px;line-height:1.9;position:relative}
+.para-block .para-label{font-size:11px;font-weight:700;margin-bottom:4px;opacity:.8}
 .para-intro{background:#EBF5FF;border-left:4px solid #5BA4CF}
 .para-intro .para-label{color:#1A5B8A}
 .para-event{background:#FFF3CD;border-left:4px solid #F59E0B}
@@ -177,30 +177,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .para-end .para-label{color:#1E3A8A}
 
 .tmpl-block{background:#F4F8FC;border-radius:10px;padding:12px;margin-bottom:10px;border:1px dashed #c0c0c0}
-.tmpl-label{font-size:11px;font-weight:700;color:#555;margin-bottom:6px}
-.tmpl-hint{font-size:13px;color:#888;font-style:italic;line-height:1.7}
+.tmpl-label{font-size:12px;font-weight:700;color:#555;margin-bottom:6px}
+.tmpl-hint{font-size:14px;color:#888;font-style:italic;line-height:1.7}
 
 .chat-area{border:1.5px solid #e0e0e0;border-radius:12px;padding:12px;margin-bottom:10px;background:#F8FBFF;max-height:260px;overflow-y:auto}
-.msg{padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.7;margin-bottom:8px;max-width:88%}
+.msg{padding:8px 12px;border-radius:12px;font-size:14px;line-height:1.7;margin-bottom:8px;max-width:88%}
 .msg-ai{background:#EBF5FF;color:#1A5B8A;margin-right:auto}
 .msg-user{background:#5BA4CF;color:#fff;margin-left:auto;text-align:right}
 
 .char-target{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.ctbtn{padding:6px 12px;border:1.5px solid #e0e0e0;border-radius:20px;font-size:12px;cursor:pointer;background:#F8FBFF;color:#666;font-weight:600;-webkit-tap-highlight-color:transparent;transition:all .1s}
+.ctbtn{padding:6px 12px;border:1.5px solid #e0e0e0;border-radius:20px;font-size:13px;cursor:pointer;background:#F8FBFF;color:#666;font-weight:600;-webkit-tap-highlight-color:transparent;transition:all .1s}
 .ctbtn.on{background:#5BA4CF;color:#fff;border-color:#5BA4CF}
 
 .step-nav{display:flex;gap:8px;margin-top:12px}
-.step-next{flex:1;padding:12px;background:#5BA4CF;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.step-back{padding:12px 16px;background:#fff;color:#5BA4CF;border:1.5px solid #5BA4CF;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
+.step-next{flex:1;padding:12px;background:#5BA4CF;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.step-back{padding:12px 16px;background:#fff;color:#5BA4CF;border:1.5px solid #5BA4CF;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer}
 /* ===== 科目ボタン ===== */
-.subj-btn{padding:12px 10px;border:2px solid #e0e0e0;border-radius:12px;background:#F8FBFF;cursor:pointer;font-size:13px;font-weight:600;color:#555;line-height:1.4;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.subj-btn{padding:12px 10px;border:2px solid #e0e0e0;border-radius:12px;background:#F8FBFF;cursor:pointer;font-size:14px;font-weight:600;color:#555;line-height:1.4;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .15s}
 .subj-btn:active{transform:scale(.96)}
 .subj-btn.on{border-color:#5BA4CF;background:#EBF5FF;color:#1A5B8A}
 .subj-btn.on .subj-pt{color:#5BA4CF}
-.subj-btn .subj-pt{display:block;font-size:11px;color:#aaa;margin-top:2px;font-weight:500}
+.subj-btn .subj-pt{display:block;font-size:12px;color:#aaa;margin-top:2px;font-weight:500}
 
 
-.level-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;margin-left:4px}
+.level-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;margin-left:4px}
 .lv1{background:#DBEAFE;color:#1E3A8A}
 .lv2{background:#EBF5FF;color:#1A5B8A}
 .lv3{background:#FEF3C7;color:#7C4A00}
@@ -211,21 +211,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .photo-upload-area:active{border-color:#5BA4CF;background:#EBF5FF}
 .photo-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .photo-upload-area .pu-icon{font-size:38px;margin-bottom:8px}
-.photo-upload-area .pu-label{font-size:15px;font-weight:700;color:#2D7DB3;margin-bottom:4px}
-.photo-upload-area .pu-sub{font-size:12px;color:#888}
+.photo-upload-area .pu-label{font-size:16px;font-weight:700;color:#2D7DB3;margin-bottom:4px}
+.photo-upload-area .pu-sub{font-size:13px;color:#888}
 .photo-preview{position:relative;margin-bottom:10px;border-radius:12px;overflow:hidden;border:2px solid #A8C8E8}
 .photo-preview img{width:100%;max-height:340px;object-fit:contain;background:#f0f0f0;display:block}
-.photo-preview .pp-remove{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:20px;padding:5px 12px;font-size:12px;cursor:pointer}
+.photo-preview .pp-remove{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:20px;padding:5px 12px;font-size:13px;cursor:pointer}
 .photo-section{background:#EBF5FF;border-radius:14px;padding:16px;margin-top:12px;margin-bottom:10px;border:1.5px solid #C8E6FA}
-.photo-section .ps-title{font-size:14px;font-weight:700;color:#2D7DB3;margin-bottom:10px}
-.photo-fb-btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#3A7BD5,#5BA4CF);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;-webkit-tap-highlight-color:transparent}
+.photo-section .ps-title{font-size:15px;font-weight:700;color:#2D7DB3;margin-bottom:10px}
+.photo-fb-btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#3A7BD5,#5BA4CF);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-top:8px;-webkit-tap-highlight-color:transparent}
 .photo-fb-btn:active{opacity:.85}
 .photo-fb-btn:disabled{background:#bbb;cursor:default}
-.cost-note{font-size:11px;color:#888;text-align:center;margin-top:5px}
+.cost-note{font-size:12px;color:#888;text-align:center;margin-top:5px}
 /* ===== 読みやすさ改善 ===== */
-.qbox{font-size:15px;line-height:1.95}
-.ta{font-size:15px}
-.card p{font-size:14px;line-height:1.8}
+.qbox{font-size:16px;line-height:1.95}
+.ta{font-size:16px}
+.card p{font-size:15px;line-height:1.8}
+
+/* ===== 動画セクション ===== */
+.video-item{margin-bottom:20px}
+.video-title{font-size:15px;font-weight:700;color:#2D7DB3;margin-bottom:8px;padding-left:4px}
+.video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;background:#000}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:12px}
+.video-accordion{margin-bottom:6px;border-radius:12px;overflow:hidden;border:1.5px solid #C8E6FA}
+.vacc-btn{display:flex;align-items:center;gap:8px;width:100%;padding:12px 14px;background:#F4F8FC;border:none;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.vacc-btn:active{background:#EBF5FF}
+.vacc-num{min-width:24px;height:24px;border-radius:50%;background:#5BA4CF;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.vacc-title{flex:1;font-size:14px;font-weight:600;color:#1a1a1a;line-height:1.4}
+.vacc-arrow{font-size:12px;color:#5BA4CF;flex-shrink:0}
+.video-accordion .video-wrap{border-radius:0 0 10px 10px}
 </style>
 </head>
 <body>
@@ -260,6 +273,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <button class="tab" onclick="sw('sansu')">🔢 算数</button>
   <button class="tab" onclick="sw('mensetsu')">🎤 面接</button>
   <button class="tab" onclick="sw('tips')">💡 コツ</button>
+  <button class="tab" onclick="sw('video')">▶️ 動画</button>
 </div>
 
 <!-- カレンダー -->
@@ -268,7 +282,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div class="sc"><div class="v" id="st1">0</div><div class="l">練習日</div></div>
     <div class="sc"><div class="v" id="st2">0</div><div class="l">連続🔥</div></div>
     <div class="sc" style="background:#FFF3CD"><div class="v" id="stPt" style="color:#F0A030">0pt</div><div class="l">今月pt</div></div>
-    <div class="sc" style="background:#EBF5FF"><div class="v" id="stYen" style="color:#1A5B8A;font-size:16px">¥0</div><div class="l">総獲得</div></div>
+    <div class="sc" style="background:#EBF5FF"><div class="v" id="stYen" style="color:#1A5B8A;font-size:17px">¥0</div><div class="l">総獲得</div></div>
   </div>
   <!-- 累計獲得金額バナー -->
   <div class="earn-banner" id="earnBanner">
@@ -290,9 +304,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       <button class="subj-btn" id="sb-sansu" onclick="toggleSubj('sansu')">🔢 算数<br><span class="subj-pt">+1pt</span></button>
       <button class="subj-btn" id="sb-review" onclick="toggleSubj('review')">🔄 復習<br><span class="subj-pt">+1pt</span></button>
     </div>
-    <div id="comboAlert" style="display:none;background:#FFF3CD;border-radius:10px;padding:8px 12px;font-size:12px;color:#856404;margin-bottom:8px;text-align:center"></div>
+    <div id="comboAlert" style="display:none;background:#FFF3CD;border-radius:10px;padding:8px 12px;font-size:13px;color:#856404;margin-bottom:8px;text-align:center"></div>
     <button class="stbtn" id="stbtn" onclick="stamp()">⭐ 今日の記録を保存！</button>
-    <p style="font-size:11px;color:#999;text-align:center;margin-top:4px" id="stampHint">科目を選んで保存してね</p>
+    <p style="font-size:12px;color:#999;text-align:center;margin-top:4px" id="stampHint">科目を選んで保存してね</p>
   </div>
 
   <!-- 月間ボーナス進捗 -->
@@ -308,10 +322,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       <button class="bs" onclick="cm(1)" style="padding:8px 14px">▶</button>
     </div>
     <div class="cgrid" id="cgrid"></div>
-    <div style="display:flex;gap:10px;font-size:12px;color:#666;margin-bottom:4px;flex-wrap:wrap">
+    <div style="display:flex;gap:10px;font-size:13px;color:#666;margin-bottom:4px;flex-wrap:wrap">
       <span>⭐練習日</span><span style="color:#E24B4A">🔴A方式 11/15</span><span style="color:#9B8FD4">🔵B方式 12/13</span>
     </div>
-    <div style="display:flex;gap:10px;font-size:12px;color:#666;margin-bottom:8px;flex-wrap:wrap">
+    <div style="display:flex;gap:10px;font-size:13px;color:#666;margin-bottom:8px;flex-wrap:wrap">
       <span style="color:#3A7BD5">🟢コンボ日</span><span style="color:#F0A030">🟡バランスボーナス日</span>
     </div>
   </div>
@@ -335,7 +349,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div id="sk-step1">
     <div class="card">
       <div class="ctitle">📖 良い作文を読もう <span class="badge ba">Step 1</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:10px">まずは受賞作品を読んで「良い作文」のイメージをつかもう！レベル順に並んでいるよ。</p>
+      <p style="font-size:14px;color:#666;margin-bottom:10px">まずは受賞作品を読んで「良い作文」のイメージをつかもう！レベル順に並んでいるよ。</p>
       <!-- フィルター -->
       <div class="filter-row" id="essayFilters">
         <button class="fchip on" onclick="filterEssays('all',this)">すべて</button>
@@ -362,12 +376,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div id="sk-step2" style="display:none">
     <div class="card">
       <div class="ctitle">🔍 構成を分解しよう <span class="badge bb">Step 2</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:10px">この作文はどんな「型」で書かれているか、段落ごとに色分けして見てみよう！</p>
+      <p style="font-size:14px;color:#666;margin-bottom:10px">この作文はどんな「型」で書かれているか、段落ごとに色分けして見てみよう！</p>
       <div id="structureView"></div>
       <div style="margin-top:12px;padding:12px;background:#F4F8FC;border-radius:10px">
-        <div style="font-size:12px;font-weight:700;color:#555;margin-bottom:8px">📌 この作文の「型」</div>
-        <div id="essayTypeLabel" style="font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:6px"></div>
-        <div id="structureSteps" style="font-size:13px;color:#555;line-height:1.9"></div>
+        <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:8px">📌 この作文の「型」</div>
+        <div id="essayTypeLabel" style="font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:6px"></div>
+        <div id="structureSteps" style="font-size:14px;color:#555;line-height:1.9"></div>
       </div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(1)">← 戻る</button>
@@ -380,7 +394,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div id="sk-step3" style="display:none">
     <div class="card">
       <div class="ctitle">📝 型をまねて書こう <span class="badge bc">Step 3</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:10px">テンプレートに自分の体験を当てはめてみよう。まずはメモでOK！</p>
+      <p style="font-size:14px;color:#666;margin-bottom:10px">テンプレートに自分の体験を当てはめてみよう。まずはメモでOK！</p>
       <div id="tmplArea"></div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(2)">← 戻る</button>
@@ -393,13 +407,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div id="sk-step4" style="display:none">
     <div class="card">
       <div class="ctitle">✏️ 400字で書こう <span class="badge ba">Step 4</span></div>
-      <p style="font-size:12px;color:#666;margin-bottom:8px">まずは400字（原稿用紙1枚分）でまとめてみよう。</p>
-      <div style="font-size:12px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
+      <p style="font-size:13px;color:#666;margin-bottom:8px">まずは400字（原稿用紙1枚分）でまとめてみよう。</p>
+      <div style="font-size:13px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
         <strong style="color:#1A5B8A">書くヒント：</strong><br>
         <span id="step4hint"></span>
       </div>
       <div class="char-target">
-        <span style="font-size:12px;color:#666;font-weight:600;align-self:center">目標：</span>
+        <span style="font-size:13px;color:#666;font-weight:600;align-self:center">目標：</span>
         <button class="ctbtn on" onclick="setCT(400,this)">400字</button>
         <button class="ctbtn" onclick="setCT(800,this)">800字</button>
         <button class="ctbtn" onclick="setCT(1200,this)">1200字</button>
@@ -442,7 +456,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div id="sk-step5" style="display:none">
     <div class="card">
       <div class="ctitle">🤖 AIコーチと深めよう <span class="badge bb">Step 5</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:10px">AIコーチが質問するから、答えながら作文のネタを深めよう！</p>
+      <p style="font-size:14px;color:#666;margin-bottom:10px">AIコーチが質問するから、答えながら作文のネタを深めよう！</p>
       <div class="chat-area" id="chatArea"></div>
       <div style="display:flex;gap:6px">
         <textarea class="ta" id="chatIn" style="min-height:60px;flex:1" placeholder="答えを書いてね…"></textarea>
@@ -459,8 +473,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div id="sk-step6" style="display:none">
     <div class="card">
       <div class="ctitle">📄 800字に広げよう <span class="badge ba">Step 6</span></div>
-      <p style="font-size:12px;color:#666;margin-bottom:8px">Step 5で出てきたネタも使って、800字に広げよう！</p>
-      <div style="font-size:12px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
+      <p style="font-size:13px;color:#666;margin-bottom:8px">Step 5で出てきたネタも使って、800字に広げよう！</p>
+      <div style="font-size:13px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
         <strong style="color:#1A5B8A">広げるポイント：</strong><br>
         <span id="step6hint"></span>
       </div>
@@ -502,8 +516,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div id="sk-step7" style="display:none">
     <div class="card">
       <div class="ctitle">🏆 1200字の完成版！ <span class="badge ba">Step 7</span></div>
-      <p style="font-size:12px;color:#666;margin-bottom:8px">明訓中学A方式の本番は1200字（400字×3枚）。仕上げの一本を書こう！</p>
-      <div style="font-size:12px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
+      <p style="font-size:13px;color:#666;margin-bottom:8px">明訓中学A方式の本番は1200字（400字×3枚）。仕上げの一本を書こう！</p>
+      <div style="font-size:13px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
         <strong style="color:#1A5B8A">仕上げのチェック：</strong><br>
         ① 意見がはっきり書けているか　② 体験（オランダ生活！）が入っているか　③ 気づきや学びが書けているか　④ 締めくくりが決まっているか　⑤ 誤字脱字はないか
       </div>
@@ -518,7 +532,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       </div>
       <div class="photo-section">
         <div class="ps-title">🏆 清書した完成版を写真で最終添削！</div>
-        <p style="font-size:13px;color:#666;margin-bottom:10px">縦書き・400字詰め原稿用紙に清書したら写真を撮って送ってね。複数枚あれば1枚ずつ送ってね。</p>
+        <p style="font-size:14px;color:#666;margin-bottom:10px">縦書き・400字詰め原稿用紙に清書したら写真を撮って送ってね。複数枚あれば1枚ずつ送ってね。</p>
         <div class="photo-upload-area" id="pu7area">
           <input type="file" id="pu7input" accept="image/*" capture="environment"
             onchange="showPhotoPreview('pu7input','pu7preview','pu7area')">
@@ -535,7 +549,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
         <div id="pfresult7" style="display:none;margin-top:8px"></div>
       </div>
       <div style="margin-top:12px;padding:12px;background:#EBF5FF;border-radius:10px;text-align:center">
-        <p style="font-size:13px;color:#1A5B8A;font-weight:600">🌸 ここまで来たら、あとは手書きで清書するだけ！<br>縦書き・400字詰め原稿用紙3枚 でがんばれ！</p>
+        <p style="font-size:14px;color:#1A5B8A;font-weight:600">🌸 ここまで来たら、あとは手書きで清書するだけ！<br>縦書き・400字詰め原稿用紙3枚 でがんばれ！</p>
       </div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(6)">← 戻る</button>
@@ -584,9 +598,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div class="card">
       <div class="ctitle">💬 語彙・慣用句・ことわざ <span class="badge bb">B方式</span></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-        <button class="bpurp" style="font-size:13px;padding:10px 14px" onclick="genVQ('kanyou')">慣用句</button>
-        <button class="bpurp" style="font-size:13px;padding:10px 14px" onclick="genVQ('kotowaza')">ことわざ</button>
-        <button class="bpurp" style="font-size:13px;padding:10px 14px" onclick="genVQ('jukugo')">熟語・語彙</button>
+        <button class="bpurp" style="font-size:14px;padding:10px 14px" onclick="genVQ('kanyou')">慣用句</button>
+        <button class="bpurp" style="font-size:14px;padding:10px 14px" onclick="genVQ('kotowaza')">ことわざ</button>
+        <button class="bpurp" style="font-size:14px;padding:10px 14px" onclick="genVQ('jukugo')">熟語・語彙</button>
       </div>
       <div id="vqloading" style="display:none" class="loading">問題を作っています</div>
       <div id="vqarea" style="display:none">
@@ -603,14 +617,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 <div id="s-kanji" class="sec">
   <div class="card">
     <div class="ctitle">漢字フラッシュカード <span class="badge bc">5・6年生</span></div>
-    <p style="font-size:13px;color:#666;margin-bottom:12px">タップ→読み方表示 → もう1回タップ→✅覚えた → もう1回→❌苦手</p>
+    <p style="font-size:14px;color:#666;margin-bottom:12px">タップ→読み方表示 → もう1回タップ→✅覚えた → もう1回→❌苦手</p>
     <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-      <button class="bamb" style="font-size:13px" onclick="loadKanji(5)">5年生漢字</button>
-      <button class="bamb" style="font-size:13px" onclick="loadKanji(6)">6年生漢字</button>
-      <button class="bs" style="font-size:13px" onclick="loadKanji('miss')">苦手だけ</button>
-      <button class="bp" style="font-size:13px" onclick="genKanjiQ()">書き取りクイズ</button>
+      <button class="bamb" style="font-size:14px" onclick="loadKanji(5)">5年生漢字</button>
+      <button class="bamb" style="font-size:14px" onclick="loadKanji(6)">6年生漢字</button>
+      <button class="bs" style="font-size:14px" onclick="loadKanji('miss')">苦手だけ</button>
+      <button class="bp" style="font-size:14px" onclick="genKanjiQ()">書き取りクイズ</button>
     </div>
-    <div style="display:flex;gap:12px;font-size:13px;margin-bottom:10px;background:#EBF5FF;padding:10px;border-radius:10px">
+    <div style="display:flex;gap:12px;font-size:14px;margin-bottom:10px;background:#EBF5FF;padding:10px;border-radius:10px">
       <span>✅ <strong id="kdone">0</strong>字</span>
       <span>❌ <strong id="kmiss">0</strong>字苦手</span>
       <span style="color:#666">残り <strong id="kleft">—</strong>字</span>
@@ -619,11 +633,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   </div>
   <div class="card" id="kquizcard" style="display:none">
     <div class="ctitle">✍️ 書き取りクイズ</div>
-    <div id="kqbox" class="qbox" style="font-size:15px;line-height:1.8"></div>
-    <p style="font-size:12px;color:#888;margin-bottom:8px">📝 紙に書いて練習してから答えを確認しよう！</p>
+    <div id="kqbox" class="qbox" style="font-size:16px;line-height:1.8"></div>
+    <p style="font-size:13px;color:#888;margin-bottom:8px">📝 紙に書いて練習してから答えを確認しよう！</p>
     <div id="kqanswer" style="display:none;background:#FFF3CD;border-radius:10px;padding:10px 14px;margin-bottom:10px;border-left:4px solid #F0A030">
-      <div style="font-size:11px;font-weight:700;color:#7C4A00;margin-bottom:6px">💡 答え</div>
-      <div id="kqanswerText" style="font-size:14px;line-height:1.8"></div>
+      <div style="font-size:12px;font-weight:700;color:#7C4A00;margin-bottom:6px">💡 答え</div>
+      <div id="kqanswerText" style="font-size:15px;line-height:1.8"></div>
     </div>
     <div class="brow">
       <button id="kqansBtn" class="bamb" onclick="toggleKanjiAnswer()">答えを見る</button>
@@ -645,11 +659,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     </div>
     <div id="mloading" style="display:none" class="loading">問題を作っています</div>
     <div id="marea" style="display:none">
-      <div class="qbox" id="mbox" style="font-size:15px;line-height:1.95"></div>
-      <p style="font-size:12px;color:#888;margin-bottom:8px">まず自分で解いてみよう！解けたら「答えを見る」か「自分の解答を採点」を使ってね。</p>
+      <div class="qbox" id="mbox" style="font-size:16px;line-height:1.95"></div>
+      <p style="font-size:13px;color:#888;margin-bottom:8px">まず自分で解いてみよう！解けたら「答えを見る」か「自分の解答を採点」を使ってね。</p>
       <div id="mansanswer" style="display:none;background:#FFF3CD;border-radius:10px;padding:10px 14px;margin-bottom:10px;border-left:4px solid #F0A030">
-        <div style="font-size:11px;font-weight:700;color:#7C4A00;margin-bottom:6px">💡 答えと解説</div>
-        <div id="mansanswerText" style="font-size:14px;line-height:1.8"></div>
+        <div style="font-size:12px;font-weight:700;color:#7C4A00;margin-bottom:6px">💡 答えと解説</div>
+        <div id="mansanswerText" style="font-size:15px;line-height:1.8"></div>
       </div>
       <textarea class="ta" id="mansin" style="min-height:100px" placeholder="式と答えをここに書こう"></textarea>
       <div class="brow">
@@ -666,7 +680,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 <div id="s-mensetsu" class="sec">
   <div class="card">
     <div class="ctitle">🎤 面接練習 <span class="badge ba">A・B方式（親子面接）</span></div>
-    <p style="font-size:13px;color:#666;margin-bottom:10px">質問をタップして答えを書く → AIにアドバイスをもらおう</p>
+    <p style="font-size:14px;color:#666;margin-bottom:10px">質問をタップして答えを書く → AIにアドバイスをもらおう</p>
     <div id="iqlist"></div>
   </div>
   <div class="card" id="ipcard" style="display:none">
@@ -709,28 +723,75 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   </div>
   <div class="card">
     <div class="ctitle">🔢 B方式 国語・算数ポイント</div>
-    <div style="display:grid;gap:8px;font-size:13px">
+    <div style="display:grid;gap:8px;font-size:14px">
       <div style="padding:12px;background:#EDE9FE;border-radius:10px;border-left:4px solid #9B8FD4">
         <strong style="color:#4C1D95">国語 50分・28〜30問</strong><br>
-        <span style="color:#7B6FC4;font-size:12px">速く正確に読む練習を。根拠は必ず本文から。漢字は5・6年生レベルを完璧に</span>
+        <span style="color:#7B6FC4;font-size:13px">速く正確に読む練習を。根拠は必ず本文から。漢字は5・6年生レベルを完璧に</span>
       </div>
       <div style="padding:12px;background:#FFF3CD;border-radius:10px;border-left:4px solid #F0A030">
         <strong style="color:#7C4A00">算数 50分・22〜26問</strong><br>
-        <span style="color:#854F0B;font-size:12px">1点差で合否が決まることも。ケアレスミスゼロへ。文章題・速さ・比・図形を優先</span>
+        <span style="color:#854F0B;font-size:13px">1点差で合否が決まることも。ケアレスミスゼロへ。文章題・速さ・比・図形を優先</span>
       </div>
       <div style="padding:12px;background:#EEF4FA;border-radius:10px">
         <strong>毎日メニュー例</strong><br>
-        <span style="color:#555;font-size:12px">月水：作文+AI添削 ／ 火木：国語読解+漢字 ／ 金：算数+面接練習 ／ 土：清書・見直し</span>
+        <span style="color:#555;font-size:13px">月水：作文+AI添削 ／ 火木：国語読解+漢字 ／ 金：算数+面接練習 ／ 土：清書・見直し</span>
       </div>
     </div>
   </div>
   <div class="card">
     <div class="ctitle">⚙️ 設定</div>
-    <button class="bs" style="font-size:13px;padding:10px 16px" onclick="resetKey()">APIキーを変更する</button>
+    <button class="bs" style="font-size:14px;padding:10px 16px" onclick="resetKey()">APIキーを変更する</button>
   </div>
 </div>
 </div>
 
+
+<!-- 動画 -->
+<div id="s-video" class="sec" style="display:none">
+
+  <!-- 国語・小論文セクション -->
+  <div class="card">
+    <div class="ctitle">📖 国語・小論文 動画</div>
+    <p style="font-size:13px;color:#666;margin-bottom:14px">明訓中学の受験対策に役立つ国語・作文・小論文の動画です。</p>
+
+    <div class="video-item">
+      <div class="video-title">📝 小論文の書き方①</div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/l_FM-7W1w2Q" title="小論文の書き方①"
+          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="video-item">
+      <div class="video-title">📝 小論文の書き方②</div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/fwbfbwkz5Lg" title="小論文の書き方②"
+          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="video-item">
+      <div class="video-title">📝 小論文の書き方③</div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/N_o3psXDhDo" title="小論文の書き方③"
+          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- 算数セクション -->
+  <div class="card">
+    <div class="ctitle">🔢 算数 動画（計算達人シリーズ）</div>
+    <p style="font-size:13px;color:#666;margin-bottom:14px">計算の基礎から入試レベルまで。タイトルをタップすると動画が表示されます。</p>
+
+    <div id="mathVideoList">
+    </div>
+  </div>
+
+</div>
 <script>
 
 const IQS=[
@@ -766,7 +827,7 @@ function resetKey(){localStorage.removeItem('mk_apikey');location.reload()}
 function init(){
   try{cal=JSON.parse(localStorage.getItem('mk_cal')||'{}');kanjiState=JSON.parse(localStorage.getItem('mk_kstate')||'{}')}catch(e){cal={};kanjiState={}}
   const t=new Date();cY=t.getFullYear();cM=t.getMonth()+1;
-  migrateCal();countdown();renderCal();initSakubun();renderIQ();upStats();renderEarnBanner();renderBonusChips();initTodayButtons();
+  migrateCal();countdown();renderCal();initSakubun();renderIQ();upStats();renderEarnBanner();renderBonusChips();initTodayButtons();initVideoSection();
 }
 
 async function callAPI(prompt,maxTokens=800){
@@ -1099,8 +1160,8 @@ function renderCal(){
     const k=cY+'-'+cM+'-'+d,el=document.createElement('div');el.className='cday';
     const isT=t.getFullYear()===cY&&t.getMonth()+1===cM&&t.getDate()===d;
     const isA=cY===2026&&cM===11&&d===15,isB=cY===2026&&cM===12&&d===13;
-    if(isA){el.classList.add('xa');el.innerHTML='<span style="font-size:9px;color:#E24B4A;text-align:center">'+d+'<br>A試験</span>'}
-    else if(isB){el.classList.add('xb');el.innerHTML='<span style="font-size:9px;color:#9B8FD4;text-align:center">'+d+'<br>B試験</span>'}
+    if(isA){el.classList.add('xa');el.innerHTML='<span style="font-size:10px;color:#E24B4A;text-align:center">'+d+'<br>A試験</span>'}
+    else if(isB){el.classList.add('xb');el.innerHTML='<span style="font-size:10px;color:#9B8FD4;text-align:center">'+d+'<br>B試験</span>'}
     else if(cal[k] && (cal[k]===true || cal[k].pts !== undefined)){
       const dayData = cal[k];
       const pts = (dayData.pts||0)+(dayData.bonus||0);
@@ -1163,8 +1224,8 @@ function renderQUI(reply,boxId,optsId,resId,nxtId){
   }
 
   const qb=document.getElementById(boxId);let html='';
-  if(tm)html+='<p style="font-size:13px;color:#555;margin-bottom:10px;border-bottom:1px solid #e0e0e0;padding-bottom:10px">'+tm[1].trim().replace(/\n/g,'<br>')+'</p>';
-  if(qm)html+='<p style="font-weight:700;font-size:15px;margin-top:4px">'+qm[1].trim().replace(/\n/g,'<br>')+'</p>';
+  if(tm)html+='<p style="font-size:14px;color:#555;margin-bottom:10px;border-bottom:1px solid #e0e0e0;padding-bottom:10px">'+tm[1].trim().replace(/\n/g,'<br>')+'</p>';
+  if(qm)html+='<p style="font-weight:700;font-size:16px;margin-top:4px">'+qm[1].trim().replace(/\n/g,'<br>')+'</p>';
   qb.innerHTML=html||(md2html(reply));
 
   const opts=document.getElementById(optsId);opts.innerHTML='';
@@ -1229,22 +1290,22 @@ function renderKanji(){
       el.className='kcard';
       if(phase===0){
         el.innerHTML='<div class="kj">'+item.k+'</div>'
-          +'<div class="kr" style="visibility:hidden;font-size:10px;min-height:1em">'+item.r+'</div>';
+          +'<div class="kr" style="visibility:hidden;font-size:11px;min-height:1em">'+item.r+'</div>';
       } else if(phase===1){
         el.classList.add('show');
         el.innerHTML='<div class="kj">'+item.k+'</div>'
           +'<div class="kr">'+item.r+'</div>'
-          +'<div style="font-size:9px;color:#888;margin-top:2px">→ ✅</div>';
+          +'<div style="font-size:10px;color:#888;margin-top:2px">→ ✅</div>';
       } else if(phase===2){
         el.classList.add('done');
         el.innerHTML='<div class="kj">'+item.k+'</div>'
           +'<div class="kr">'+item.r+'</div>'
-          +'<div style="font-size:13px;margin-top:2px">✅</div>';
+          +'<div style="font-size:14px;margin-top:2px">✅</div>';
       } else {
         el.classList.add('miss');
         el.innerHTML='<div class="kj">'+item.k+'</div>'
           +'<div class="kr">'+item.r+'</div>'
-          +'<div style="font-size:13px;margin-top:2px">❌</div>';
+          +'<div style="font-size:14px;margin-top:2px">❌</div>';
       }
     }
     applyPhase();
@@ -1408,8 +1469,8 @@ async function getIFB(){
 function md2html(text){
   return text
     .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
-    .replace(/##\s*(.+)/g,"<p style=\"font-weight:700;font-size:15px;margin:10px 0 4px\">$1</p>")
-    .replace(/\$([^$]+)\$/g,"<span style=\"font-family:serif;font-size:15px\">$1</span>")
+    .replace(/##\s*(.+)/g,"<p style=\"font-weight:700;font-size:16px;margin:10px 0 4px\">$1</p>")
+    .replace(/\$([^$]+)\$/g,"<span style=\"font-family:serif;font-size:16px\">$1</span>")
     .replace(/---/g,"<hr style=\"border:none;border-top:1px solid #e0e0e0;margin:8px 0\">")
     .replace(/^\d+\.\s+/gm,(m)=>"<br>"+m)
     .replace(/\n/g,"<br>");
@@ -1578,7 +1639,7 @@ function renderStructure(){
 
 function renderTemplate(){
   const e=sk_essay;const rl={intro:'導入',event:'出来事',change:'気づき（転換点）',spread:'考えの広がり',end:'結末・決意'};
-  document.getElementById('tmplArea').innerHTML=`<div style="font-size:13px;background:#FFF3CD;padding:10px 12px;border-radius:10px;margin-bottom:12px;border-left:4px solid #F59E0B"><strong style="color:#7C4A00">💡 まねるポイント：</strong><br><span style="color:#1a1a1a">${e.imitation}</span></div>${e.structure.map(p=>`<div class="tmpl-block"><div class="tmpl-label">${p.label}（${rl[p.role]||p.role}）</div><div class="tmpl-hint">→ あなたの「${p.text.split('。')[0]}」はどんなこと？</div><textarea class="ta" style="min-height:70px;margin-top:6px" placeholder="自分の体験をここにメモしよう…"></textarea></div>`).join('')}`;
+  document.getElementById('tmplArea').innerHTML=`<div style="font-size:14px;background:#FFF3CD;padding:10px 12px;border-radius:10px;margin-bottom:12px;border-left:4px solid #F59E0B"><strong style="color:#7C4A00">💡 まねるポイント：</strong><br><span style="color:#1a1a1a">${e.imitation}</span></div>${e.structure.map(p=>`<div class="tmpl-block"><div class="tmpl-label">${p.label}（${rl[p.role]||p.role}）</div><div class="tmpl-hint">→ あなたの「${p.text.split('。')[0]}」はどんなこと？</div><textarea class="ta" style="min-height:70px;margin-top:6px" placeholder="自分の体験をここにメモしよう…"></textarea></div>`).join('')}`;
 }
 
 function renderStep4(){const e=sk_essay;document.getElementById('step4hint').innerHTML=(e.prompts400[0]||'')+'<br>💡 '+e.imitation;}
@@ -1668,6 +1729,78 @@ async function getS7FB(){
     document.getElementById('s7farea').scrollIntoView({behavior:'smooth'});
   }catch(err){alert('エラー：'+err.message);}
   btn.disabled=false;btn.textContent='🎓 最終添削してもらう';
+}
+
+
+// ===== 動画セクション =====
+const MATH_VIDEOS = [
+    {title:"計算達人「計算の順番変え」",id:"FHHQYBhhJ7A"},
+    {title:"計算達人「分配法則（整数編）」",id:"Gz6txevBIcw"},
+    {title:"計算達人「分配法則（小数編）」",id:"hVVE5Qno4GA"},
+    {title:"計算達人「分配法則（分数編）」",id:"MIXrK3CzNAY"},
+    {title:"計算達人「小数の分数変換」",id:"3sDYD3ZED-w"},
+    {title:"計算達人「小数化・分数化の判断」",id:"FDAbGUl_L3M"},
+    {title:"計算達人「□を求める計算（逆算）整数編①」",id:"kRHdR7-yDys"},
+    {title:"計算達人「□を求める計算（逆算）整数編②」",id:"IRmYEiHHBMc"},
+    {title:"計算達人「□を求める計算（逆算）小数編」",id:"KddyjkKvNcU"},
+    {title:"計算達人「□を求める計算（逆算）分数編」",id:"z-zgaB6EUY8"},
+    {title:"計算達人「□を求める計算（逆算）あまりのある割り算編」",id:"K1TXqwBxguQ"},
+    {title:"計算達人「キセル算（部分分数分解）」",id:"uXlxZxpUl1o"},
+    {title:"計算達人「単位分数の和」",id:"Tu6Lifae2X4"},
+    {title:"計算達人「単位変換①（長さと重さ）」",id:"zgGfO5YejQU"},
+    {title:"計算達人「単位変換②（面積と容積・体積）」",id:"tdivqESQANE"},
+    {title:"計算達人「単位変換③（時間）」",id:"TPUeOjD1TdE"},
+    {title:"計算達人「単位の計算問題①（長さと重さ）」",id:"mYhtr072oXs"},
+    {title:"計算達人「単位の計算問題②（面積と体積・容積）」",id:"g9rwKFRqseE"},
+    {title:"計算達人「単位の計算問題③（時間）」",id:"SGy20EcTgLY"},
+    {title:"計算達人「比の計算（比例式）①」",id:"b76GSSSxEMo"},
+    {title:"計算達人「比の計算（比例式）②＊単位の比」",id:"UsSrPHIIvx4"},
+    {title:"計算達人「分母・分子の□を求める計算（逆算の応用）」",id:"6cWJ1RdQUVo"},
+    {title:"計算達人「複数の□を求める計算①（比の利用）」",id:"2n07FgcPnKM"},
+    {title:"計算達人「複数の□を求める計算②（素因数分解）」",id:"ht_fTwzwa6Q"}
+];
+
+let _openVideoId = null;
+
+function initVideoSection() {
+  const list = document.getElementById('mathVideoList');
+  if (!list) return;
+  list.innerHTML = '';
+  MATH_VIDEOS.forEach((v, i) => {
+    const item = document.createElement('div');
+    item.className = 'video-accordion';
+    item.innerHTML =
+      '<button class="vacc-btn" onclick="toggleMathVideo(' + i + ',\'v_'+i+'\')">'
+      + '<span class="vacc-num">' + (i+1) + '</span>'
+      + '<span class="vacc-title">' + v.title + '</span>'
+      + '<span class="vacc-arrow" id="arr_' + i + '">▼</span>'
+      + '</button>'
+      + '<div class="video-wrap" id="v_' + i + '" style="display:none">'
+      + '<iframe src="https://www.youtube.com/embed/' + v.id + '?rel=0" title="' + v.title + '"'
+      + ' frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"'
+      + ' allowfullscreen loading="lazy"></iframe>'
+      + '</div>';
+    list.appendChild(item);
+  });
+}
+
+function toggleMathVideo(idx, wrapId) {
+  const wrap = document.getElementById(wrapId);
+  const arr = document.getElementById('arr_' + idx);
+  if (!wrap) return;
+  const isOpen = wrap.style.display !== 'none';
+  // 他を全部閉じる
+  MATH_VIDEOS.forEach((_, i) => {
+    const w = document.getElementById('v_' + i);
+    const a = document.getElementById('arr_' + i);
+    if (w) w.style.display = 'none';
+    if (a) a.textContent = '▼';
+  });
+  if (!isOpen) {
+    wrap.style.display = 'block';
+    if (arr) arr.textContent = '▲';
+    wrap.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
 }
 
 </script>
