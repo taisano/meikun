@@ -503,11 +503,11 @@ async function getFB(){
   const t=document.getElementById('stt').textContent,btn=document.getElementById('fbtn');
   btn.disabled=true;btn.textContent='添削中…';document.getElementById('farea').style.display='none';
   try{
-    const reply=await callAPI(`新潟明訓中学A方式入試作文添削。11歳・小6・帰国子女（オランダ在住）。\nテーマ：「${t}」\n作文：${txt}\n\n【総合評価】A/B/Cのどれか1字＋一言コメント\n【良かった点】2〜3つ（箇条書き）\n【改善のヒント】2〜3つ（具体的・小6向けの言葉で）\n【書き直しのヒント】1〜2文だけ改善例を示す\n\n帰国子女ならではの体験を活かしているかも評価してください。励ます口調で！`,1000);
+    const reply=await callAPI(`新潟明訓中学A方式入試作文添削。11歳・小6・帰国子女（オランダ在住）。\nテーマ：「${t}」\n作文：${txt}\n\n【総合評価】A/B/Cのどれか1字＋一言コメント\n【良かった点】2〜3つ（箇条書き）\n【改善のヒント】2〜3つ（具体的・小6向けの言葉で）\n【書き直しのヒント】1〜2文だけ改善例を示す\n\n帰国子女ならではの体験を活かしているかも評価してください。励ます口調で！\n\n【重要】マークダウン記法（**や##）は使わず、普通の日本語テキストで書いてください。`,1000);
     const sm=reply.match(/【総合評価】([ABC])/),sp=document.getElementById('pills');sp.innerHTML='';
     if(sm){const p=document.createElement('span');p.className='pill pila';p.textContent='評価：'+sm[1];sp.appendChild(p)}
     const lp=document.createElement('span');lp.className='pill pilb';lp.textContent=document.getElementById('ein').value.length+'字';sp.appendChild(lp);
-    document.getElementById('ftxt').textContent=reply;document.getElementById('farea').style.display='block';
+    document.getElementById('ftxt').innerHTML=md2html(reply);document.getElementById('farea').style.display='block';
     const c=parseInt(localStorage.getItem('mk_essays')||'0')+1;localStorage.setItem('mk_essays',c);upStats();
     document.getElementById('farea').scrollIntoView({behavior:'smooth'});
   }catch(e){alert('エラー：'+e.message)}
@@ -569,7 +569,7 @@ async function genBun(){
   const btn=event.currentTarget;btn.disabled=true;btn.textContent='作成中…';document.getElementById('bunarea').style.display='none';
   try{
     const reply=await callAPI('小6向け短文（100〜150字）と記述問題（体験をまじえて3〜4文で答える）を作成。形式：【文章】（文章）【設問】（問い）');
-    document.getElementById('bunbox').textContent=reply;document.getElementById('bunarea').style.display='block';
+    document.getElementById('bunbox').innerHTML=md2html(reply);document.getElementById('bunarea').style.display='block';
     document.getElementById('bunfb').style.display='none';document.getElementById('bunin').value='';
   }catch(e){alert('エラー：'+e.message)}
   btn.disabled=false;btn.textContent='文章問題を作ってもらう';
@@ -580,7 +580,7 @@ async function getBunFB(){
   btn.disabled=true;btn.textContent='添削中…';
   try{
     const reply=await callAPI(`小6帰国子女（オランダ）の記述練習。\n問題：${q}\n答え：${txt}\n良かった点と改善点をやさしく短く教えてください。`);
-    document.getElementById('bunft').textContent=reply;document.getElementById('bunfb').style.display='block';
+    document.getElementById('bunft').innerHTML=md2html(reply);document.getElementById('bunfb').style.display='block';
   }catch(e){alert('エラー：'+e.message)}
   btn.disabled=false;btn.textContent='添削してもらう';
 }
@@ -626,7 +626,7 @@ async function genKanjiQ(){
   const sample=kanjiData.sort(()=>Math.random()-.5).slice(0,5).map(x=>x.k).join('・');
   try{
     const reply=await callAPI(`以下の漢字を使って小6向け書き取り問題を5問作成。ひらがなの語を漢字に直す問題。\n使用漢字：${sample}\n形式（番号付きリスト）：\n1. ○○（ひらがな）→ （漢字）\n2. ...\n答えも含めて書いてください。`);
-    document.getElementById('kqbox').innerHTML=reply.replace(/\n/g,'<br>');
+    document.getElementById('kqbox').innerHTML=md2html(reply);
     document.getElementById('kquizcard').scrollIntoView({behavior:'smooth'});
   }catch(e){document.getElementById('kqbox').textContent='エラー：'+e.message}
 }
@@ -636,17 +636,17 @@ async function checkKanjiQ(){
   btn.disabled=true;btn.textContent='確認中…';
   try{
     const reply=await callAPI(`漢字書き取り採点。\n問題：${q}\n生徒の答え：${txt}\n何問正解か教えて。間違えた問題は正しい答えを示してやさしく説明してください。`);
-    const r=document.getElementById('kqresult');r.className='qans ok';r.innerHTML=reply.replace(/\n/g,'<br>');r.style.display='block';
+    const r=document.getElementById('kqresult');r.className='qans ok';r.innerHTML=md2html(reply);r.style.display='block';
   }catch(e){alert('エラー：'+e.message)}
   btn.disabled=false;btn.textContent='答え合わせ';
 }
 
 window._lastMT='keisan';
 const MPROMPTS={
-  keisan:'小学6年生向け計算問題（分数・小数・四則混合計算）を1問。式と答えを書かせる問題形式で。解答と丁寧な解説付き。',
-  bunshoudai:'小学6年生向け文章題（速さ・時間・距離またはつるかめ算）を1問。解答と丁寧な解説付き。',
-  zukei:'小学6年生向け図形問題（面積・体積・円の計算）を1問。解答と丁寧な解説付き。',
-  wariai:'小学6年生向け割合・比・百分率の問題を1問。解答と丁寧な解説付き。'
+  keisan:'小学6年生向け計算問題（分数・小数・四則混合計算）を1問。式と答えを書かせる問題形式で。解答と丁寧な解説付き。\n\n【重要】マークダウン（**や##）やLaTeX（$記号）は使わず、普通の日本語テキストで書いてください。分数は「3/4」、掛け算は「×」のように書いてください。',
+  bunshoudai:'小学6年生向け文章題（速さ・時間・距離またはつるかめ算）を1問。解答と丁寧な解説付き。\n\n【重要】マークダウン（**や##）は使わず、普通の日本語テキストで書いてください。',
+  zukei:'小学6年生向け図形問題（面積・体積・円の計算）を1問。解答と丁寧な解説付き。\n\n【重要】マークダウン（**や##）は使わず、普通の日本語テキストで書いてください。',
+  wariai:'小学6年生向け割合・比・百分率の問題を1問。解答と丁寧な解説付き。\n\n【重要】マークダウン（**や##）は使わず、普通の日本語テキストで書いてください。'
 };
 async function genMath(type){
   window._lastMT=type;
@@ -654,7 +654,7 @@ async function genMath(type){
   document.getElementById('mfb').style.display='none';document.getElementById('mansin').value='';
   try{
     const reply=await callAPI(MPROMPTS[type]);
-    document.getElementById('mbox').innerHTML=reply.replace(/\n/g,'<br>');
+    document.getElementById('mbox').innerHTML=md2html(reply);
     document.getElementById('marea').style.display='block';
   }catch(e){alert('エラー：'+e.message)}
   document.getElementById('mloading').style.display='none';
@@ -665,7 +665,7 @@ async function getMathFB(){
   btn.disabled=true;btn.textContent='確認中…';
   try{
     const reply=await callAPI(`小学6年生の算数採点。\n問題：${q}\n生徒の答え：${txt}\n正誤判定と解き方の解説を丁寧にやさしくお願いします。`);
-    document.getElementById('mft').textContent=reply;document.getElementById('mfb').style.display='block';
+    document.getElementById('mft').innerHTML=md2html(reply);document.getElementById('mfb').style.display='block';
     document.getElementById('mfb').scrollIntoView({behavior:'smooth'});
   }catch(e){alert('エラー：'+e.message)}
   btn.disabled=false;btn.textContent='解説してもらう';
@@ -692,9 +692,20 @@ async function getIFB(){
   const btn=event.currentTarget;btn.disabled=true;btn.textContent='確認中…';
   try{
     const reply=await callAPI(`明訓中学受験面接練習（11歳・小6・帰国子女・オランダ在住）。\n質問：「${window._curQ}」\n生徒の答え：「${txt}」\n【良かった点】【改善のヒント】【答えの例（50字程度）】を、やさしく短く教えてください。`);
-    document.getElementById('ift').textContent=reply;document.getElementById('ifarea').style.display='block';
+    document.getElementById('ift').innerHTML=md2html(reply);document.getElementById('ifarea').style.display='block';
   }catch(e){alert('エラー：'+e.message)}
   btn.disabled=false;btn.textContent='アドバイスをもらう';
+}
+
+// Markdown→HTML変換
+function md2html(text){
+  return text
+    .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+    .replace(/##\s*(.+)/g,"<p style=\"font-weight:700;font-size:15px;margin:10px 0 4px\">$1</p>")
+    .replace(/\$([^$]+)\$/g,"<span style=\"font-family:serif;font-size:15px\">$1</span>")
+    .replace(/---/g,"<hr style=\"border:none;border-top:1px solid #e0e0e0;margin:8px 0\">")
+    .replace(/^\d+\.\s+/gm,(m)=>"<br>"+m)
+    .replace(/\n/g,"<br>");
 }
 
 // 起動時：保存済みキーがあればすぐ開始
