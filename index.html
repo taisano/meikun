@@ -520,7 +520,7 @@ async function genQ(type){
   document.getElementById('qarea').style.display='none';document.getElementById('qloading').style.display='block';document.getElementById('nxtq').style.display='none';
   const tp={ronsetsu:'論説文・説明文（科学・自然・社会テーマ）',shosetsu:'物語・小説（人物の心情読み取り）'};
   try{
-    const reply=await callAPI(`中学入試国語（小6〜中1レベル・${tp[type]}）の選択問題を1問作成。\n形式：\n【文章】（5〜8行）\n【問題】（問い）\n【選択肢】\nア（選択肢）\nイ（選択肢）\nウ（選択肢）\nエ（選択肢）\n【正解】アイウエのどれか1字のみ\n【解説】（2〜3文で丁寧に）`);
+    const reply=await callAPI(`中学入試国語（小6〜中1レベル・${tp[type]}）の選択問題を1問作成。必ず以下の形式を守ってください。マークダウン・LaTeX不使用。\n\n【文章】\n（ここに5〜8行の文章）\n【問題】\n（ここに問い）\n【選択肢】\nア （選択肢1）\nイ （選択肢2）\nウ （選択肢3）\nエ （選択肢4）\n【正解】ア\n【解説】\n（ここに2〜3文の解説）\n\n正解はア・イ・ウ・エのいずれか1文字だけ書いてください。`);
     renderQUI(reply,'qbox','qopts','qresult','nxtq');
     document.getElementById('qarea').style.display='block';
   }catch(e){alert('エラー：'+e.message)}
@@ -533,7 +533,7 @@ async function genVQ(type){
   document.getElementById('vqarea').style.display='none';document.getElementById('vqloading').style.display='block';document.getElementById('nvq').style.display='none';
   const tp={kanyou:'慣用句（体の一部を使ったもの）',kotowaza:'ことわざ・四字熟語',jukugo:'熟語の意味・対義語・類義語'};
   try{
-    const reply=await callAPI(`小学6年生向け${tp[type]}の選択問題を1問作成。\n形式：\n【問題】（問い文）\n【選択肢】\nア（選択肢）\nイ（選択肢）\nウ（選択肢）\nエ（選択肢）\n【正解】1字のみ\n【解説】（短く丁寧に）`);
+    const reply=await callAPI(`小学6年生向け${tp[type]}の選択問題を1問作成。必ず以下の形式を守ってください。マークダウン不使用。\n\n【問題】\n（ここに問い文）\n【選択肢】\nア （選択肢1）\nイ （選択肢2）\nウ （選択肢3）\nエ （選択肢4）\n【正解】ア\n【解説】\n（ここに短い解説）\n\n正解はア・イ・ウ・エのいずれか1文字だけ書いてください。`);
     renderQUI(reply,'vqbox','vqopts','vqresult','nvq');
     document.getElementById('vqarea').style.display='block';
   }catch(e){alert('エラー：'+e.message)}
@@ -541,16 +541,34 @@ async function genVQ(type){
 }
 
 function renderQUI(reply,boxId,optsId,resId,nxtId){
-  const qm=reply.match(/【問題】([\s\S]*?)(?:【選択肢】|$)/),om=reply.match(/【選択肢】([\s\S]*?)(?:【正解】|$)/),am=reply.match(/【正解】([アイウエ])/),bm=reply.match(/【解説】([\s\S]*?)$/),tm=reply.match(/【文章】([\s\S]*?)(?:【問題】|$)/);
+  // 各セクションを柔軟に抽出
+  const tm=reply.match(/【文章】([\s\S]*?)(?:【問題】|【設問】|$)/);
+  const qm=reply.match(/【問題】([\s\S]*?)(?:【選択肢】|ア[　 、．.]|$)/)||reply.match(/【設問】([\s\S]*?)(?:【選択肢】|ア[　 、．.]|$)/);
+  const am=reply.match(/【正解】[\s]*([アイウエ])/)||reply.match(/正解[：:][\s]*([アイウエ])/);
+  const bm=reply.match(/【解説】([\s\S]*?)$/)||reply.match(/解説[：:]([\s\S]*?)$/);
+
+  // 選択肢：【選択肢】ブロックまたは本文中のア〜エを探す
+  let optLines=[];
+  const omBlock=reply.match(/【選択肢】([\s\S]*?)(?:【正解】|正解|$)/);
+  if(omBlock){
+    optLines=omBlock[1].trim().split('\n').filter(l=>/^[アイウエ]/.test(l.trim()));
+  }
+  // ブロックがなければ全文からア〜エ行を拾う
+  if(optLines.length===0){
+    optLines=reply.split('\n').filter(l=>/^[アイウエ][　 、．．:]/.test(l.trim())||/^[アイウエ]\s/.test(l.trim()));
+  }
+
   const qb=document.getElementById(boxId);let html='';
   if(tm)html+='<p style="font-size:13px;color:#555;margin-bottom:10px;border-bottom:1px solid #e0e0e0;padding-bottom:10px">'+tm[1].trim().replace(/\n/g,'<br>')+'</p>';
-  if(qm)html+='<p style="font-weight:700;font-size:14px">'+qm[1].trim()+'</p>';
-  qb.innerHTML=html||reply;
+  if(qm)html+='<p style="font-weight:700;font-size:15px;margin-top:4px">'+qm[1].trim().replace(/\n/g,'<br>')+'</p>';
+  qb.innerHTML=html||(md2html(reply));
+
   const opts=document.getElementById(optsId);opts.innerHTML='';
   document.getElementById(resId).style.display='none';
-  if(om&&am){
-    om[1].trim().split('\n').filter(l=>l.trim()).forEach(line=>{
-      const lt=line.match(/^([アイウエ])/);if(!lt)return;
+
+  if(optLines.length>0&&am){
+    optLines.forEach(line=>{
+      const lt=line.trim().match(/^([アイウエ])/);if(!lt)return;
       const btn=document.createElement('button');btn.className='qopt';btn.textContent=line.trim();
       btn.onclick=()=>{
         document.querySelectorAll('#'+optsId+' .qopt').forEach(b=>b.disabled=true);
@@ -562,6 +580,9 @@ function renderQUI(reply,boxId,optsId,resId,nxtId){
       };
       opts.appendChild(btn);
     });
+  } else {
+    // 選択肢が取れなかった場合は全文表示
+    qb.innerHTML=md2html(reply);
   }
 }
 
