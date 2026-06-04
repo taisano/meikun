@@ -6,109 +6,109 @@
 <title>明訓中学 合格への道</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;background:#f5f5f0;color:#1a1a1a;font-size:16px;-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;background:#EEF4FA;color:#1a1a1a;font-size:16px;-webkit-text-size-adjust:100%}
 #apiModal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
 .apiBox{background:#fff;border-radius:16px;padding:24px;max-width:400px;width:100%}
-.apiBox h2{font-size:18px;margin-bottom:8px;color:#04342C}
+.apiBox h2{font-size:18px;margin-bottom:8px;color:#2D7DB3}
 .apiBox p{font-size:13px;color:#666;margin-bottom:16px;line-height:1.6}
 .apiBox input{width:100%;border:1px solid #ccc;border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:12px}
-.apiBox button{width:100%;padding:12px;background:#1D9E75;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}
+.apiBox button{width:100%;padding:12px;background:#5BA4CF;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}
 #app{max-width:680px;margin:0 auto;padding:12px}
-.hero{background:#04342C;border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.hero{background:linear-gradient(135deg,#3A7BD5 0%,#5BA4CF 100%;border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
 .cdowns{display:flex;gap:6px}
-.cd2{background:#0F6E56;border-radius:10px;padding:8px 10px;text-align:center;min-width:62px}
-.cd2.b{background:#3C3489}
-.cd2 .n{font-size:24px;font-weight:700;color:#9FE1CB;display:block;line-height:1}
-.cd2 .l{font-size:10px;color:#5DCAA5;margin-top:2px}
-.cd2.b .n,.cd2.b .l{color:#CECBF6}
-.hero-t h1{font-size:16px;font-weight:700;color:#9FE1CB}
-.hero-t p{font-size:12px;color:#5DCAA5;margin-top:3px}
-.tabs{display:flex;overflow-x:auto;background:#fff;border-radius:12px;margin-bottom:14px;padding:4px;gap:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.cd2{background:rgba(255,255,255,.22;border-radius:10px;padding:8px 10px;text-align:center;min-width:62px}
+.cd2.b{background:rgba(155,143,212,.45)}
+.cd2 .n{font-size:24px;font-weight:700;color:#fff;display:block;line-height:1}
+.cd2 .l{font-size:10px;color:rgba(255,255,255,.8);margin-top:2px}
+.cd2.b .n,.cd2.b .l{color:#fff}
+.hero-t h1{font-size:16px;font-weight:700;color:#fff}
+.hero-t p{font-size:12px;color:rgba(255,255,255,.8);margin-top:3px}
+.tabs{display:flex;overflow-x:auto;background:#fff;border-radius:12px;margin-bottom:14px;padding:4px;gap:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none;box-shadow:0 2px 8px rgba(91,164,207,.15)}
 .tabs::-webkit-scrollbar{display:none}
 .tab{padding:8px 14px;font-size:13px;cursor:pointer;border:none;border-radius:9px;background:none;color:#666;white-space:nowrap;flex-shrink:0;font-weight:500;transition:all .15s}
-.tab.on{background:#1D9E75;color:#fff}
+.tab.on{background:#5BA4CF;color:#fff}
 .sec{display:none}.sec.on{display:block}
-.card{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.card{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(91,164,207,.12)}
 .ctitle{font-size:13px;font-weight:600;color:#555;margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
-.ba{background:#E1F5EE;color:#085041}.bb{background:#EEEDFE;color:#26215C}.bc{background:#FAEEDA;color:#412402}
+.ba{background:#C8E6FA;color:#1A5B8A}.bb{background:#EDE9FE;color:#4C1D95}.bc{background:#FFF3CD;color:#7C4A00}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
-.sc{background:#f0f8f5;border-radius:10px;padding:10px 6px;text-align:center}
-.sc .v{font-size:20px;font-weight:700;color:#1D9E75}
+.sc{background:#EBF5FF;border-radius:10px;padding:10px 6px;text-align:center}
+.sc .v{font-size:20px;font-weight:700;color:#2D7DB3}
 .sc .l{font-size:10px;color:#666;margin-top:2px}
 /* ===== ゲーミフィケーション ===== */
-.earn-banner{background:linear-gradient(135deg,#04342C 0%,#0F6E56 100%);border-radius:14px;padding:14px 16px;margin-bottom:12px;color:#fff}
-.earn-banner .earn-total{font-size:32px;font-weight:800;color:#9FE1CB;letter-spacing:-1px}
-.earn-banner .earn-label{font-size:11px;color:#5DCAA5;margin-bottom:2px}
-.earn-banner .earn-sub{font-size:12px;color:#9FE1CB;margin-top:4px}
+.earn-banner{background:linear-gradient(135deg,#2D7DB3 0%,#5BA4CF 100%);border-radius:14px;padding:14px 16px;margin-bottom:12px;color:#fff}
+.earn-banner .earn-total{font-size:32px;font-weight:800;color:#fff;letter-spacing:-1px}
+.earn-banner .earn-label{font-size:11px;color:rgba(255,255,255,.8);margin-bottom:2px}
+.earn-banner .earn-sub{font-size:12px;color:rgba(255,255,255,.9);margin-top:4px}
 .earn-banner .earn-bar-wrap{background:rgba(255,255,255,.15);border-radius:10px;height:8px;margin-top:8px;overflow:hidden}
-.earn-banner .earn-bar{height:100%;border-radius:10px;background:#9FE1CB;transition:width .5s ease}
-.earn-banner .earn-cap{font-size:10px;color:#5DCAA5;margin-top:3px;text-align:right}
-.month-bonus-bar{background:#fff;border-radius:12px;padding:10px 14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.earn-banner .earn-bar{height:100%;border-radius:10px;background:#fff;transition:width .5s ease}
+.earn-banner .earn-cap{font-size:10px;color:rgba(255,255,255,.75);margin-top:3px;text-align:right}
+.month-bonus-bar{background:#fff;border-radius:12px;padding:10px 14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(91,164,207,.12)}
 .month-bonus-bar .mbb-title{font-size:12px;color:#555;font-weight:600;margin-bottom:6px}
 .month-bonus-chips{display:flex;gap:6px;flex-wrap:wrap}
-.mbc{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;background:#f0f0f0;color:#888}
-.mbc.on{background:#E1F5EE;color:#085041}
+.mbc{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;background:#EEF4FA;color:#888}
+.mbc.on{background:#C8E6FA;color:#1A5B8A}
 .mbc.bonus{background:#FFF3CD;color:#856404}
-.pt-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1D9E75;color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;font-weight:700;z-index:999;pointer-events:none;opacity:0;transition:opacity .3s}
+.pt-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#5BA4CF;color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;font-weight:700;z-index:999;pointer-events:none;opacity:0;transition:opacity .3s}
 .pt-toast.show{opacity:1}
-.cday.done{background:#E1F5EE;border-color:#1D9E75}
-.cday.done .cday-pt{font-size:8px;color:#085041;font-weight:700;line-height:1}
-.cday.done .cday-num{font-size:10px;color:#085041;line-height:1}
-.cday.combo{background:linear-gradient(135deg,#E1F5EE,#d4f5e0);border-color:#0F6E56;border-width:2px}
+.cday.done{background:#EBF5FF;border-color:#5BA4CF}
+.cday.done .cday-pt{font-size:8px;color:#2D7DB3;font-weight:700;line-height:1}
+.cday.done .cday-num{font-size:10px;color:#2D7DB3;line-height:1}
+.cday.combo{background:linear-gradient(135deg,#EBF5FF,#C8E6FA);border-color:#3A7BD5;border-width:2px}
 .cday.bonus-day{background:linear-gradient(135deg,#FFF3CD,#FFE69C);border-color:#BA7517;border-width:2px}
 .week-bonus-badge{display:inline-block;background:#BA7517;color:#fff;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;margin-left:6px}
-.mon-earn-lbl{font-size:13px;color:#1D9E75;font-weight:700}
+.mon-earn-lbl{font-size:13px;color:#2D7DB3;font-weight:700}
 .cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:10px}
 .ch{font-size:10px;color:#999;text-align:center;padding:3px 0;font-weight:600}
 .cday{aspect-ratio:1;border-radius:7px;border:1px solid #e8e8e8;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#999;background:#fff;cursor:pointer;transition:all .1s;-webkit-tap-highlight-color:transparent}
 .cday:active{transform:scale(.95)}
-.cday.today{border-color:#1D9E75;color:#1D9E75;font-weight:700;border-width:2px}
-.cday.done{background:#E1F5EE;border-color:#1D9E75}
+.cday.today{border-color:#5BA4CF;color:#5BA4CF;font-weight:700;border-width:2px}
+.cday.done{background:#EBF5FF;border-color:#5BA4CF}
 .cday.done::after{content:'⭐';font-size:12px;display:block}
-.cday.done .dn{font-size:9px;color:#085041}
+.cday.done .dn{font-size:9px;color:#2D7DB3}
 .cday.xa{border-color:#E24B4A;background:#fff0f0}
-.cday.xb{border-color:#534AB7;background:#f0efff}
+.cday.xb{border-color:#9B8FD4;background:#EDE9FE}
 .cday.ex{border:none;background:none;cursor:default}
-.stbtn{display:block;width:100%;padding:14px;background:#1D9E75;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;margin-bottom:8px;-webkit-tap-highlight-color:transparent;transition:background .15s}
-.stbtn:active{background:#085041}
+.stbtn{display:block;width:100%;padding:14px;background:#5BA4CF;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;margin-bottom:8px;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.stbtn:active{background:#2D7DB3}
 .stbtn:disabled{background:#ccc;cursor:default}
 .monnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .monnav span{font-size:15px;font-weight:700;color:#1a1a1a}
-.bp{padding:12px 18px;background:#1D9E75;color:#fff;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600;-webkit-tap-highlight-color:transparent;transition:background .15s}
-.bp:active{background:#085041}
+.bp{padding:12px 18px;background:#5BA4CF;color:#fff;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.bp:active{background:#2D7DB3}
 .bp:disabled{opacity:.5;cursor:not-allowed}
-.bs{padding:12px 18px;background:#fff;color:#1D9E75;border:1.5px solid #1D9E75;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600}
-.bpurp{padding:12px 18px;background:#534AB7;color:#fff;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600;transition:background .15s}
-.bpurp:active{background:#3C3489}
+.bs{padding:12px 18px;background:#fff;color:#2D7DB3;border:1.5px solid #5BA4CF;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600}
+.bpurp{padding:12px 18px;background:#9B8FD4;color:#fff;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600;transition:background .15s}
+.bpurp:active{background:#7B6FC4}
 .bpurp:disabled{opacity:.5}
-.bamb{padding:12px 18px;background:#BA7517;color:#fff;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600}
+.bamb{padding:12px 18px;background:#F0A030;color:#fff;border:none;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600}
 .brow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .ta{width:100%;border:1.5px solid #e0e0e0;border-radius:10px;padding:12px;font-size:15px;font-family:inherit;resize:vertical;color:#1a1a1a;background:#fff;line-height:1.8;-webkit-appearance:none}
-.ta:focus{outline:none;border-color:#1D9E75}
+.ta:focus{outline:none;border-color:#5BA4CF}
 .cc{font-size:12px;color:#999;text-align:right;margin-top:4px}
-.cc.ok{color:#1D9E75;font-weight:600}.cc.mid{color:#BA7517}
-.fbox{background:#f8f8f8;border-radius:12px;padding:14px;margin-top:10px;border-left:4px solid #1D9E75}
+.cc.ok{color:#2D7DB3;font-weight:600}.cc.mid{color:#BA7517}
+.fbox{background:#F4F8FC;border-radius:12px;padding:14px;margin-top:10px;border-left:4px solid #5BA4CF}
 .fbox p{font-size:14px;line-height:1.75;color:#1a1a1a;white-space:pre-wrap}
-.fbox.purp{border-left-color:#534AB7}
-.fbox.amb{border-left-color:#BA7517}
+.fbox.purp{border-left-color:#9B8FD4}
+.fbox.amb{border-left-color:#F0A030}
 .pills{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
 .pill{padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
-.pila{background:#E1F5EE;color:#085041}.pilb{background:#FAEEDA;color:#412402}.pilc{background:#EEEDFE;color:#26215C}
+.pila{background:#C8E6FA;color:#1A5B8A}.pilb{background:#FFF3CD;color:#7C4A00}.pilc{background:#EDE9FE;color:#4C1D95}
 .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .tchip{padding:10px 12px;border-radius:10px;border:1.5px solid #e0e0e0;font-size:13px;cursor:pointer;background:#fafafa;color:#1a1a1a;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.tchip.sel{background:#E1F5EE;border-color:#1D9E75;color:#085041}
+.tchip.sel{background:#EBF5FF;border-color:#5BA4CF;color:#1A5B8A}
 .tchip:active{transform:scale(.97)}
 .tchip .yr{font-size:10px;color:#999;margin-bottom:2px}
-.tchip.sel .yr{color:#1D9E75}
-.qbox{background:#f8f8f8;border-radius:10px;padding:14px;margin-bottom:10px;font-size:14px;line-height:1.75;color:#1a1a1a}
+.tchip.sel .yr{color:#5BA4CF}
+.qbox{background:#EBF5FF;border-radius:10px;padding:14px;margin-bottom:10px;font-size:14px;line-height:1.75;color:#1a1a1a}
 .qopts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .qopt{padding:12px 10px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;cursor:pointer;background:#fff;color:#1a1a1a;text-align:left;-webkit-tap-highlight-color:transparent;transition:all .1s}
 .qopt:active{transform:scale(.97)}
-.qopt.ok{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:700}
+.qopt.ok{background:#EBF5FF;border-color:#5BA4CF;color:#1A5B8A;font-weight:700}
 .qopt.ng{background:#fff0f0;border-color:#E24B4A;color:#501313}
 .qans{font-size:13px;padding:10px 12px;border-radius:10px;margin-top:6px;line-height:1.6}
-.qans.ok{background:#E1F5EE;color:#085041}
+.qans.ok{background:#EBF5FF;color:#1A5B8A}
 .qans.ng{background:#fff0f0;color:#501313}
 .kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
 .kcard{border:1.5px solid #e0e0e0;border-radius:10px;padding:12px 6px;text-align:center;cursor:pointer;background:#fff;-webkit-tap-highlight-color:transparent;transition:all .15s}
@@ -116,17 +116,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .kcard .kj{font-size:30px;font-weight:500;color:#1a1a1a}
 .kcard .kr{font-size:11px;color:#555;margin-top:4px;display:none;line-height:1.4}
 .kcard.show .kr{display:block}
-.kcard.done{background:#E1F5EE;border-color:#1D9E75}
+.kcard.done{background:#EBF5FF;border-color:#5BA4CF}
 .kcard.miss{background:#fff0f0;border-color:#E24B4A}
 .iq{padding:12px 14px;border-radius:10px;border:1.5px solid #e0e0e0;margin-bottom:8px;cursor:pointer;font-size:14px;background:#fff;color:#1a1a1a;-webkit-tap-highlight-color:transparent;transition:all .1s}
-.iq:active{background:#E1F5EE}
+.iq:active{background:#EBF5FF}
 .iq .iqc{font-size:11px;color:#999;margin-bottom:3px;font-weight:600}
 .subtabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 .stab{padding:8px 14px;border-radius:20px;font-size:13px;border:1.5px solid #e0e0e0;cursor:pointer;background:#fafafa;color:#666;font-weight:500;-webkit-tap-highlight-color:transparent}
-.stab.on{background:#534AB7;color:#fff;border-color:#534AB7}
+.stab.on{background:#9B8FD4;color:#fff;border-color:#9B8FD4}
 .type-sel{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .tsbtn{padding:14px 8px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;cursor:pointer;background:#fafafa;color:#1a1a1a;text-align:center;font-weight:600;-webkit-tap-highlight-color:transparent;transition:all .1s}
-.tsbtn:active,.tsbtn.on{background:#534AB7;color:#fff;border-color:#534AB7}
+.tsbtn:active,.tsbtn.on{background:#9B8FD4;color:#fff;border-color:#9B8FD4}
 .loading{font-size:14px;color:#666;padding:12px;text-align:center}
 .loading::after{content:'';animation:dt 1.2s steps(4,end) infinite}
 @keyframes dt{0%,20%{content:'.'}40%{content:'..'}60%,80%{content:'...'}100%{content:''}}
@@ -136,39 +136,39 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .tips-desc{font-size:12px;margin-top:3px;line-height:1.5}
 
 /* ===== 7ステップ 作文タブ ===== */
-.step-bar{display:flex;gap:0;margin-bottom:14px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.step-bar{display:flex;gap:0;margin-bottom:14px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(91,164,207,.15)}
 .step-btn{flex:1;padding:10px 4px;border:none;background:none;cursor:pointer;text-align:center;font-size:10px;color:#aaa;font-weight:600;border-right:1px solid #f0f0f0;transition:all .15s;position:relative;-webkit-tap-highlight-color:transparent}
 .step-btn:last-child{border-right:none}
 .step-btn .snum{display:block;font-size:16px;margin-bottom:2px}
-.step-btn.on{background:#1D9E75;color:#fff}
-.step-btn.done{background:#E1F5EE;color:#085041}
+.step-btn.on{background:#5BA4CF;color:#fff}
+.step-btn.done{background:#EBF5FF;color:#2D7DB3}
 .step-btn.done::after{content:'✓';position:absolute;top:4px;right:4px;font-size:9px}
 
 .essay-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
 .essay-card{border:1.5px solid #e0e0e0;border-radius:10px;padding:10px;cursor:pointer;background:#fafafa;-webkit-tap-highlight-color:transparent;transition:all .15s}
 .essay-card:active{transform:scale(.97)}
-.essay-card.sel{background:#E1F5EE;border-color:#1D9E75}
+.essay-card.sel{background:#EBF5FF;border-color:#5BA4CF}
 .essay-card .ec-grade{font-size:10px;color:#999;font-weight:600;margin-bottom:3px}
 .essay-card .ec-title{font-size:13px;font-weight:700;color:#1a1a1a;line-height:1.3;margin-bottom:4px}
 .essay-card .ec-tags{display:flex;flex-wrap:wrap;gap:3px}
 .essay-card .ec-tag{font-size:10px;padding:1px 6px;border-radius:10px;background:#f0f0f0;color:#666}
-.essay-card.sel .ec-grade{color:#1D9E75}
-.essay-card.sel .ec-tag{background:#c8efe3;color:#085041}
-.ec-fit-A{border-left:3px solid #1D9E75}
-.ec-fit-B{border-left:3px solid #534AB7}
-.ec-fit-C{border-left:3px solid #BA7517}
+.essay-card.sel .ec-grade{color:#2D7DB3}
+.essay-card.sel .ec-tag{background:#C8E6FA;color:#1A5B8A}
+.ec-fit-A{border-left:3px solid #5BA4CF}
+.ec-fit-B{border-left:3px solid #9B8FD4}
+.ec-fit-C{border-left:3px solid #F0A030}
 
 .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 .fchip{padding:5px 10px;border-radius:20px;font-size:12px;border:1.5px solid #e0e0e0;cursor:pointer;background:#fafafa;color:#666;font-weight:500;-webkit-tap-highlight-color:transparent;transition:all .1s}
-.fchip.on{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.fchip.on{background:#5BA4CF;color:#fff;border-color:#5BA4CF}
 
-.essay-body{font-size:14px;line-height:2;color:#1a1a1a;white-space:pre-wrap;background:#fafffe;border-radius:10px;padding:14px;border:1px solid #e8f5f0;margin-bottom:10px;max-height:380px;overflow-y:auto}
+.essay-body{font-size:14px;line-height:2;color:#1a1a1a;white-space:pre-wrap;background:#F4F8FC;border-radius:10px;padding:14px;border:1px solid #C8E6FA;margin-bottom:10px;max-height:380px;overflow-y:auto}
 .para-block{padding:10px 12px;border-radius:8px;margin-bottom:8px;font-size:14px;line-height:1.9;position:relative}
 .para-block .para-label{font-size:10px;font-weight:700;margin-bottom:4px;opacity:.8}
-.para-intro{background:#E1F5EE;border-left:4px solid #1D9E75}
-.para-intro .para-label{color:#085041}
+.para-intro{background:#EBF5FF;border-left:4px solid #5BA4CF}
+.para-intro .para-label{color:#2D7DB3}
 .para-event{background:#fff8e1;border-left:4px solid #F59E0B}
-.para-event .para-label{color:#78350F}
+.para-event .para-label{color:#7C4A00}
 .para-change{background:#EDE9FE;border-left:4px solid #7C3AED}
 .para-change .para-label{color:#4C1D95}
 .para-spread{background:#FEE2E2;border-left:4px solid #EF4444}
@@ -176,34 +176,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .para-end{background:#DBEAFE;border-left:4px solid #3B82F6}
 .para-end .para-label{color:#1E3A8A}
 
-.tmpl-block{background:#f8f8f8;border-radius:10px;padding:12px;margin-bottom:10px;border:1px dashed #c0c0c0}
+.tmpl-block{background:#EBF5FF;border-radius:10px;padding:12px;margin-bottom:10px;border:1px dashed #A8C8E8}
 .tmpl-label{font-size:11px;font-weight:700;color:#555;margin-bottom:6px}
 .tmpl-hint{font-size:13px;color:#888;font-style:italic;line-height:1.7}
 
 .chat-area{border:1.5px solid #e0e0e0;border-radius:12px;padding:12px;margin-bottom:10px;background:#fafafa;max-height:260px;overflow-y:auto}
 .msg{padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.7;margin-bottom:8px;max-width:88%}
-.msg-ai{background:#E1F5EE;color:#085041;margin-right:auto}
-.msg-user{background:#1D9E75;color:#fff;margin-left:auto;text-align:right}
+.msg-ai{background:#EBF5FF;color:#1A5B8A;margin-right:auto}
+.msg-user{background:#5BA4CF;color:#fff;margin-left:auto;text-align:right}
 
 .char-target{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
 .ctbtn{padding:6px 12px;border:1.5px solid #e0e0e0;border-radius:20px;font-size:12px;cursor:pointer;background:#fafafa;color:#666;font-weight:600;-webkit-tap-highlight-color:transparent;transition:all .1s}
-.ctbtn.on{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.ctbtn.on{background:#5BA4CF;color:#fff;border-color:#5BA4CF}
 
 .step-nav{display:flex;gap:8px;margin-top:12px}
-.step-next{flex:1;padding:12px;background:#1D9E75;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.step-back{padding:12px 16px;background:#fff;color:#1D9E75;border:1.5px solid #1D9E75;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
+.step-next{flex:1;padding:12px;background:#5BA4CF;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.step-back{padding:12px 16px;background:#fff;color:#2D7DB3;border:1.5px solid #5BA4CF;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
 /* ===== 科目ボタン ===== */
 .subj-btn{padding:12px 10px;border:2px solid #e0e0e0;border-radius:12px;background:#fafafa;cursor:pointer;font-size:13px;font-weight:600;color:#555;line-height:1.4;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .15s}
 .subj-btn:active{transform:scale(.96)}
-.subj-btn.on{border-color:#1D9E75;background:#E1F5EE;color:#085041}
-.subj-btn.on .subj-pt{color:#1D9E75}
+.subj-btn.on{border-color:#5BA4CF;background:#EBF5FF;color:#1A5B8A}
+.subj-btn.on .subj-pt{color:#5BA4CF}
 .subj-btn .subj-pt{display:block;font-size:11px;color:#aaa;margin-top:2px;font-weight:500}
 
 
 .level-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;margin-left:4px}
-.lv1{background:#DBEAFE;color:#1E3A8A}
-.lv2{background:#E1F5EE;color:#085041}
-.lv3{background:#FEF3C7;color:#78350F}
+.lv1{background:#C8E6FA;color:#1A5B8A}
+.lv2{background:#D1FAE5;color:#065F46}
+.lv3{background:#FEF3C7;color:#7C4A00}
 .lv4{background:#FEE2E2;color:#7F1D1D}
 </style>
 </head>
@@ -246,8 +246,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div class="stats">
     <div class="sc"><div class="v" id="st1">0</div><div class="l">練習日</div></div>
     <div class="sc"><div class="v" id="st2">0</div><div class="l">連続🔥</div></div>
-    <div class="sc" style="background:#fff8e1"><div class="v" id="stPt" style="color:#BA7517">0pt</div><div class="l">今月pt</div></div>
-    <div class="sc" style="background:#E1F5EE"><div class="v" id="stYen" style="color:#085041;font-size:16px">¥0</div><div class="l">総獲得</div></div>
+    <div class="sc" style="background:#FFF3CD"><div class="v" id="stPt" style="color:#F0A030">0pt</div><div class="l">今月pt</div></div>
+    <div class="sc" style="background:#EBF5FF"><div class="v" id="stYen" style="color:#2D7DB3;font-size:16px">¥0</div><div class="l">総獲得</div></div>
   </div>
   <!-- 累計獲得金額バナー -->
   <div class="earn-banner" id="earnBanner">
@@ -288,10 +288,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     </div>
     <div class="cgrid" id="cgrid"></div>
     <div style="display:flex;gap:10px;font-size:12px;color:#666;margin-bottom:4px;flex-wrap:wrap">
-      <span>⭐練習日</span><span style="color:#E24B4A">🔴A方式 11/15</span><span style="color:#534AB7">🔵B方式 12/13</span>
+      <span>⭐練習日</span><span style="color:#E24B4A">🔴A方式 11/15</span><span style="color:#9B8FD4">🔵B方式 12/13</span>
     </div>
     <div style="display:flex;gap:10px;font-size:12px;color:#666;margin-bottom:8px;flex-wrap:wrap">
-      <span style="color:#0F6E56">🟢コンボ日</span><span style="color:#BA7517">🟡バランスボーナス日</span>
+      <span style="color:#3A7BD5">🟢コンボ日</span><span style="color:#BA7517">🟡バランスボーナス日</span>
     </div>
   </div>
 </div>
@@ -343,7 +343,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       <div class="ctitle">🔍 構成を分解しよう <span class="badge bb">Step 2</span></div>
       <p style="font-size:12px;color:#666;margin-bottom:10px">この作文はどんな「型」で書かれているか、段落ごとに色分けして見てみよう！</p>
       <div id="structureView"></div>
-      <div style="margin-top:12px;padding:12px;background:#f8f8f8;border-radius:10px">
+      <div style="margin-top:12px;padding:12px;background:#EBF5FF;border-radius:10px">
         <div style="font-size:12px;font-weight:700;color:#555;margin-bottom:8px">📌 この作文の「型」</div>
         <div id="essayTypeLabel" style="font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:6px"></div>
         <div id="structureSteps" style="font-size:13px;color:#555;line-height:1.9"></div>
@@ -373,8 +373,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div class="card">
       <div class="ctitle">✏️ 400字で書こう <span class="badge ba">Step 4</span></div>
       <p style="font-size:12px;color:#666;margin-bottom:8px">まずは400字（原稿用紙1枚分）でまとめてみよう。</p>
-      <div style="font-size:12px;background:#f0f8f5;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
-        <strong style="color:#085041">書くヒント：</strong><br>
+      <div style="font-size:12px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
+        <strong style="color:#1A5B8A">書くヒント：</strong><br>
         <span id="step4hint"></span>
       </div>
       <div class="char-target">
@@ -421,8 +421,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div class="card">
       <div class="ctitle">📄 800字に広げよう <span class="badge ba">Step 6</span></div>
       <p style="font-size:12px;color:#666;margin-bottom:8px">Step 5で出てきたネタも使って、800字に広げよう！</p>
-      <div style="font-size:12px;background:#f0f8f5;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
-        <strong style="color:#085041">広げるポイント：</strong><br>
+      <div style="font-size:12px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
+        <strong style="color:#1A5B8A">広げるポイント：</strong><br>
         <span id="step6hint"></span>
       </div>
       <textarea class="ta" id="s6in" style="min-height:300px" placeholder="Step 4の作文をコピーして、ここに広げた版を書こう！" oninput="s6cc()"></textarea>
@@ -446,8 +446,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div class="card">
       <div class="ctitle">🏆 1200字の完成版！ <span class="badge ba">Step 7</span></div>
       <p style="font-size:12px;color:#666;margin-bottom:8px">明訓中学A方式の本番は1200字（400字×3枚）。仕上げの一本を書こう！</p>
-      <div style="font-size:12px;background:#f0f8f5;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
-        <strong style="color:#085041">仕上げのチェック：</strong><br>
+      <div style="font-size:12px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
+        <strong style="color:#1A5B8A">仕上げのチェック：</strong><br>
         ① 意見がはっきり書けているか　② 体験（オランダ生活！）が入っているか　③ 気づきや学びが書けているか　④ 締めくくりが決まっているか　⑤ 誤字脱字はないか
       </div>
       <textarea class="ta" id="s7in" style="min-height:380px" placeholder="完成版を書こう！（目標1200字）" oninput="s7cc()"></textarea>
@@ -459,8 +459,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       <div id="s7farea" style="display:none">
         <div class="fbox"><div class="pills" id="s7pills"></div><p id="s7ftxt"></p></div>
       </div>
-      <div style="margin-top:12px;padding:12px;background:#E1F5EE;border-radius:10px;text-align:center">
-        <p style="font-size:13px;color:#085041;font-weight:600">🌸 ここまで来たら、あとは手書きで清書するだけ！<br>縦書き・400字詰め原稿用紙3枚 でがんばれ！</p>
+      <div style="margin-top:12px;padding:12px;background:#EBF5FF;border-radius:10px;text-align:center">
+        <p style="font-size:13px;color:#1A5B8A;font-weight:600">🌸 ここまで来たら、あとは手書きで清書するだけ！<br>縦書き・400字詰め原稿用紙3枚 でがんばれ！</p>
       </div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(6)">← 戻る</button>
@@ -597,11 +597,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div class="card">
     <div class="ctitle">📝 作文「いりたまご」の法則 <span class="badge ba">A方式</span></div>
     <div style="display:grid;gap:8px">
-      <div class="tips-item" style="background:#E1F5EE">
-        <span class="tips-icon" style="color:#085041">い</span>
-        <div><div class="tips-label" style="color:#085041">意見</div><div class="tips-desc" style="color:#0F6E56">「〜だと思います」ではっきり書く</div></div>
+      <div class="tips-item" style="background:#EBF5FF">
+        <span class="tips-icon" style="color:#1A5B8A">い</span>
+        <div><div class="tips-label" style="color:#1A5B8A">意見</div><div class="tips-desc" style="color:#3A7BD5">「〜だと思います」ではっきり書く</div></div>
       </div>
-      <div class="tips-item" style="background:#f5f5f0">
+      <div class="tips-item" style="background:#F4F8FC">
         <span class="tips-icon">り</span>
         <div><div class="tips-label">理由</div><div class="tips-desc" style="color:#555">「なぜなら〜だからです」</div></div>
       </div>
@@ -609,11 +609,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
         <span class="tips-icon" style="color:#633806">た</span>
         <div><div class="tips-label" style="color:#633806">体験（ここが最大の武器！）</div><div class="tips-desc" style="color:#854F0B">オランダ・補習校・現地校での体験。日本の子にはない視点が採点官の印象に残る！</div></div>
       </div>
-      <div class="tips-item" style="background:#f5f5f0">
+      <div class="tips-item" style="background:#F4F8FC">
         <span class="tips-icon">ま</span>
         <div><div class="tips-label">まとめ</div><div class="tips-desc" style="color:#555">「これから〇〇していきたいです」と締める</div></div>
       </div>
-      <div class="tips-item" style="background:#f5f5f0">
+      <div class="tips-item" style="background:#F4F8FC">
         <span class="tips-icon">ご</span>
         <div><div class="tips-label">誤字脱字チェック</div><div class="tips-desc" style="color:#555">自筆・縦書き・400字詰め×3枚程度</div></div>
       </div>
@@ -622,15 +622,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div class="card">
     <div class="ctitle">🔢 B方式 国語・算数ポイント</div>
     <div style="display:grid;gap:8px;font-size:13px">
-      <div style="padding:12px;background:#EEEDFE;border-radius:10px;border-left:4px solid #534AB7">
+      <div style="padding:12px;background:#EEEDFE;border-radius:10px;border-left:4px solid #9B8FD4">
         <strong style="color:#26215C">国語 50分・28〜30問</strong><br>
-        <span style="color:#3C3489;font-size:12px">速く正確に読む練習を。根拠は必ず本文から。漢字は5・6年生レベルを完璧に</span>
+        <span style="color:#7B6FC4;font-size:12px">速く正確に読む練習を。根拠は必ず本文から。漢字は5・6年生レベルを完璧に</span>
       </div>
       <div style="padding:12px;background:#FAEEDA;border-radius:10px;border-left:4px solid #BA7517">
         <strong style="color:#633806">算数 50分・22〜26問</strong><br>
         <span style="color:#854F0B;font-size:12px">1点差で合否が決まることも。ケアレスミスゼロへ。文章題・速さ・比・図形を優先</span>
       </div>
-      <div style="padding:12px;background:#f5f5f0;border-radius:10px">
+      <div style="padding:12px;background:#F4F8FC;border-radius:10px">
         <strong>毎日メニュー例</strong><br>
         <span style="color:#555;font-size:12px">月水：作文+AI添削 ／ 火木：国語読解+漢字 ／ 金：算数+面接練習 ／ 土：清書・見直し</span>
       </div>
@@ -1012,7 +1012,7 @@ function renderCal(){
     const isT=t.getFullYear()===cY&&t.getMonth()+1===cM&&t.getDate()===d;
     const isA=cY===2026&&cM===11&&d===15,isB=cY===2026&&cM===12&&d===13;
     if(isA){el.classList.add('xa');el.innerHTML='<span style="font-size:9px;color:#E24B4A;text-align:center">'+d+'<br>A試験</span>'}
-    else if(isB){el.classList.add('xb');el.innerHTML='<span style="font-size:9px;color:#534AB7;text-align:center">'+d+'<br>B試験</span>'}
+    else if(isB){el.classList.add('xb');el.innerHTML='<span style="font-size:9px;color:#9B8FD4;text-align:center">'+d+'<br>B試験</span>'}
     else if(cal[k] && (cal[k]===true || cal[k].pts !== undefined)){
       const dayData = cal[k];
       const pts = (dayData.pts||0)+(dayData.bonus||0);
@@ -1314,7 +1314,7 @@ function renderStructure(){
 
 function renderTemplate(){
   const e=sk_essay;const rl={intro:'導入',event:'出来事',change:'気づき（転換点）',spread:'考えの広がり',end:'結末・決意'};
-  document.getElementById('tmplArea').innerHTML=`<div style="font-size:13px;background:#fff8e1;padding:10px 12px;border-radius:10px;margin-bottom:12px;border-left:4px solid #F59E0B"><strong style="color:#78350F">💡 まねるポイント：</strong><br><span style="color:#1a1a1a">${e.imitation}</span></div>${e.structure.map(p=>`<div class="tmpl-block"><div class="tmpl-label">${p.label}（${rl[p.role]||p.role}）</div><div class="tmpl-hint">→ あなたの「${p.text.split('。')[0]}」はどんなこと？</div><textarea class="ta" style="min-height:70px;margin-top:6px" placeholder="自分の体験をここにメモしよう…"></textarea></div>`).join('')}`;
+  document.getElementById('tmplArea').innerHTML=`<div style="font-size:13px;background:#FFF3CD;padding:10px 12px;border-radius:10px;margin-bottom:12px;border-left:4px solid #F0A030"><strong style="color:#7C4A00">💡 まねるポイント：</strong><br><span style="color:#1a1a1a">${e.imitation}</span></div>${e.structure.map(p=>`<div class="tmpl-block"><div class="tmpl-label">${p.label}（${rl[p.role]||p.role}）</div><div class="tmpl-hint">→ あなたの「${p.text.split('。')[0]}」はどんなこと？</div><textarea class="ta" style="min-height:70px;margin-top:6px" placeholder="自分の体験をここにメモしよう…"></textarea></div>`).join('')}`;
 }
 
 function renderStep4(){const e=sk_essay;document.getElementById('step4hint').innerHTML=(e.prompts400[0]||'')+'<br>💡 '+e.imitation;}
