@@ -1264,8 +1264,7 @@ function showCancelBtn(total) {
 }
 
 function cancelStamp() {
-  if (!confirm('今日の記録を取り消しますか？
-ポイントも戻ります。')) return;
+  if (!confirm('今日の記録を取り消しますか？\nポイントも戻ります。')) return;
   const k = getTodayKey();
   delete cal[k];
   sv();
