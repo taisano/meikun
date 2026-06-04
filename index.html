@@ -36,6 +36,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .sc{background:#f0f8f5;border-radius:10px;padding:10px 6px;text-align:center}
 .sc .v{font-size:20px;font-weight:700;color:#1D9E75}
 .sc .l{font-size:10px;color:#666;margin-top:2px}
+/* ===== ゲーミフィケーション ===== */
+.earn-banner{background:linear-gradient(135deg,#04342C 0%,#0F6E56 100%);border-radius:14px;padding:14px 16px;margin-bottom:12px;color:#fff}
+.earn-banner .earn-total{font-size:32px;font-weight:800;color:#9FE1CB;letter-spacing:-1px}
+.earn-banner .earn-label{font-size:11px;color:#5DCAA5;margin-bottom:2px}
+.earn-banner .earn-sub{font-size:12px;color:#9FE1CB;margin-top:4px}
+.earn-banner .earn-bar-wrap{background:rgba(255,255,255,.15);border-radius:10px;height:8px;margin-top:8px;overflow:hidden}
+.earn-banner .earn-bar{height:100%;border-radius:10px;background:#9FE1CB;transition:width .5s ease}
+.earn-banner .earn-cap{font-size:10px;color:#5DCAA5;margin-top:3px;text-align:right}
+.month-bonus-bar{background:#fff;border-radius:12px;padding:10px 14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.month-bonus-bar .mbb-title{font-size:12px;color:#555;font-weight:600;margin-bottom:6px}
+.month-bonus-chips{display:flex;gap:6px;flex-wrap:wrap}
+.mbc{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;background:#f0f0f0;color:#888}
+.mbc.on{background:#E1F5EE;color:#085041}
+.mbc.bonus{background:#FFF3CD;color:#856404}
+.pt-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1D9E75;color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;font-weight:700;z-index:999;pointer-events:none;opacity:0;transition:opacity .3s}
+.pt-toast.show{opacity:1}
+.cday.done{background:#E1F5EE;border-color:#1D9E75}
+.cday.done .cday-pt{font-size:8px;color:#085041;font-weight:700;line-height:1}
+.cday.done .cday-num{font-size:10px;color:#085041;line-height:1}
+.cday.combo{background:linear-gradient(135deg,#E1F5EE,#d4f5e0);border-color:#0F6E56;border-width:2px}
+.cday.bonus-day{background:linear-gradient(135deg,#FFF3CD,#FFE69C);border-color:#BA7517;border-width:2px}
+.week-bonus-badge{display:inline-block;background:#BA7517;color:#fff;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700;margin-left:6px}
+.mon-earn-lbl{font-size:13px;color:#1D9E75;font-weight:700}
 .cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:10px}
 .ch{font-size:10px;color:#999;text-align:center;padding:3px 0;font-weight:600}
 .cday{aspect-ratio:1;border-radius:7px;border:1px solid #e8e8e8;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#999;background:#fff;cursor:pointer;transition:all .1s;-webkit-tap-highlight-color:transparent}
@@ -169,6 +192,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .step-nav{display:flex;gap:8px;margin-top:12px}
 .step-next{flex:1;padding:12px;background:#1D9E75;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .step-back{padding:12px 16px;background:#fff;color:#1D9E75;border:1.5px solid #1D9E75;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
+/* ===== 科目ボタン ===== */
+.subj-btn{padding:12px 10px;border:2px solid #e0e0e0;border-radius:12px;background:#fafafa;cursor:pointer;font-size:13px;font-weight:600;color:#555;line-height:1.4;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.subj-btn:active{transform:scale(.96)}
+.subj-btn.on{border-color:#1D9E75;background:#E1F5EE;color:#085041}
+.subj-btn.on .subj-pt{color:#1D9E75}
+.subj-btn .subj-pt{display:block;font-size:11px;color:#aaa;margin-top:2px;font-weight:500}
+
 
 .level-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;margin-left:4px}
 .lv1{background:#DBEAFE;color:#1E3A8A}
@@ -216,9 +246,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div class="stats">
     <div class="sc"><div class="v" id="st1">0</div><div class="l">練習日</div></div>
     <div class="sc"><div class="v" id="st2">0</div><div class="l">連続🔥</div></div>
-    <div class="sc"><div class="v" id="st3">0</div><div class="l">作文</div></div>
-    <div class="sc"><div class="v" id="st4">0</div><div class="l">問題数</div></div>
+    <div class="sc" style="background:#fff8e1"><div class="v" id="stPt" style="color:#BA7517">0pt</div><div class="l">今月pt</div></div>
+    <div class="sc" style="background:#E1F5EE"><div class="v" id="stYen" style="color:#085041;font-size:16px">¥0</div><div class="l">総獲得</div></div>
   </div>
+  <!-- 累計獲得金額バナー -->
+  <div class="earn-banner" id="earnBanner">
+    <div class="earn-label">💰 これまで稼いだ金額</div>
+    <div class="earn-total" id="earnTotal">¥0</div>
+    <div class="earn-sub" id="earnSub">今月の目標まで <span id="earnToTarget">-</span></div>
+    <div class="earn-bar-wrap"><div class="earn-bar" id="earnBar" style="width:0%"></div></div>
+    <div class="earn-cap" id="earnCap">今月Cap: ¥-</div>
+  </div>
+
+  <!-- 今日の科目ボタン -->
+  <div class="card">
+    <div class="ctitle">📅 今日の練習を記録しよう <span class="badge ba" id="todayPtLabel">+0pt</span></div>
+    <div id="todaySubjects" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      <button class="subj-btn" id="sb-sakubun" onclick="toggleSubj('sakubun')">✏️ 作文練習<br><span class="subj-pt">+2pt</span></button>
+      <button class="subj-btn" id="sb-mensetsu" onclick="toggleSubj('mensetsu')">🎤 面接練習<br><span class="subj-pt">+2pt</span></button>
+      <button class="subj-btn" id="sb-kokugo" onclick="toggleSubj('kokugo')">📖 国語<br><span class="subj-pt">+1pt</span></button>
+      <button class="subj-btn" id="sb-kanji" onclick="toggleSubj('kanji')">🖊️ 漢字<br><span class="subj-pt">+1pt</span></button>
+      <button class="subj-btn" id="sb-sansu" onclick="toggleSubj('sansu')">🔢 算数<br><span class="subj-pt">+1pt</span></button>
+      <button class="subj-btn" id="sb-review" onclick="toggleSubj('review')">🔄 復習<br><span class="subj-pt">+1pt</span></button>
+    </div>
+    <div id="comboAlert" style="display:none;background:#fff8e1;border-radius:10px;padding:8px 12px;font-size:12px;color:#856404;margin-bottom:8px;text-align:center"></div>
+    <button class="stbtn" id="stbtn" onclick="stamp()">⭐ 今日の記録を保存！</button>
+    <p style="font-size:11px;color:#999;text-align:center;margin-top:4px" id="stampHint">科目を選んで保存してね</p>
+  </div>
+
+  <!-- 月間ボーナス進捗 -->
+  <div class="month-bonus-bar" id="monthBonusBar">
+    <div class="mbb-title">🎯 今月のボーナス進捗</div>
+    <div class="month-bonus-chips" id="bonusChips"></div>
+  </div>
+
   <div class="card">
     <div class="monnav">
       <button class="bs" onclick="cm(-1)" style="padding:8px 14px">◀</button>
@@ -226,11 +287,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       <button class="bs" onclick="cm(1)" style="padding:8px 14px">▶</button>
     </div>
     <div class="cgrid" id="cgrid"></div>
-    <div style="display:flex;gap:10px;font-size:12px;color:#666;margin-bottom:10px;flex-wrap:wrap">
+    <div style="display:flex;gap:10px;font-size:12px;color:#666;margin-bottom:4px;flex-wrap:wrap">
       <span>⭐練習日</span><span style="color:#E24B4A">🔴A方式 11/15</span><span style="color:#534AB7">🔵B方式 12/13</span>
     </div>
-    <button class="stbtn" id="stbtn" onclick="stamp()">⭐ 今日の練習スタンプを押す！</button>
-    <p style="font-size:12px;color:#999;text-align:center">何か練習したら押してね</p>
+    <div style="display:flex;gap:10px;font-size:12px;color:#666;margin-bottom:8px;flex-wrap:wrap">
+      <span style="color:#0F6E56">🟢コンボ日</span><span style="color:#BA7517">🟡バランスボーナス日</span>
+    </div>
   </div>
 </div>
 
@@ -616,7 +678,7 @@ function resetKey(){localStorage.removeItem('mk_apikey');location.reload()}
 function init(){
   try{cal=JSON.parse(localStorage.getItem('mk_cal')||'{}');kanjiState=JSON.parse(localStorage.getItem('mk_kstate')||'{}')}catch(e){cal={};kanjiState={}}
   const t=new Date();cY=t.getFullYear();cM=t.getMonth()+1;
-  countdown();renderCal();initSakubun();renderIQ();upStats();
+  migrateCal();countdown();renderCal();initSakubun();renderIQ();upStats();renderEarnBanner();renderBonusChips();initTodayButtons();
 }
 
 async function callAPI(prompt,maxTokens=800){
@@ -632,19 +694,11 @@ async function callAPI(prompt,maxTokens=800){
 
 function countdown(){
   const now=new Date();
-  document.getElementById('dA').textContent=Math.max(0,Math.ceil((new Date(2025,10,15)-now)/86400000))+'日';
-  document.getElementById('dB').textContent=Math.max(0,Math.ceil((new Date(2025,11,13)-now)/86400000))+'日';
+  document.getElementById('dA').textContent=Math.max(0,Math.ceil((new Date(2026,10,15)-now)/86400000))+'日';
+  document.getElementById('dB').textContent=Math.max(0,Math.ceil((new Date(2026,11,13)-now)/86400000))+'日';
 }
-function upStats(){
-  const keys=Object.keys(cal).filter(k=>cal[k]);
-  document.getElementById('st1').textContent=keys.length;
-  document.getElementById('st3').textContent=parseInt(localStorage.getItem('mk_essays')||'0');
-  document.getElementById('st4').textContent=parseInt(localStorage.getItem('mk_qs')||'0');
-  let str=0;const t=new Date();
-  for(let i=0;i<365;i++){const d=new Date(t);d.setDate(d.getDate()-i);const k=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();if(cal[k])str++;else if(i>0)break;}
-  document.getElementById('st2').textContent=str;
-}
-function sv(){try{localStorage.setItem('mk_cal',JSON.stringify(cal));localStorage.setItem('mk_kstate',JSON.stringify(kanjiState))}catch(e){}}
+
+
 
 function sw(id){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
@@ -660,28 +714,321 @@ function ksw(id){
 }
 
 function cm(d){cM+=d;if(cM>12){cM=1;cY++}if(cM<1){cM=12;cY--}renderCal()}
+
+// ==========================================
+// ゲーミフィケーション システム
+// ==========================================
+
+// 月別予算Cap（円）：階段式 6月〜11月
+const MONTH_CAPS = {
+  6:  10000,  // 6月  スタート
+  7:  14000,  // 7月
+  8:  17000,  // 8月 夏休み
+  9:  16000,  // 9月
+  10: 21000,  // 10月 直前期
+  11: 22000,  // 11月 ラスト（受験月）
+};
+// 合計 = 100,000円
+
+// 科目ポイント定義
+const SUBJ_PT = {
+  sakubun:2, mensetsu:2, kokugo:1, kanji:1, sansu:1, review:1
+};
+const SUBJ_NAMES = {
+  sakubun:'作文', mensetsu:'面接', kokugo:'国語', kanji:'漢字', sansu:'算数', review:'復習'
+};
+
+// 今日選択中の科目
+let todaySubjects = {};
+
+// 保存データ構造: cal[key] = {subjs:{sakubun:true,...}, pts:N, bonus:N, combo:N}
+// （後方互換: cal[key]=true もあり得るのでmigrate）
+
+function migrateCal() {
+  // 古い形式(=true)を新形式に変換
+  Object.keys(cal).forEach(k => {
+    if (cal[k] === true) {
+      cal[k] = {subjs:{sakubun:true}, pts:2, bonus:0, combo:0};
+    }
+  });
+}
+
+function calcDayPts(subjs) {
+  let base = 0;
+  Object.keys(subjs).forEach(s => { if(subjs[s]) base += (SUBJ_PT[s]||1); });
+  return base;
+}
+
+function calcDayBonus(subjs, comboCount) {
+  let bonus = 0;
+  const hasSakubun = subjs.sakubun;
+  const otherCount = ['kokugo','kanji','sansu','mensetsu','review'].filter(s=>subjs[s]).length;
+  // バランスボーナス：作文＋他3科目以上
+  if (hasSakubun && otherCount >= 3) bonus += 3;
+  // コンボボーナス：連続5日 +2pt, 10日 +5pt
+  if (comboCount >= 10) bonus += 5;
+  else if (comboCount >= 5) bonus += 2;
+  else if (comboCount >= 3) bonus += 1;
+  return bonus;
+}
+
+function getMonthCap(yr, mo) {
+  // 2026年の月はズレ補正
+  const cap = MONTH_CAPS[mo];
+  if (cap) return cap;
+  // 範囲外は平均
+  return 16700;
+}
+
+function calcMonthEarnings(yr, mo) {
+  let pts = 0;
+  Object.keys(cal).forEach(k => {
+    const parts = k.split('-');
+    if (parseInt(parts[0])===yr && parseInt(parts[1])===mo && cal[k]) {
+      const d = cal[k];
+      pts += (d.pts||0) + (d.bonus||0);
+    }
+  });
+  return pts;
+}
+
+function calcTotalYen() {
+  let totalPts = 0;
+  Object.keys(cal).forEach(k => {
+    if (cal[k] && cal[k].pts !== undefined) {
+      totalPts += (cal[k].pts||0) + (cal[k].bonus||0);
+    }
+  });
+  return totalPts * 10; // 10pt = 100円 → 1pt = 10円
+}
+
+function getCurrentStreak() {
+  const t = new Date();
+  let str = 0;
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(t); d.setDate(d.getDate()-i);
+    const k = d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    if (cal[k]) str++; else if (i > 0) break;
+  }
+  return str;
+}
+
+function toggleSubj(s) {
+  const btn = document.getElementById('sb-'+s);
+  const savedToday = getTodayData();
+  if (savedToday) return; // 保存済みは変更不可
+  todaySubjects[s] = !todaySubjects[s];
+  if (todaySubjects[s]) btn.classList.add('on');
+  else btn.classList.remove('on');
+  updateTodayPreview();
+}
+
+function getTodayKey() {
+  const t = new Date();
+  return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
+}
+function getTodayData() {
+  const k = getTodayKey();
+  return (cal[k] && cal[k].pts !== undefined) ? cal[k] : null;
+}
+
+function updateTodayPreview() {
+  const base = calcDayPts(todaySubjects);
+  const streak = getCurrentStreak();
+  const bonus = calcDayBonus(todaySubjects, streak + 1); // +1で今日追加後
+  const total = base + bonus;
+  const label = document.getElementById('todayPtLabel');
+  label.textContent = '+' + total + 'pt';
+  label.className = 'badge ' + (bonus > 0 ? 'bc' : 'ba');
+
+  // コンボ/ボーナスメッセージ
+  const ca = document.getElementById('comboAlert');
+  let msgs = [];
+  if (bonus > 0) {
+    const hasSakubun = todaySubjects.sakubun;
+    const otherCount = ['kokugo','kanji','sansu','mensetsu','review'].filter(s=>todaySubjects[s]).length;
+    if (hasSakubun && otherCount >= 3) msgs.push('🎯 バランスボーナス +3pt');
+    if (streak + 1 >= 10) msgs.push('🔥 10日コンボ！ +5pt');
+    else if (streak + 1 >= 5) msgs.push('🔥 5日コンボ！ +2pt');
+    else if (streak + 1 >= 3) msgs.push('🔥 3日コンボ！ +1pt');
+  }
+  if (msgs.length > 0) { ca.style.display='block'; ca.textContent = msgs.join('　'); }
+  else ca.style.display='none';
+
+  const btn = document.getElementById('stbtn');
+  btn.textContent = '⭐ 今日の記録を保存！ (' + total + 'pt → ¥' + (total*10) + ')';
+}
+
+function stamp() {
+  const k = getTodayKey();
+  if (getTodayData()) return; // 既保存
+
+  const subjs = {...todaySubjects};
+  if (Object.keys(subjs).filter(s=>subjs[s]).length === 0) {
+    alert('最低1つ科目を選んでね！');
+    return;
+  }
+
+  const streak = getCurrentStreak();
+  const base = calcDayPts(subjs);
+  const bonus = calcDayBonus(subjs, streak + 1);
+  const total = base + bonus;
+
+  cal[k] = {subjs, pts: base, bonus, combo: streak + 1};
+  sv(); renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
+
+  // ボタン更新
+  document.getElementById('stbtn').textContent = '⭐ 今日は記録済み！ +' + total + 'pt';
+  document.getElementById('stbtn').disabled = true;
+  document.getElementById('stampHint').textContent = '今日 +' + total + 'pt（¥' + (total*10) + '）稼いだよ！';
+
+  // 全科目ボタン無効化
+  Object.keys(SUBJ_PT).forEach(s => {
+    const btn = document.getElementById('sb-'+s);
+    if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; }
+  });
+
+  // トースト
+  showPtToast('+' + total + 'pt 獲得！ ¥' + (total*10));
+}
+
+function showPtToast(msg) {
+  let t = document.getElementById('ptToast');
+  if (!t) { t = document.createElement('div'); t.id = 'ptToast'; t.className = 'pt-toast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function renderEarnBanner() {
+  const totalYen = calcTotalYen();
+  const t = new Date();
+  const mo = t.getMonth() + 1;
+  const yr = t.getFullYear();
+  const cap = getMonthCap(yr, mo);
+  const moYen = calcMonthEarnings(yr, mo) * 10;
+  const pct = Math.min(100, Math.round(moYen / cap * 100));
+
+  document.getElementById('earnTotal').textContent = '¥' + totalYen.toLocaleString();
+  document.getElementById('earnBar').style.width = pct + '%';
+  document.getElementById('earnCap').textContent = '今月Cap: ¥' + cap.toLocaleString() + '（' + pct + '%達成）';
+  const remain = Math.max(0, cap - moYen);
+  document.getElementById('earnSub').innerHTML = '今月 ¥' + moYen.toLocaleString() + ' 獲得 / あと ¥' + remain.toLocaleString();
+}
+
+function renderBonusChips() {
+  const t = new Date();
+  const yr = t.getFullYear(), mo = t.getMonth()+1;
+  // 今月の日数取得
+  const daysInMonth = new Date(yr, mo, 0).getDate();
+  // 今月の週数（月曜始まり）を計算
+  let weeks = 0, weekDone = [], weekIdx = 0;
+  for (let d=1; d<=daysInMonth; d++) {
+    const dow = new Date(yr, mo-1, d).getDay(); // 0=日
+    if (d===1 || dow===0) { weeks++; weekDone.push(0); weekIdx = weeks-1; }
+    const k = yr+'-'+mo+'-'+d;
+    if (cal[k]) weekDone[weekIdx]++;
+  }
+  // ボーナス達成チップ
+  const container = document.getElementById('bonusChips');
+  if (!container) return;
+  container.innerHTML = '';
+  const chips = [];
+  // 週5日達成チェック
+  weekDone.forEach((cnt, wi) => {
+    const ok = cnt >= 5;
+    chips.push({label: (wi+1)+'週 週5日', on: ok, bonus: ok});
+  });
+  // 月の作文日数
+  let sakubunDays = 0;
+  Object.keys(cal).forEach(k => {
+    const parts = k.split('-');
+    if (parseInt(parts[0])===yr && parseInt(parts[1])===mo && cal[k] && cal[k].subjs && cal[k].subjs.sakubun) sakubunDays++;
+  });
+  chips.push({label: '作文'+sakubunDays+'日', on: sakubunDays>=8, bonus: sakubunDays>=12});
+  // 連続10日
+  const streak = getCurrentStreak();
+  chips.push({label: '連続'+streak+'日🔥', on: streak>=5, bonus: streak>=10});
+
+  chips.forEach(ch => {
+    const el = document.createElement('span');
+    el.className = 'mbc' + (ch.bonus?' bonus':ch.on?' on':'');
+    el.textContent = (ch.bonus?'⭐ ':ch.on?'✅ ':'') + ch.label;
+    container.appendChild(el);
+  });
+}
+
+function initTodayButtons() {
+  const saved = getTodayData();
+  if (saved) {
+    // 保存済み：ボタン状態を復元
+    Object.keys(SUBJ_PT).forEach(s => {
+      const btn = document.getElementById('sb-'+s);
+      if (!btn) return;
+      if (saved.subjs && saved.subjs[s]) btn.classList.add('on');
+      btn.disabled = true; btn.style.opacity = '0.7';
+    });
+    const total = (saved.pts||0) + (saved.bonus||0);
+    document.getElementById('stbtn').textContent = '⭐ 今日は記録済み！ +' + total + 'pt';
+    document.getElementById('stbtn').disabled = true;
+    document.getElementById('stampHint').textContent = '今日 +' + total + 'pt（¥' + (total*10) + '）稼いだよ！';
+    document.getElementById('todayPtLabel').textContent = '+' + total + 'pt';
+  }
+}
+
+function upStats(){
+  migrateCal();
+  const keys=Object.keys(cal).filter(k=>cal[k]);
+  document.getElementById('st1').textContent=keys.length;
+  const streak = getCurrentStreak();
+  document.getElementById('st2').textContent=streak;
+  // 今月pt
+  const t=new Date();
+  const moPts=calcMonthEarnings(t.getFullYear(),t.getMonth()+1);
+  document.getElementById('stPt').textContent=moPts+'pt';
+  const totalYen=calcTotalYen();
+  document.getElementById('stYen').textContent='¥'+totalYen.toLocaleString();
+}
+
+function sv(){
+  try{
+    localStorage.setItem('mk_cal',JSON.stringify(cal));
+    localStorage.setItem('mk_kstate',JSON.stringify(kanjiState));
+  }catch(e){}
+}
+
 function renderCal(){
   const mn=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-  document.getElementById('mlbl').textContent=cY+'年 '+mn[cM-1];
+  const t=new Date();
+  const moEarn=calcMonthEarnings(cY,cM);
+  const moYen=moEarn*10;
+  document.getElementById('mlbl').innerHTML=cY+'年 '+mn[cM-1]+'<span class="mon-earn-lbl" style="margin-left:10px">¥'+moYen.toLocaleString()+'</span>';
   const g=document.getElementById('cgrid');g.innerHTML='';
   ['日','月','火','水','木','金','土'].forEach(d=>{const h=document.createElement('div');h.className='ch';h.textContent=d;g.appendChild(h)});
-  const fd=new Date(cY,cM-1,1).getDay(),dim=new Date(cY,cM,0).getDate(),t=new Date();
+  const fd=new Date(cY,cM-1,1).getDay(),dim=new Date(cY,cM,0).getDate();
   for(let i=0;i<fd;i++){const e=document.createElement('div');e.className='cday ex';g.appendChild(e)}
   for(let d=1;d<=dim;d++){
     const k=cY+'-'+cM+'-'+d,el=document.createElement('div');el.className='cday';
     const isT=t.getFullYear()===cY&&t.getMonth()+1===cM&&t.getDate()===d;
-    const isA=cY===2025&&cM===11&&d===15,isB=cY===2025&&cM===12&&d===13;
+    const isA=cY===2026&&cM===11&&d===15,isB=cY===2026&&cM===12&&d===13;
     if(isA){el.classList.add('xa');el.innerHTML='<span style="font-size:9px;color:#E24B4A;text-align:center">'+d+'<br>A試験</span>'}
     else if(isB){el.classList.add('xb');el.innerHTML='<span style="font-size:9px;color:#534AB7;text-align:center">'+d+'<br>B試験</span>'}
-    else if(cal[k]){el.classList.add('done');const dn=document.createElement('span');dn.className='dn';dn.textContent=d;el.appendChild(dn)}
+    else if(cal[k] && (cal[k]===true || cal[k].pts !== undefined)){
+      const dayData = cal[k];
+      const pts = (dayData.pts||0)+(dayData.bonus||0);
+      const isCombo = dayData.combo >= 3;
+      const isBonus = dayData.bonus > 0;
+      if(isBonus) el.classList.add('bonus-day');
+      else if(isCombo) el.classList.add('combo');
+      else el.classList.add('done');
+      el.innerHTML='<span class="cday-num">'+d+'</span><span class="cday-pt">¥'+(pts*10)+'</span>';
+    }
     else{if(isT)el.classList.add('today');el.textContent=d}
     g.appendChild(el);
   }
-  const tk=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate(),btn=document.getElementById('stbtn');
-  btn.textContent=cal[tk]?'⭐ 今日はスタンプ済み！':'⭐ 今日の練習スタンプを押す！';
-  btn.disabled=!!cal[tk];
 }
-function stamp(){const t=new Date(),k=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();cal[k]=true;sv();renderCal();upStats()}
+
+
 
 window._lastQT='ronsetsu';
 async function genQ(type){
@@ -991,7 +1338,7 @@ async function getS4FB(){
     const lp=document.createElement('span');lp.className='pill pilb';lp.textContent=txt.length+'字';sp.appendChild(lp);
     document.getElementById('s4ftxt').innerHTML=md2html(reply);
     document.getElementById('s4farea').style.display='block';
-    const c=parseInt(localStorage.getItem('mk_essays')||'0')+1;localStorage.setItem('mk_essays',c);upStats();
+    const c=parseInt(localStorage.getItem('mk_essays')||'0')+1;localStorage.setItem('mk_essays',c);upStats();renderEarnBanner();
     document.getElementById('s4farea').scrollIntoView({behavior:'smooth'});
   }catch(err){alert('エラー：'+err.message);}
   btn.disabled=false;btn.textContent='AI先生に添削してもらう';
@@ -1053,7 +1400,7 @@ async function getS7FB(){
     if(sm){const p=document.createElement('span');p.className='pill pila';p.textContent='評価：'+sm[1];sp.appendChild(p);}
     sp.innerHTML+=`<span class="pill pilb">${txt.length}字</span><span class="pill pilc">完成版</span>`;
     document.getElementById('s7ftxt').innerHTML=md2html(reply);document.getElementById('s7farea').style.display='block';
-    const c=parseInt(localStorage.getItem('mk_essays')||'0')+1;localStorage.setItem('mk_essays',c);upStats();
+    const c=parseInt(localStorage.getItem('mk_essays')||'0')+1;localStorage.setItem('mk_essays',c);upStats();renderEarnBanner();
     document.getElementById('s7farea').scrollIntoView({behavior:'smooth'});
   }catch(err){alert('エラー：'+err.message);}
   btn.disabled=false;btn.textContent='🎓 最終添削してもらう';
