@@ -25,17 +25,186 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .hero-t p{font-size:13px;color:rgba(255,255,255,.8);margin-top:3px}
 .tabs{display:flex;overflow-x:auto;background:#fff;border-radius:12px;margin-bottom:14px;padding:4px;gap:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none;box-shadow:0 2px 8px rgba(58,123,213,.13)}
 .tabs::-webkit-scrollbar{display:none}
-.tab{padding:8px 14px;font-size:15px;cursor:pointer;border:none;border-radius:9px;background:none;color:#666;white-space:nowrap;flex-shrink:0;font-weight:500;transition:all .15s}
+.tab{padding:8px 14px;font-size:14px;cursor:pointer;border:none;border-radius:9px;background:none;color:#666;white-space:nowrap;flex-shrink:0;font-weight:500;transition:all .15s}
 .tab.on{background:#5BA4CF;color:#fff}
 .sec{display:none}.sec.on{display:block}
 .card{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(58,123,213,.1)}
-.ctitle{font-size:17px;font-weight:600;color:#555;margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ctitle{font-size:14px;font-weight:600;color:#555;margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:12px;font-weight:600}
 .ba{background:#EBF5FF;color:#1A5B8A}.bb{background:#EDE9FE;color:#4C1D95}.bc{background:#FFF3CD;color:#412402}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
 .sc{background:#EBF5FF;border-radius:10px;padding:10px 6px;text-align:center}
 .sc .v{font-size:22px;font-weight:700;color:#5BA4CF}
 .sc .l{font-size:11px;color:#666;margin-top:2px}
+/* ===== ゲーミフィケーション ===== */
+.earn-banner{background:linear-gradient(135deg,#2D7DB3 0%,#5BA4CF 100%);border-radius:14px;padding:14px 16px;margin-bottom:12px;color:#fff}
+.earn-banner .earn-total{font-size:32px;font-weight:800;color:#fff;letter-spacing:-1px}
+.earn-banner .earn-label{font-size:12px;color:rgba(255,255,255,.85);margin-bottom:2px}
+.earn-banner .earn-sub{font-size:13px;color:rgba(255,255,255,.9);margin-top:4px}
+.earn-banner .earn-bar-wrap{background:rgba(255,255,255,.15);border-radius:10px;height:8px;margin-top:8px;overflow:hidden}
+.earn-banner .earn-bar{height:100%;border-radius:10px;background:#fff;transition:width .5s ease}
+.earn-banner .earn-cap{font-size:11px;color:rgba(255,255,255,.75);margin-top:3px;text-align:right}
+.month-bonus-bar{background:#fff;border-radius:12px;padding:10px 14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(58,123,213,.1)}
+.month-bonus-bar .mbb-title{font-size:13px;color:#555;font-weight:600;margin-bottom:6px}
+.month-bonus-chips{display:flex;gap:6px;flex-wrap:wrap}
+.mbc{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;background:#EBF5FF;color:#888}
+.mbc.on{background:#EBF5FF;color:#1A5B8A}
+.mbc.bonus{background:#FFF3CD;color:#856404}
+.pt-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#5BA4CF;color:#fff;padding:10px 20px;border-radius:20px;font-size:15px;font-weight:700;z-index:999;pointer-events:none;opacity:0;transition:opacity .3s}
+.pt-toast.show{opacity:1}
+.cday.done{background:#EBF5FF;border-color:#5BA4CF}
+.cday.done .cday-pt{font-size:9px;color:#1A5B8A;font-weight:700;line-height:1}
+.cday.done .cday-num{font-size:11px;color:#1A5B8A;line-height:1}
+.cday.combo{background:linear-gradient(135deg,#EBF5FF,#d4f5e0);border-color:#3A7BD5;border-width:2px}
+.cday.bonus-day{background:linear-gradient(135deg,#FFF3CD,#FFE69C);border-color:#F0A030;border-width:2px}
+.week-bonus-badge{display:inline-block;background:#F0A030;color:#fff;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700;margin-left:6px}
+.mon-earn-lbl{font-size:14px;color:#5BA4CF;font-weight:700}
+.cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:10px}
+.ch{font-size:11px;color:#999;text-align:center;padding:3px 0;font-weight:600}
+.cday{aspect-ratio:1;border-radius:7px;border:1px solid #e8e8e8;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;color:#999;background:#fff;cursor:pointer;transition:all .1s;-webkit-tap-highlight-color:transparent}
+.cday:active{transform:scale(.95)}
+.cday.today{border-color:#5BA4CF;color:#5BA4CF;font-weight:700;border-width:2px}
+.cday.done{background:#EBF5FF;border-color:#5BA4CF}
+.cday.done::after{content:'⭐';font-size:13px;display:block}
+.cday.done .dn{font-size:10px;color:#1A5B8A}
+.cday.xa{border-color:#E24B4A;background:#fff0f0}
+.cday.xb{border-color:#9B8FD4;background:#f0efff}
+.cday.ex{border:none;background:none;cursor:default}
+.stbtn{display:block;width:100%;padding:14px;background:#5BA4CF;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;text-align:center;margin-bottom:8px;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.stbtn:active{background:#1A5B8A}
+.stbtn:disabled{background:#ccc;cursor:default}
+.monnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.monnav span{font-size:16px;font-weight:700;color:#1a1a1a}
+.bp{padding:12px 18px;background:#5BA4CF;color:#fff;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-weight:600;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.bp:active{background:#1A5B8A}
+.bp:disabled{opacity:.5;cursor:not-allowed}
+.bs{padding:12px 18px;background:#fff;color:#5BA4CF;border:1.5px solid #5BA4CF;border-radius:10px;font-size:15px;cursor:pointer;font-weight:600}
+.bpurp{padding:12px 18px;background:#9B8FD4;color:#fff;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-weight:600;transition:background .15s}
+.bpurp:active{background:#7B6FC4}
+.bpurp:disabled{opacity:.5}
+.bamb{padding:12px 18px;background:#F0A030;color:#fff;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-weight:600}
+.brow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.ta{width:100%;border:1.5px solid #e0e0e0;border-radius:10px;padding:12px;font-size:16px;font-family:inherit;resize:vertical;color:#1a1a1a;background:#fff;line-height:1.8;-webkit-appearance:none}
+.ta:focus{outline:none;border-color:#5BA4CF}
+.cc{font-size:13px;color:#999;text-align:right;margin-top:4px}
+.cc.ok{color:#5BA4CF;font-weight:600}.cc.mid{color:#F0A030}
+.fbox{background:#F4F8FC;border-radius:12px;padding:14px;margin-top:10px;border-left:4px solid #5BA4CF}
+.fbox p{font-size:15px;line-height:1.75;color:#1a1a1a;white-space:pre-wrap}
+.fbox.purp{border-left-color:#9B8FD4}
+.fbox.amb{border-left-color:#F0A030}
+.pills{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.pill{padding:3px 10px;border-radius:20px;font-size:13px;font-weight:600}
+.pila{background:#EBF5FF;color:#1A5B8A}.pilb{background:#FFF3CD;color:#412402}.pilc{background:#EDE9FE;color:#4C1D95}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tchip{padding:10px 12px;border-radius:10px;border:1.5px solid #e0e0e0;font-size:14px;cursor:pointer;background:#F8FBFF;color:#1a1a1a;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.tchip.sel{background:#EBF5FF;border-color:#5BA4CF;color:#1A5B8A}
+.tchip:active{transform:scale(.97)}
+.tchip .yr{font-size:11px;color:#999;margin-bottom:2px}
+.tchip.sel .yr{color:#5BA4CF}
+.qbox{background:#F4F8FC;border-radius:10px;padding:14px;margin-bottom:10px;font-size:15px;line-height:1.75;color:#1a1a1a}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.qopt{padding:12px 10px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;cursor:pointer;background:#fff;color:#1a1a1a;text-align:left;-webkit-tap-highlight-color:transparent;transition:all .1s}
+.qopt:active{transform:scale(.97)}
+.qopt.ok{background:#EBF5FF;border-color:#5BA4CF;color:#1A5B8A;font-weight:700}
+.qopt.ng{background:#fff0f0;border-color:#E24B4A;color:#501313}
+.qans{font-size:14px;padding:10px 12px;border-radius:10px;margin-top:6px;line-height:1.6}
+.qans.ok{background:#EBF5FF;color:#1A5B8A}
+.qans.ng{background:#fff0f0;color:#501313}
+.kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.kcard{border:1.5px solid #e0e0e0;border-radius:10px;padding:12px 6px;text-align:center;cursor:pointer;background:#fff;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.kcard:active{transform:scale(.95)}
+.kcard .kj{font-size:30px;font-weight:500;color:#1a1a1a}
+.kcard .kr{font-size:12px;color:#555;margin-top:4px;display:none;line-height:1.4}
+.kcard.show .kr{display:block}
+.kcard.done{background:#EBF5FF;border-color:#5BA4CF}
+.kcard.miss{background:#fff0f0;border-color:#E24B4A}
+.iq{padding:12px 14px;border-radius:10px;border:1.5px solid #e0e0e0;margin-bottom:8px;cursor:pointer;font-size:15px;background:#fff;color:#1a1a1a;-webkit-tap-highlight-color:transparent;transition:all .1s}
+.iq:active{background:#EBF5FF}
+.iq .iqc{font-size:12px;color:#999;margin-bottom:3px;font-weight:600}
+.subtabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.stab{padding:8px 14px;border-radius:20px;font-size:14px;border:1.5px solid #e0e0e0;cursor:pointer;background:#F8FBFF;color:#666;font-weight:500;-webkit-tap-highlight-color:transparent}
+.stab.on{background:#9B8FD4;color:#fff;border-color:#9B8FD4}
+.type-sel{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.tsbtn{padding:14px 8px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;cursor:pointer;background:#F8FBFF;color:#1a1a1a;text-align:center;font-weight:600;-webkit-tap-highlight-color:transparent;transition:all .1s}
+.tsbtn:active,.tsbtn.on{background:#9B8FD4;color:#fff;border-color:#9B8FD4}
+.loading{font-size:15px;color:#666;padding:12px;text-align:center}
+.loading::after{content:'';animation:dt 1.2s steps(4,end) infinite}
+@keyframes dt{0%,20%{content:'.'}40%{content:'..'}60%,80%{content:'...'}100%{content:''}}
+.tips-item{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:10px;margin-bottom:6px}
+.tips-icon{font-size:17px;font-weight:700;min-width:22px;text-align:center}
+.tips-label{font-size:14px;font-weight:700}
+.tips-desc{font-size:13px;margin-top:3px;line-height:1.5}
+
+/* ===== 7ステップ 作文タブ ===== */
+.step-bar{display:flex;gap:0;margin-bottom:14px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(58,123,213,.13)}
+.step-btn{flex:1;padding:10px 4px;border:none;background:none;cursor:pointer;text-align:center;font-size:11px;color:#aaa;font-weight:600;border-right:1px solid #EBF5FF;transition:all .15s;position:relative;-webkit-tap-highlight-color:transparent}
+.step-btn:last-child{border-right:none}
+.step-btn .snum{display:block;font-size:17px;margin-bottom:2px}
+.step-btn.on{background:#5BA4CF;color:#fff}
+.step-btn.done{background:#EBF5FF;color:#1A5B8A}
+.step-btn.done::after{content:'✓';position:absolute;top:4px;right:4px;font-size:10px}
+
+.essay-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.essay-card{border:1.5px solid #e0e0e0;border-radius:10px;padding:10px;cursor:pointer;background:#F8FBFF;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.essay-card:active{transform:scale(.97)}
+.essay-card.sel{background:#EBF5FF;border-color:#5BA4CF}
+.essay-card .ec-grade{font-size:11px;color:#999;font-weight:600;margin-bottom:3px}
+.essay-card .ec-title{font-size:14px;font-weight:700;color:#1a1a1a;line-height:1.3;margin-bottom:4px}
+.essay-card .ec-tags{display:flex;flex-wrap:wrap;gap:3px}
+.essay-card .ec-tag{font-size:11px;padding:1px 6px;border-radius:10px;background:#EBF5FF;color:#666}
+.essay-card.sel .ec-grade{color:#5BA4CF}
+.essay-card.sel .ec-tag{background:#c8efe3;color:#1A5B8A}
+.ec-fit-A{border-left:3px solid #5BA4CF}
+.ec-fit-B{border-left:3px solid #9B8FD4}
+.ec-fit-C{border-left:3px solid #F0A030}
+
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.fchip{padding:5px 10px;border-radius:20px;font-size:13px;border:1.5px solid #e0e0e0;cursor:pointer;background:#F8FBFF;color:#666;font-weight:500;-webkit-tap-highlight-color:transparent;transition:all .1s}
+.fchip.on{background:#5BA4CF;color:#fff;border-color:#5BA4CF}
+
+.essay-body{font-size:15px;line-height:2;color:#1a1a1a;white-space:pre-wrap;background:#fafffe;border-radius:10px;padding:14px;border:1px solid #e8f5f0;margin-bottom:10px;max-height:380px;overflow-y:auto}
+.para-block{padding:10px 12px;border-radius:8px;margin-bottom:8px;font-size:15px;line-height:1.9;position:relative}
+.para-block .para-label{font-size:11px;font-weight:700;margin-bottom:4px;opacity:.8}
+.para-intro{background:#EBF5FF;border-left:4px solid #5BA4CF}
+.para-intro .para-label{color:#1A5B8A}
+.para-event{background:#FFF3CD;border-left:4px solid #F59E0B}
+.para-event .para-label{color:#7C4A00}
+.para-change{background:#EDE9FE;border-left:4px solid #7C3AED}
+.para-change .para-label{color:#4C1D95}
+.para-spread{background:#FEE2E2;border-left:4px solid #EF4444}
+.para-spread .para-label{color:#7F1D1D}
+.para-end{background:#DBEAFE;border-left:4px solid #3B82F6}
+.para-end .para-label{color:#1E3A8A}
+
+.tmpl-block{background:#F4F8FC;border-radius:10px;padding:12px;margin-bottom:10px;border:1px dashed #c0c0c0}
+.tmpl-label{font-size:12px;font-weight:700;color:#555;margin-bottom:6px}
+.tmpl-hint{font-size:14px;color:#888;font-style:italic;line-height:1.7}
+
+.chat-area{border:1.5px solid #e0e0e0;border-radius:12px;padding:12px;margin-bottom:10px;background:#F8FBFF;max-height:260px;overflow-y:auto}
+.msg{padding:8px 12px;border-radius:12px;font-size:14px;line-height:1.7;margin-bottom:8px;max-width:88%}
+.msg-ai{background:#EBF5FF;color:#1A5B8A;margin-right:auto}
+.msg-user{background:#5BA4CF;color:#fff;margin-left:auto;text-align:right}
+
+.char-target{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.ctbtn{padding:6px 12px;border:1.5px solid #e0e0e0;border-radius:20px;font-size:13px;cursor:pointer;background:#F8FBFF;color:#666;font-weight:600;-webkit-tap-highlight-color:transparent;transition:all .1s}
+.ctbtn.on{background:#5BA4CF;color:#fff;border-color:#5BA4CF}
+
+.step-nav{display:flex;gap:8px;margin-top:12px}
+.step-next{flex:1;padding:12px;background:#5BA4CF;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.step-back{padding:12px 16px;background:#fff;color:#5BA4CF;border:1.5px solid #5BA4CF;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer}
+/* ===== 科目ボタン ===== */
+.subj-btn{padding:12px 10px;border:2px solid #e0e0e0;border-radius:12px;background:#F8FBFF;cursor:pointer;font-size:14px;font-weight:600;color:#555;line-height:1.4;text-align:center;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.subj-btn:active{transform:scale(.96)}
+.subj-btn.on{border-color:#5BA4CF;background:#EBF5FF;color:#1A5B8A}
+.subj-btn.on .subj-pt{color:#5BA4CF}
+.subj-btn .subj-pt{display:block;font-size:12px;color:#aaa;margin-top:2px;font-weight:500}
+
+
+.level-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;margin-left:4px}
+.lv1{background:#DBEAFE;color:#1E3A8A}
+.lv2{background:#EBF5FF;color:#1A5B8A}
+.lv3{background:#FEF3C7;color:#7C4A00}
+.lv4{background:#FEE2E2;color:#7F1D1D}
 /* ===== ゲーミフィケーション ===== */
 .earn-banner{background:linear-gradient(135deg,#2D7DB3 0%,#5BA4CF 100%);border-radius:14px;padding:14px 16px;margin-bottom:12px;color:#fff}
 .earn-banner .earn-total{font-size:32px;font-weight:800;color:#fff;letter-spacing:-1px}
@@ -240,13 +409,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .vacc-arrow{font-size:12px;color:#5BA4CF;flex-shrink:0}
 .video-accordion .video-wrap{border-radius:0 0 10px 10px}
 </style>
-  <!-- EmailJS -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>
-    (function(){
-      emailjs.init({ publicKey: "YOUR_EMAILJS_PUBLIC_KEY" });
-    })();
-  </script>
 </head>
 <body>
 
@@ -322,33 +484,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div class="month-bonus-chips" id="bonusChips"></div>
   </div>
 
-
-  <!-- メール・設定 -->
-  <div class="card" id="emailCard">
-    <div class="ctitle">📧 日報メール設定</div>
-    <p style="font-size:13px;color:#666;margin-bottom:10px">毎日オランダ時間22:00に自動でレポートメールを送ります。</p>
-    <div style="background:#FFF3CD;border-radius:10px;padding:12px;margin-bottom:10px;font-size:13px;line-height:1.7;border-left:4px solid #F0A030">
-      <strong style="color:#7C4A00">⚙️ 初回設定が必要です</strong><br>
-      <a href="https://www.emailjs.com" target="_blank" style="color:#2D7DB3">EmailJS</a>に無料登録して、
-      Service ID・Template IDを取得してから下に入力してください。<br>
-      テンプレートの変数：<code>{{subject}}</code> <code>{{message}}</code> <code>{{today_subjects}}</code>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">
-      <input id="ejsPublicKey" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px"
-        placeholder="EmailJS Public Key（例：aBcDeFgH...）"
-        value="" oninput="saveEmailConfig()">
-      <input id="ejsServiceId" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px"
-        placeholder="Service ID（例：service_xxxxxx）"
-        value="" oninput="saveEmailConfig()">
-      <input id="ejsTemplateId" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px"
-        placeholder="Template ID（例：template_xxxxxx）"
-        value="" oninput="saveEmailConfig()">
-    </div>
-    <button id="manualReportBtn" class="bp" onclick="manualSendReport()" style="margin-bottom:6px">
-      📧 今日のレポートをメール送信
-    </button>
-    <p style="font-size:11px;color:#999;text-align:center">送信先：taisuke.sano@gmail.com・i.yayaco@gmail.com</p>
-  </div>
   <div class="card">
     <div class="monnav">
       <button class="bs" onclick="cm(-1)" style="padding:8px 14px">◀</button>
@@ -362,6 +497,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div style="display:flex;gap:10px;font-size:13px;color:#666;margin-bottom:8px;flex-wrap:wrap">
       <span style="color:#3A7BD5">🟢コンボ日</span><span style="color:#F0A030">🟡バランスボーナス日</span>
     </div>
+  </div>
+
+  <!-- メール・設定 -->
+  <div class="card" id="emailCard">
+    <div class="ctitle">📧 日報メール設定</div>
+    <p style="font-size:13px;color:#666;margin-bottom:10px">毎日オランダ時間22:00に自動でレポートメールを送ります。</p>
+    <div style="background:#FFF3CD;border-radius:10px;padding:12px;margin-bottom:10px;font-size:13px;line-height:1.7;border-left:4px solid #F0A030">
+      <strong style="color:#7C4A00">⚙️ 初回設定が必要です</strong><br>
+      <a href="https://www.emailjs.com" target="_blank" style="color:#2D7DB3">EmailJS</a>に無料登録して、Service ID・Template IDを取得してから入力してください。<br>
+      テンプレート変数：<code>{{subject}}</code> <code>{{message}}</code>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">
+      <input id="ejsPublicKey" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px" placeholder="EmailJS Public Key" value="" oninput="saveEmailConfig()">
+      <input id="ejsServiceId" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px" placeholder="Service ID（例：service_xxxxxx）" value="" oninput="saveEmailConfig()">
+      <input id="ejsTemplateId" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px" placeholder="Template ID（例：template_xxxxxx）" value="" oninput="saveEmailConfig()">
+    </div>
+    <button id="manualReportBtn" class="bp" onclick="manualSendReport()" style="margin-bottom:6px">📧 今日のレポートをメール送信</button>
+    <p style="font-size:11px;color:#999;text-align:center">送信先：taisuke.sano@gmail.com・i.yayaco@gmail.com</p>
   </div>
 </div>
 
@@ -383,7 +536,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div id="sk-step1">
     <div class="card">
       <div class="ctitle">📖 良い作文を読もう <span class="badge ba">Step 1</span></div>
-      <p style="font-size:14px;color:#666;margin-bottom:10px">まずは受賞作品を読んで「良い作文」のイメージをつかもう！レベル順に並んでいるよ。</p>
+      <p style="font-size:13px;color:#666;margin-bottom:10px">まずは受賞作品を読んで「良い作文」のイメージをつかもう！レベル順に並んでいるよ。</p>
       <!-- フィルター -->
       <div class="filter-row" id="essayFilters">
         <button class="fchip on" onclick="filterEssays('all',this)">すべて</button>
@@ -410,7 +563,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div id="sk-step2" style="display:none">
     <div class="card">
       <div class="ctitle">🔍 構成を分解しよう <span class="badge bb">Step 2</span></div>
-      <p style="font-size:14px;color:#666;margin-bottom:10px">この作文はどんな「型」で書かれているか、段落ごとに色分けして見てみよう！</p>
+      <p style="font-size:13px;color:#666;margin-bottom:10px">この作文はどんな「型」で書かれているか、段落ごとに色分けして見てみよう！</p>
       <div id="structureView"></div>
       <div style="margin-top:12px;padding:12px;background:#F4F8FC;border-radius:10px">
         <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:8px">📌 この作文の「型」</div>
@@ -428,7 +581,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div id="sk-step3" style="display:none">
     <div class="card">
       <div class="ctitle">📝 型をまねて書こう <span class="badge bc">Step 3</span></div>
-      <p style="font-size:14px;color:#666;margin-bottom:10px">テンプレートに自分の体験を当てはめてみよう。まずはメモでOK！</p>
+      <p style="font-size:13px;color:#666;margin-bottom:10px">テンプレートに自分の体験を当てはめてみよう。まずはメモでOK！</p>
       <div id="tmplArea"></div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(2)">← 戻る</button>
@@ -461,24 +614,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       <div id="s4farea" style="display:none">
         <div class="fbox"><div class="pills" id="s4pills"></div><p id="s4ftxt"></p></div>
       </div>
-
-      <div class="photo-section">
-        <div class="ps-title">📸 手書きで書いた場合は写真で添削！</div>
-        <div class="photo-upload-area" id="pu4area">
-          <input type="file" id="pu4input" accept="image/*" capture="environment"
-            onchange="showPhotoPreview('pu4input','pu4preview','pu4area')">
-          <div class="pu-icon">📷</div>
-          <div class="pu-label">写真を選ぶ・撮影する</div>
-          <div class="pu-sub">手書き作文の写真をここにアップ</div>
-        </div>
-        <div class="photo-preview" id="pu4preview" style="display:none"></div>
-        <button class="photo-fb-btn" id="pfbtn4"
-          onclick="submitPhotoFeedback('pu4input','pfresult4','pfbtn4','Step4（400字）',sk_essay?.type,sk_essay?.imitation)">
-          📸 写真を添削してもらう
-        </button>
-        <div class="cost-note">写真添削は1回約1〜3円のAPIコストがかかります</div>
-        <div id="pfresult4" style="display:none;margin-top:8px"></div>
-      </div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(3)">← 戻る</button>
         <button class="step-next" onclick="goStep(5)">次へ：AIコーチと深める →</button>
@@ -490,7 +625,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div id="sk-step5" style="display:none">
     <div class="card">
       <div class="ctitle">🤖 AIコーチと深めよう <span class="badge bb">Step 5</span></div>
-      <p style="font-size:14px;color:#666;margin-bottom:10px">AIコーチが質問するから、答えながら作文のネタを深めよう！</p>
+      <p style="font-size:13px;color:#666;margin-bottom:10px">AIコーチが質問するから、答えながら作文のネタを深めよう！</p>
       <div class="chat-area" id="chatArea"></div>
       <div style="display:flex;gap:6px">
         <textarea class="ta" id="chatIn" style="min-height:60px;flex:1" placeholder="答えを書いてね…"></textarea>
@@ -521,24 +656,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       <div id="s6farea" style="display:none">
         <div class="fbox"><div class="pills" id="s6pills"></div><p id="s6ftxt"></p></div>
       </div>
-
-      <div class="photo-section">
-        <div class="ps-title">📸 手書きで書いた場合は写真で添削！</div>
-        <div class="photo-upload-area" id="pu6area">
-          <input type="file" id="pu6input" accept="image/*" capture="environment"
-            onchange="showPhotoPreview('pu6input','pu6preview','pu6area')">
-          <div class="pu-icon">📷</div>
-          <div class="pu-label">写真を選ぶ・撮影する</div>
-          <div class="pu-sub">手書き作文の写真をここにアップ</div>
-        </div>
-        <div class="photo-preview" id="pu6preview" style="display:none"></div>
-        <button class="photo-fb-btn" id="pfbtn6"
-          onclick="submitPhotoFeedback('pu6input','pfresult6','pfbtn6','Step6（800字）',sk_essay?.type,sk_essay?.imitation)">
-          📸 写真を添削してもらう
-        </button>
-        <div class="cost-note">写真添削は1回約1〜3円のAPIコストがかかります</div>
-        <div id="pfresult6" style="display:none;margin-top:8px"></div>
-      </div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(5)">← 戻る</button>
         <button class="step-next" onclick="goStep(7)">次へ：1200字に完成 →</button>
@@ -563,24 +680,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       </div>
       <div id="s7farea" style="display:none">
         <div class="fbox"><div class="pills" id="s7pills"></div><p id="s7ftxt"></p></div>
-      </div>
-      <div class="photo-section">
-        <div class="ps-title">🏆 清書した完成版を写真で最終添削！</div>
-        <p style="font-size:14px;color:#666;margin-bottom:10px">縦書き・400字詰め原稿用紙に清書したら写真を撮って送ってね。複数枚あれば1枚ずつ送ってね。</p>
-        <div class="photo-upload-area" id="pu7area">
-          <input type="file" id="pu7input" accept="image/*" capture="environment"
-            onchange="showPhotoPreview('pu7input','pu7preview','pu7area')">
-          <div class="pu-icon">📝</div>
-          <div class="pu-label">写真を選ぶ・撮影する</div>
-          <div class="pu-sub">縦書き・400字詰め原稿用紙を撮影してね</div>
-        </div>
-        <div class="photo-preview" id="pu7preview" style="display:none"></div>
-        <button class="photo-fb-btn" id="pfbtn7"
-          onclick="submitPhotoFeedback('pu7input','pfresult7','pfbtn7','Step7（完成版・縦書き清書）',sk_essay?.type,sk_essay?.imitation)">
-          🎓 清書を最終添削してもらう
-        </button>
-        <div class="cost-note">写真添削は1回約1〜3円のAPIコストがかかります</div>
-        <div id="pfresult7" style="display:none;margin-top:8px"></div>
       </div>
       <div style="margin-top:12px;padding:12px;background:#EBF5FF;border-radius:10px;text-align:center">
         <p style="font-size:14px;color:#1A5B8A;font-weight:600">🌸 ここまで来たら、あとは手書きで清書するだけ！<br>縦書き・400字詰め原稿用紙3枚 でがんばれ！</p>
@@ -668,15 +767,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div class="card" id="kquizcard" style="display:none">
     <div class="ctitle">✍️ 書き取りクイズ</div>
     <div id="kqbox" class="qbox" style="font-size:16px;line-height:1.8"></div>
-    <p style="font-size:13px;color:#888;margin-bottom:8px">📝 紙に書いて練習してから答えを確認しよう！</p>
-    <div id="kqanswer" style="display:none;background:#FFF3CD;border-radius:10px;padding:10px 14px;margin-bottom:10px;border-left:4px solid #F0A030">
-      <div style="font-size:12px;font-weight:700;color:#7C4A00;margin-bottom:6px">💡 答え</div>
-      <div id="kqanswerText" style="font-size:15px;line-height:1.8"></div>
-    </div>
-    <div class="brow">
-      <button id="kqansBtn" class="bamb" onclick="toggleKanjiAnswer()">答えを見る</button>
-      <button class="bs" onclick="genKanjiQ()">新しい問題</button>
-    </div>
+    <textarea class="ta" id="kqin" style="min-height:80px" placeholder="漢字で書いてみよう"></textarea>
+    <div class="brow"><button class="bamb" onclick="checkKanjiQ()">答え合わせ</button></div>
     <div id="kqresult" style="display:none;margin-top:8px"></div>
   </div>
 </div>
@@ -693,16 +785,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     </div>
     <div id="mloading" style="display:none" class="loading">問題を作っています</div>
     <div id="marea" style="display:none">
-      <div class="qbox" id="mbox" style="font-size:16px;line-height:1.95"></div>
-      <p style="font-size:13px;color:#888;margin-bottom:8px">まず自分で解いてみよう！解けたら「答えを見る」か「自分の解答を採点」を使ってね。</p>
-      <div id="mansanswer" style="display:none;background:#FFF3CD;border-radius:10px;padding:10px 14px;margin-bottom:10px;border-left:4px solid #F0A030">
-        <div style="font-size:12px;font-weight:700;color:#7C4A00;margin-bottom:6px">💡 答えと解説</div>
-        <div id="mansanswerText" style="font-size:15px;line-height:1.8"></div>
-      </div>
-      <textarea class="ta" id="mansin" style="min-height:100px" placeholder="式と答えをここに書こう"></textarea>
+      <div class="qbox" id="mbox" style="font-size:15px;line-height:1.9"></div>
+      <textarea class="ta" id="mansin" style="min-height:100px" placeholder="式と答えを書こう"></textarea>
       <div class="brow">
-        <button id="mansAnsBtn" class="bamb" onclick="toggleMathAnswer()">答えを見る</button>
-        <button class="bp" onclick="getMathFB()">自分の解答を採点</button>
+        <button class="bamb" onclick="getMathFB()">解説してもらう</button>
         <button class="bs" onclick="genMath(window._lastMT)">別の問題</button>
       </div>
       <div id="mfb" style="display:none"><div class="fbox amb"><p id="mft"></p></div></div>
@@ -779,53 +865,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 </div>
 </div>
 
-
-<!-- 動画 -->
-<div id="s-video" class="sec" style="display:none">
-
-  <!-- 国語・小論文セクション -->
-  <div class="card">
-    <div class="ctitle">📖 国語・小論文 動画</div>
-    <p style="font-size:13px;color:#666;margin-bottom:14px">明訓中学の受験対策に役立つ国語・作文・小論文の動画です。</p>
-
-    <div class="video-item">
-      <div class="video-title">📝 小論文の書き方①</div>
-      <div class="video-wrap">
-        <iframe src="https://www.youtube.com/embed/l_FM-7W1w2Q" title="小論文の書き方①"
-          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen loading="lazy"></iframe>
-      </div>
-    </div>
-
-    <div class="video-item">
-      <div class="video-title">📝 小論文の書き方②</div>
-      <div class="video-wrap">
-        <iframe src="https://www.youtube.com/embed/fwbfbwkz5Lg" title="小論文の書き方②"
-          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen loading="lazy"></iframe>
-      </div>
-    </div>
-
-    <div class="video-item">
-      <div class="video-title">📝 小論文の書き方③</div>
-      <div class="video-wrap">
-        <iframe src="https://www.youtube.com/embed/N_o3psXDhDo" title="小論文の書き方③"
-          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen loading="lazy"></iframe>
-      </div>
-    </div>
-  </div>
-
-  <!-- 算数セクション -->
-  <div class="card">
-    <div class="ctitle">🔢 算数 動画（計算達人シリーズ）</div>
-    <p style="font-size:13px;color:#666;margin-bottom:14px">計算の基礎から入試レベルまで。タイトルをタップすると動画が表示されます。</p>
-
-    <div id="mathVideoList">
-    </div>
-  </div>
-
-</div>
 <script>
 
 const IQS=[
@@ -861,7 +900,7 @@ function resetKey(){localStorage.removeItem('mk_apikey');location.reload()}
 function init(){
   try{cal=JSON.parse(localStorage.getItem('mk_cal')||'{}');kanjiState=JSON.parse(localStorage.getItem('mk_kstate')||'{}')}catch(e){cal={};kanjiState={}}
   const t=new Date();cY=t.getFullYear();cM=t.getMonth()+1;
-  migrateCal();countdown();renderCal();initSakubun();renderIQ();upStats();renderEarnBanner();renderBonusChips();initTodayButtons();initVideoSection();startDailyMailCheck();loadEmailConfig();
+  migrateCal();countdown();renderCal();initSakubun();renderIQ();upStats();renderEarnBanner();renderBonusChips();initTodayButtons();
 }
 
 async function callAPI(prompt,maxTokens=800){
@@ -888,7 +927,6 @@ function sw(id){
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
   document.getElementById('s-'+id).classList.add('on');
   event.currentTarget.classList.add('on');
-  if(id==='video') setTimeout(initVideoSection, 50);
 }
 function ksw(id){
   document.querySelectorAll('.subtabs .stab').forEach(t=>t.classList.remove('on'));
@@ -904,23 +942,15 @@ function cm(d){cM+=d;if(cM>12){cM=1;cY++}if(cM<1){cM=12;cY--}renderCal()}
 // ==========================================
 
 // 月別予算Cap（円）：階段式 6月〜11月
-const MONTH_CAPS_PT = {
-  6:  80,   // 6月  スタート（約3pt/日×26日）
-  7:  120,  // 7月
-  8:  150,  // 8月 夏休み
-  9:  130,  // 9月
-  10: 160,  // 10月 直前期
-  11: 160,  // 11月 受験月
+const MONTH_CAPS = {
+  6:  10000,  // 6月  スタート
+  7:  14000,  // 7月
+  8:  17000,  // 8月 夏休み
+  9:  16000,  // 9月
+  10: 21000,  // 10月 直前期
+  11: 22000,  // 11月 ラスト（受験月）
 };
-// ptマイルストーン（累計）
-const MILESTONES = [10, 25, 50, 75, 100, 150, 200, 300];
-// 達成済みマイルストーンを記録するキー
-function getAchievedMilestones() {
-  try { return JSON.parse(localStorage.getItem('mk_milestones') || '[]'); } catch(e){ return []; }
-}
-function saveAchievedMilestones(arr) {
-  localStorage.setItem('mk_milestones', JSON.stringify(arr));
-}
+// 合計 = 100,000円
 
 // 科目ポイント定義
 const SUBJ_PT = {
@@ -964,8 +994,12 @@ function calcDayBonus(subjs, comboCount) {
   return bonus;
 }
 
-function getMonthCapPt(mo) {
-  return MONTH_CAPS_PT[mo] || 130;
+function getMonthCap(yr, mo) {
+  // 2026年の月はズレ補正
+  const cap = MONTH_CAPS[mo];
+  if (cap) return cap;
+  // 範囲外は平均
+  return 16700;
 }
 
 function calcMonthEarnings(yr, mo) {
@@ -980,34 +1014,14 @@ function calcMonthEarnings(yr, mo) {
   return pts;
 }
 
-function calcTotalPts() {
+function calcTotalYen() {
   let totalPts = 0;
   Object.keys(cal).forEach(k => {
     if (cal[k] && cal[k].pts !== undefined) {
       totalPts += (cal[k].pts||0) + (cal[k].bonus||0);
     }
   });
-  return totalPts;
-}
-
-// 次のマイルストーン情報を返す
-function calcMilestoneInfo() {
-  const pts = calcTotalPts();
-  const achieved = getAchievedMilestones();
-  // 次のマイルストーン
-  const next = MILESTONES.find(m => m > pts) || null;
-  const prev = [...MILESTONES].reverse().find(m => m <= pts) || 0;
-  const pct = next ? Math.round((pts - prev) / (next - prev) * 100) : 100;
-  return { pts, next, prev, pct, achieved };
-}
-
-// コイン換算（親確認用・メール用のみ）
-function ptToYen(pts) {
-  // マイルストーン達成ptを合計して換算（10pt=¥100）
-  const achieved = getAchievedMilestones();
-  // 達成済みマイルストーンの最大値×10円
-  const maxAchieved = achieved.length > 0 ? Math.max(...achieved) : 0;
-  return maxAchieved * 10; // 例: 50pt達成→¥500
+  return totalPts * 10; // 10pt = 100円 → 1pt = 10円
 }
 
 function getCurrentStreak() {
@@ -1064,7 +1078,7 @@ function updateTodayPreview() {
   else ca.style.display='none';
 
   const btn = document.getElementById('stbtn');
-  btn.textContent = '⭐ 今日の記録を保存！ +' + total + 'pt';
+  btn.textContent = '⭐ 今日の記録を保存！ (' + total + 'pt → ¥' + (total*10) + ')';
 }
 
 function stamp() {
@@ -1088,7 +1102,7 @@ function stamp() {
   // ボタン更新
   document.getElementById('stbtn').textContent = '⭐ 今日は記録済み！ +' + total + 'pt';
   document.getElementById('stbtn').disabled = true;
-  document.getElementById('stampHint').textContent = '今日 +' + total + 'pt 記録したよ！';
+  document.getElementById('stampHint').textContent = '今日 +' + total + 'pt（¥' + (total*10) + '）稼いだよ！';
 
   // 全科目ボタン無効化
   Object.keys(SUBJ_PT).forEach(s => {
@@ -1096,10 +1110,8 @@ function stamp() {
     if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; }
   });
 
-  // 取り消しボタン表示
-  showCancelBtn(total);
   // トースト
-  showPtToast('+' + total + 'pt 獲得！🌟');
+  showPtToast('+' + total + 'pt 獲得！ ¥' + (total*10));
 }
 
 function showPtToast(msg) {
@@ -1111,80 +1123,19 @@ function showPtToast(msg) {
 }
 
 function renderEarnBanner() {
-  const info = calcMilestoneInfo();
+  const totalYen = calcTotalYen();
   const t = new Date();
   const mo = t.getMonth() + 1;
-  const moPts = calcMonthEarnings(t.getFullYear(), mo);
-  const capPt = getMonthCapPt(mo);
-  const remainCap = Math.max(0, capPt - moPts);
+  const yr = t.getFullYear();
+  const cap = getMonthCap(yr, mo);
+  const moYen = calcMonthEarnings(yr, mo) * 10;
+  const pct = Math.min(100, Math.round(moYen / cap * 100));
 
-  // メインの累計pt表示
-  const el = document.getElementById('earnTotal');
-  if (el) el.textContent = info.pts + ' pt';
-
-  // ラベル
-  const lblEl = document.getElementById('earnLabel');
-  if (lblEl) lblEl.textContent = '⭐ 累計ポイント';
-
-  // サブ：次のマイルストーンまで
-  const subEl = document.getElementById('earnSub');
-  if (subEl) {
-    if (info.next) {
-      subEl.innerHTML = '次のご褒美まで あと <strong>' + (info.next - info.pts) + ' pt</strong>'
-        + ' <span style="opacity:.7">（' + info.next + 'pt達成でコイン獲得！🪙）</span>';
-    } else {
-      subEl.innerHTML = '🎉 全マイルストーン達成！すごい！';
-    }
-  }
-
-  // プログレスバー：次のマイルストーンまでの進捗
-  const barEl = document.getElementById('earnBar');
-  if (barEl) barEl.style.width = info.pct + '%';
-
-  // 下段：今月残り獲得可能pt
-  const capEl = document.getElementById('earnCap');
-  if (capEl) {
-    capEl.textContent = remainCap > 0
-      ? '今月はまだ ' + remainCap + ' pt 獲得できるよ！'
-      : '今月の目標達成！🌟';
-  }
-
-  // マイルストーン達成チェック → 演出
-  checkMilestoneAchievement(info.pts);
-}
-
-function checkMilestoneAchievement(currentPts) {
-  const achieved = getAchievedMilestones();
-  let newAchieved = false;
-  MILESTONES.forEach(m => {
-    if (currentPts >= m && !achieved.includes(m)) {
-      achieved.push(m);
-      newAchieved = true;
-      // 達成演出
-      setTimeout(() => {
-        const yen = m * 10;
-        showMilestoneToast(m, yen);
-      }, 300);
-    }
-  });
-  if (newAchieved) saveAchievedMilestones(achieved);
-}
-
-function showMilestoneToast(pts, yen) {
-  // 既存トーストを使って大きな演出
-  const msgs = [
-    '🎉 ' + pts + 'pt 達成！',
-    '🪙 ¥' + yen + ' 分のコインをゲット！',
-    'お父さん・お母さんに報告しよう！'
-  ];
-  let i = 0;
-  const show = () => {
-    if (i >= msgs.length) return;
-    showPtToast(msgs[i]);
-    i++;
-    setTimeout(show, 1800);
-  };
-  show();
+  document.getElementById('earnTotal').textContent = '¥' + totalYen.toLocaleString();
+  document.getElementById('earnBar').style.width = pct + '%';
+  document.getElementById('earnCap').textContent = '今月Cap: ¥' + cap.toLocaleString() + '（' + pct + '%達成）';
+  const remain = Math.max(0, cap - moYen);
+  document.getElementById('earnSub').innerHTML = '今月 ¥' + moYen.toLocaleString() + ' 獲得 / あと ¥' + remain.toLocaleString();
 }
 
 function renderBonusChips() {
@@ -1232,6 +1183,7 @@ function renderBonusChips() {
 function initTodayButtons() {
   const saved = getTodayData();
   if (saved) {
+    // 保存済み：ボタン状態を復元
     Object.keys(SUBJ_PT).forEach(s => {
       const btn = document.getElementById('sb-'+s);
       if (!btn) return;
@@ -1241,51 +1193,9 @@ function initTodayButtons() {
     const total = (saved.pts||0) + (saved.bonus||0);
     document.getElementById('stbtn').textContent = '⭐ 今日は記録済み！ +' + total + 'pt';
     document.getElementById('stbtn').disabled = true;
+    document.getElementById('stampHint').textContent = '今日 +' + total + 'pt（¥' + (total*10) + '）稼いだよ！';
     document.getElementById('todayPtLabel').textContent = '+' + total + 'pt';
-    // 取り消しボタンを表示
-    showCancelBtn(total);
-    document.getElementById('stampHint').textContent = '今日 +' + total + 'pt 記録済み';
   }
-}
-
-function showCancelBtn(total) {
-  let el = document.getElementById('cancelStampBtn');
-  if (!el) {
-    el = document.createElement('button');
-    el.id = 'cancelStampBtn';
-    el.className = 'bs';
-    el.style.cssText = 'width:100%;margin-top:6px;font-size:13px;color:#E24B4A;border-color:#E24B4A';
-    const hint = document.getElementById('stampHint');
-    if (hint) hint.parentNode.insertBefore(el, hint.nextSibling);
-  }
-  el.textContent = '🗑️ 今日の記録を取り消す（-' + total + 'pt）';
-  el.onclick = cancelStamp;
-  el.style.display = 'block';
-}
-
-function cancelStamp() {
-  if (!confirm('今日の記録を取り消しますか？\nポイントも戻ります。')) return;
-  const k = getTodayKey();
-  delete cal[k];
-  sv();
-  // ボタン・UI全リセット
-  Object.keys(SUBJ_PT).forEach(s => {
-    const btn = document.getElementById('sb-'+s);
-    if (!btn) return;
-    btn.classList.remove('on');
-    btn.disabled = false;
-    btn.style.opacity = '1';
-  });
-  todaySubjects = {};
-  document.getElementById('stbtn').textContent = '⭐ 今日の記録を保存！';
-  document.getElementById('stbtn').disabled = false;
-  document.getElementById('stampHint').textContent = '科目を選んで保存してね';
-  document.getElementById('todayPtLabel').textContent = '+0pt';
-  document.getElementById('comboAlert').style.display = 'none';
-  const cancelBtn = document.getElementById('cancelStampBtn');
-  if (cancelBtn) cancelBtn.style.display = 'none';
-  renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
-  showPtToast('今日の記録を取り消しました 🗑️');
 }
 
 function upStats(){
@@ -1298,10 +1208,8 @@ function upStats(){
   const t=new Date();
   const moPts=calcMonthEarnings(t.getFullYear(),t.getMonth()+1);
   document.getElementById('stPt').textContent=moPts+'pt';
-  const totalPts2=calcTotalPts();
-  const moPts2=calcMonthEarnings(t.getFullYear(),t.getMonth()+1);
-  document.getElementById('stPt').textContent=moPts2+'pt';
-  document.getElementById('stYen').textContent=totalPts2+'pt';
+  const totalYen=calcTotalYen();
+  document.getElementById('stYen').textContent='¥'+totalYen.toLocaleString();
 }
 
 function sv(){
@@ -1315,8 +1223,8 @@ function renderCal(){
   const mn=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
   const t=new Date();
   const moEarn=calcMonthEarnings(cY,cM);
-  const moPts=moEarn;
-  document.getElementById('mlbl').innerHTML=cY+'年 '+mn[cM-1]+'<span class="mon-earn-lbl" style="margin-left:10px">'+moPts+'pt</span>';
+  const moYen=moEarn*10;
+  document.getElementById('mlbl').innerHTML=cY+'年 '+mn[cM-1]+'<span class="mon-earn-lbl" style="margin-left:10px">¥'+moYen.toLocaleString()+'</span>';
   const g=document.getElementById('cgrid');g.innerHTML='';
   ['日','月','火','水','木','金','土'].forEach(d=>{const h=document.createElement('div');h.className='ch';h.textContent=d;g.appendChild(h)});
   const fd=new Date(cY,cM-1,1).getDay(),dim=new Date(cY,cM,0).getDate();
@@ -1335,7 +1243,7 @@ function renderCal(){
       if(isBonus) el.classList.add('bonus-day');
       else if(isCombo) el.classList.add('combo');
       else el.classList.add('done');
-      el.innerHTML='<span class="cday-num">'+d+'</span><span class="cday-pt">+'+pts+'pt</span>';
+      el.innerHTML='<span class="cday-num">'+d+'</span><span class="cday-pt">¥'+(pts*10)+'</span>';
     }
     else{if(isT)el.classList.add('today');el.textContent=d}
     g.appendChild(el);
@@ -1448,40 +1356,17 @@ function renderKanji(){
   let done=0,miss=0;
   kanjiData.forEach(item=>{
     const el=document.createElement('div');el.className='kcard';
-    const saved=kanjiState[item.k];
-    // phase: 0=初期(漢字のみ), 1=読み表示, 2=覚えた✅, 3=苦手❌
-    let phase = saved==='done' ? 2 : saved==='miss' ? 3 : 0;
-    function applyPhase(){
-      el.className='kcard';
-      if(phase===0){
-        el.innerHTML='<div class="kj">'+item.k+'</div>'
-          +'<div class="kr" style="visibility:hidden;font-size:11px;min-height:1em">'+item.r+'</div>';
-      } else if(phase===1){
-        el.classList.add('show');
-        el.innerHTML='<div class="kj">'+item.k+'</div>'
-          +'<div class="kr">'+item.r+'</div>'
-          +'<div style="font-size:10px;color:#888;margin-top:2px">→ ✅</div>';
-      } else if(phase===2){
-        el.classList.add('done');
-        el.innerHTML='<div class="kj">'+item.k+'</div>'
-          +'<div class="kr">'+item.r+'</div>'
-          +'<div style="font-size:14px;margin-top:2px">✅</div>';
-      } else {
-        el.classList.add('miss');
-        el.innerHTML='<div class="kj">'+item.k+'</div>'
-          +'<div class="kr">'+item.r+'</div>'
-          +'<div style="font-size:14px;margin-top:2px">❌</div>';
-      }
-    }
-    applyPhase();
+    if(kanjiState[item.k]==='done'){el.classList.add('done')}
+    else if(kanjiState[item.k]==='miss'){el.classList.add('miss')}
+    el.innerHTML='<div class="kj">'+item.k+'</div><div class="kr">'+item.r+'</div>';
+    let phase=kanjiState[item.k]==='done'?2:kanjiState[item.k]==='miss'?0:0;
     el.onclick=()=>{
-      if(phase===0){ phase=1; applyPhase(); }
-      else if(phase===1){ phase=2; kanjiState[item.k]='done'; sv(); updateKStats(); applyPhase(); }
-      else if(phase===2){ phase=3; kanjiState[item.k]='miss'; sv(); updateKStats(); applyPhase(); }
-      else { phase=0; delete kanjiState[item.k]; sv(); updateKStats(); applyPhase(); }
+      if(phase===0){el.classList.add('show');phase=1}
+      else if(phase===1){kanjiState[item.k]='done';el.classList.add('done');el.classList.remove('miss');sv();phase=2;updateKStats()}
+      else{kanjiState[item.k]='miss';el.classList.add('miss');el.classList.remove('done');el.classList.remove('show');sv();phase=0;updateKStats()}
     };
-    if(saved==='done')done++;
-    if(saved==='miss')miss++;
+    if(kanjiState[item.k]==='done')done++;
+    if(kanjiState[item.k]==='miss')miss++;
     g.appendChild(el);
   });
   document.getElementById('kdone').textContent=done;
@@ -1496,40 +1381,14 @@ async function genKanjiQ(){
   if(!kanjiData.length){alert('まず5年生か6年生の漢字を選んでね！');return}
   document.getElementById('kquizcard').style.display='block';
   document.getElementById('kqbox').textContent='問題を作っています…';
-  document.getElementById('kqresult').style.display='none';
-  document.getElementById('kqin').value='';
-  const ansEl=document.getElementById('kqanswer');
-  if(ansEl){ansEl.style.display='none';}
-  const ansBtn=document.getElementById('kqansBtn');
-  if(ansBtn){ansBtn.textContent='答えを見る';}
+  document.getElementById('kqresult').style.display='none';document.getElementById('kqin').value='';
   const sample=kanjiData.sort(()=>Math.random()-.5).slice(0,5).map(x=>x.k).join('・');
-  window._kqSample=sample;
   try{
-    const reply=await callAPI(`以下の漢字を使って小6向け書き取り問題を5問作成してください。\n使用漢字：${sample}\n\n【絶対ルール】\n・問題文だけ書く。答えの漢字は一切書かない。\n・形式：番号. よみがな（意味の説明）\n・例：1. るす（家を空けること）\n・例：2. きかい（ものを作る道具）\n・→記号・（漢字）・正解の漢字は書かない。マークダウン不使用。`);
+    const reply=await callAPI(`以下の漢字を使って小6向け書き取り問題を5問作成。ひらがなの語を漢字に直す問題。\n使用漢字：${sample}\n形式（番号付きリスト）：\n1. ○○（ひらがな）→ （漢字）\n2. ...\n答えも含めて書いてください。`);
     document.getElementById('kqbox').innerHTML=md2html(reply);
     document.getElementById('kquizcard').scrollIntoView({behavior:'smooth'});
-    // 答えを非同期で別途取得
-    genKanjiAnswers(sample, reply);
   }catch(e){document.getElementById('kqbox').textContent='エラー：'+e.message}
 }
-async function genKanjiAnswers(sample, questions){
-  try{
-    const ans=await callAPI(`次の書き取り問題の答え（漢字）だけを番号付きリストで書いてください。答え以外は書かない。\n${questions}`);
-    const el=document.getElementById('kqanswerText');
-    if(el) el.innerHTML=md2html(ans);
-  }catch(e){}
-}
-function toggleKanjiAnswer(){
-  const el=document.getElementById('kqanswer');
-  const btn=document.getElementById('kqansBtn');
-  if(!el)return;
-  if(el.style.display==='none'||!el.style.display){
-    el.style.display='block'; if(btn)btn.textContent='答えを隠す';
-  } else {
-    el.style.display='none'; if(btn)btn.textContent='答えを見る';
-  }
-}
-
 async function checkKanjiQ(){
   const txt=document.getElementById('kqin').value.trim();if(!txt){alert('答えを書いてね！');return}
   const q=document.getElementById('kqbox').innerText,btn=event.currentTarget;
@@ -1543,54 +1402,21 @@ async function checkKanjiQ(){
 
 window._lastMT='keisan';
 const MPROMPTS={
-  keisan:'小学6年生向け計算問題（分数・小数・四則混合計算）を1問作成してください。\n\n【ルール】\n・問題文だけ書く。答え・解説・式は書かない。\n・形式：【問題】（問題文のみ）\n・例：【問題】3と4分の1 ÷ 1と3分の2 を計算しなさい。\n・マークダウン・LaTeX不使用。分数は「3/4」形式で。',
-  bunshoudai:'小学6年生向け文章題（速さ・時間・距離またはつるかめ算）を1問作成してください。\n\n【ルール】\n・問題文だけ書く。答え・解説・式は書かない。\n・形式：【問題】（問題文のみ）\n・マークダウン不使用。',
-  zukei:'小学6年生向け図形問題（面積・体積・円の計算）を1問作成してください。\n\n【ルール】\n・問題文だけ書く。答え・解説は書かない。\n・形式：【問題】（問題文のみ）\n・マークダウン不使用。',
-  wariai:'小学6年生向け割合・比・百分率の問題を1問作成してください。\n\n【ルール】\n・問題文だけ書く。答え・解説は書かない。\n・形式：【問題】（問題文のみ）\n・マークダウン不使用。'
-};
-// 答え・解説を別途取得するプロンプト
-const MPROMPTS_ANS={
-  keisan:'次の計算問題の答えと解説を書いてください。式も含めて。マークダウン・LaTeX不使用。分数は「3/4」形式。',
-  bunshoudai:'次の文章題の答えと解説を書いてください。式も含めて。マークダウン不使用。',
-  zukei:'次の図形問題の答えと解説を書いてください。式も含めて。マークダウン不使用。',
-  wariai:'次の問題の答えと解説を書いてください。式も含めて。マークダウン不使用。'
+  keisan:'小学6年生向け計算問題（分数・小数・四則混合計算）を1問。式と答えを書かせる問題形式で。解答と丁寧な解説付き。\n\n【重要】マークダウン（**や##）やLaTeX（$記号）は使わず、普通の日本語テキストで書いてください。分数は「3/4」、掛け算は「×」のように書いてください。',
+  bunshoudai:'小学6年生向け文章題（速さ・時間・距離またはつるかめ算）を1問。解答と丁寧な解説付き。\n\n【重要】マークダウン（**や##）は使わず、普通の日本語テキストで書いてください。',
+  zukei:'小学6年生向け図形問題（面積・体積・円の計算）を1問。解答と丁寧な解説付き。\n\n【重要】マークダウン（**や##）は使わず、普通の日本語テキストで書いてください。',
+  wariai:'小学6年生向け割合・比・百分率の問題を1問。解答と丁寧な解説付き。\n\n【重要】マークダウン（**や##）は使わず、普通の日本語テキストで書いてください。'
 };
 async function genMath(type){
   window._lastMT=type;
-  document.getElementById('marea').style.display='none';
-  document.getElementById('mloading').style.display='block';
-  document.getElementById('mfb').style.display='none';
-  document.getElementById('mansin').value='';
-  const ansEl=document.getElementById('mansanswer');
-  if(ansEl){ansEl.style.display='none';}
-  const ansBtn=document.getElementById('mansAnsBtn');
-  if(ansBtn){ansBtn.textContent='答えを見る';}
+  document.getElementById('marea').style.display='none';document.getElementById('mloading').style.display='block';
+  document.getElementById('mfb').style.display='none';document.getElementById('mansin').value='';
   try{
     const reply=await callAPI(MPROMPTS[type]);
     document.getElementById('mbox').innerHTML=md2html(reply);
     document.getElementById('marea').style.display='block';
-    window._lastMathQ=reply;
-    // 答えを非同期で取得
-    genMathAnswer(type, reply);
   }catch(e){alert('エラー：'+e.message)}
   document.getElementById('mloading').style.display='none';
-}
-async function genMathAnswer(type, question){
-  try{
-    const ans=await callAPI((MPROMPTS_ANS[type]||'次の問題の答えと解説を書いてください。')+'\n\n問題：'+question);
-    const el=document.getElementById('mansanswerText');
-    if(el) el.innerHTML=md2html(ans);
-  }catch(e){}
-}
-function toggleMathAnswer(){
-  const el=document.getElementById('mansanswer');
-  const btn=document.getElementById('mansAnsBtn');
-  if(!el)return;
-  if(el.style.display==='none'||!el.style.display){
-    el.style.display='block'; if(btn)btn.textContent='答えを隠す';
-  } else {
-    el.style.display='none'; if(btn)btn.textContent='答えを見る';
-  }
 }
 async function getMathFB(){
   const txt=document.getElementById('mansin').value.trim();if(!txt){alert('式と答えを書こう！');return}
@@ -1648,107 +1474,6 @@ window.onload=()=>{
 };
 
 // ===== 7ステップ作文システム =====
-async function callAPIWithImage(prompt, base64Image, mediaType, maxTokens=1200){
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': API_KEY,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: maxTokens,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64Image } },
-          { type: 'text', text: prompt }
-        ]
-      }]
-    })
-  });
-  if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'APIエラー');}
-  const data=await res.json();
-  return data.content.map(b=>b.text||'').join('');
-}
-
-function fileToBase64(file){
-  return new Promise((resolve,reject)=>{
-    const r=new FileReader();
-    r.onload=()=>resolve(r.result.split(',')[1]);
-    r.onerror=reject;
-    r.readAsDataURL(file);
-  });
-}
-
-async function submitPhotoFeedback(inputId, resultId, btnId, stepLabel, essayType, imitation){
-  const fileInput=document.getElementById(inputId);
-  const btn=document.getElementById(btnId);
-  const resultEl=document.getElementById(resultId);
-  if(!fileInput||!fileInput.files||!fileInput.files[0]){alert('写真を選んでから送ってね！');return;}
-  const file=fileInput.files[0];
-  if(file.size>10*1024*1024){alert('ファイルが大きすぎます（10MB以下にしてね）');return;}
-  btn.disabled=true; btn.textContent='📸 読み取り中…';
-  resultEl.style.display='none';
-  try{
-    const base64=await fileToBase64(file);
-    const mediaType=file.type||'image/jpeg';
-    const prompt=`新潟明訓中学A方式入試の手書き作文の添削をお願いします。
-対象：11歳・小6・帰国子女（オランダ在住）
-ステップ：${stepLabel}
-モデル作文タイプ：${essayType||'不明'}
-まねるポイント：${imitation||''}
-
-写真に写っている手書きの作文を読み取り、以下の観点で添削してください。
-
-【文字の読み取り】写真の文章を読み取ってそのまま書いてください（読めない部分は○で）
-
-【総合評価】A/B/C + 一言コメント
-【良かった点】2〜3つ
-【改善のヒント】2〜3つ（小6向けのやさしい言葉で）
-【書き直しのヒント】1文だけ具体的な改善例
-
-帰国子女ならではのオランダ体験が活かされていればプラス評価してください。
-励ます口調で！マークダウン記法（**や##）は使わずに書いてください。`;
-    const reply=await callAPIWithImage(prompt,base64,mediaType,1200);
-    resultEl.innerHTML='<div class="fbox">'+md2html(reply)+'</div>';
-    resultEl.style.display='block';
-    resultEl.scrollIntoView({behavior:'smooth'});
-    const cnt=parseInt(localStorage.getItem('mk_essays')||'0')+1;
-    localStorage.setItem('mk_essays',cnt); upStats();
-  }catch(err){
-    resultEl.innerHTML='<div class="fbox" style="border-left-color:#E24B4A"><p>エラー：'+err.message+'</p></div>';
-    resultEl.style.display='block';
-  }
-  btn.disabled=false; btn.textContent='📸 写真を添削してもらう';
-}
-
-function showPhotoPreview(inputId, previewId, areaId){
-  const file=document.getElementById(inputId).files[0];
-  if(!file)return;
-  const url=URL.createObjectURL(file);
-  const prev=document.getElementById(previewId);
-  const area=document.getElementById(areaId);
-  prev.innerHTML='<img src="'+url+'" alt="添削する作文">';
-  const removeBtn=document.createElement('button');
-  removeBtn.className='pp-remove';
-  removeBtn.textContent='✕ 削除';
-  removeBtn.dataset.input=inputId;
-  removeBtn.dataset.preview=previewId;
-  removeBtn.dataset.area=areaId;
-  removeBtn.onclick=function(){clearPhoto(this.dataset.input,this.dataset.preview,this.dataset.area);};
-  prev.appendChild(removeBtn);
-  prev.style.display='block'; area.style.display='none';
-}
-
-function clearPhoto(inputId, previewId, areaId){
-  document.getElementById(inputId).value='';
-  document.getElementById(previewId).style.display='none';
-  document.getElementById(areaId).style.display='block';
-}
-
 const ESSAYS=[{id:'E021',title:'弟と聞きたい。あの音を。',grade:'小5',fit:'◎',level:1,type:'具体物記憶型',tags:['兄弟','アレルギー','願い','家族'],body:`「チャラーラーラチャラララーラー」\nこの音を聞いただけで、熱々の器からモクモクと出る湯気、そして食欲をそそる美味しそうなにおいがよぎり、よだれが出てきそうだ。\nぼくの大好物は、ラーメンだ。学校が午前中で終わった時や、運動会が終わった後、「何が食べたい？」と聞かれると、「もちろんラーメン。」と食いつくように答えている。\nそのお店のラーメンは美味しすぎて、いつも替え玉をしてしまう。ぼくの妹も、ペロリと平らげてしまうほどだ。\nでも、ぼくはまだ弟とそのラーメン屋さんに行ったことがない。弟には、小麦と卵、えび、かに、くるみなどたくさんのアレルギーがある。ラーメンが食べられないのだ。\n弟は、病院でどのくらい小麦が食べられるのか検査をしている。家でも、うどんの量を少しずつ増やして症状が出ないか調べている。\n弟とは、十分に一回はケンカをする。少しのことでイヤなことを言い合ってしまう。\nそんな弟が、この前検査で病院に行った後、宿題で日記を書いていた。ぼくに向かって、「これ、読んでみて。」と恥ずかしそうに渡してきた。その日記を読んだ瞬間、ぼくの目から涙があふれ出た。\n日記には弟が検査をがんばる理由として、「早く小麦を食べられるようになって、お兄ちゃんとお兄ちゃんが大好きなラーメン屋さんに行きたいです。」と書かれていたのだ。ぼくは弟がそんなことを思ってくれているとは知らなかった。アレルギー症状が出るかもしれないと思いながら食べる検査はどれほど怖いだろう。みんなと同じ食べ物を食べられなくてどれほど我慢してきたのだろう。そんな感情で心がぎゅっと埋め尽くされたのだ。\n「行こう。絶対に一緒に行こう。」とぼくは弟を抱きしめながら言った。\nいつもと同じラーメン屋。「チャラーラーラチャラララーラー」一緒に聞きたかったあの音が鳴りひびく。ぼくの夢が叶う瞬間だ。初めて一緒にすするラーメンはどんな味がするのだろう。涙で少しだけしょっぱい味になるかもしれない。それでも、今まで食べたラーメンの中で一番美味しく感じるにちがいない。その日が来ることが今から楽しみで仕方ない。`,structure:[{role:'intro',label:'①導入・具体物',text:'「チャラーラーラ…」音の描写からスタート。ぼくの大好物はラーメン。'},{role:'event',label:'②出来事',text:'弟にはアレルギーがあってラーメン屋に一緒に行けない。病院で検査をがんばっている。'},{role:'change',label:'③気づき（転換点）',text:'弟の日記を読んで涙があふれる。弟がぼくのためにがんばっていたと知る。'},{role:'spread',label:'④感情の広がり',text:'検査の怖さ、我慢してきた弟の気持ちを想像して心が埋め尽くされる。'},{role:'end',label:'⑤結末・願い',text:'一緒にラーメンを食べに行く夢の場面を想像して締める。'}],imitation:'大切な人のために「できないこと」をがんばっている体験を書こう。',prompts400:['大切な人のために自分がしてあげられなかったことや、してあげたいことを書きなさい。','家族や友だちが自分のために何かをがんばっていると気づいた体験を書きなさい。'],prompts800:['「食べられないもの・できないこと」がある人への思いやりについて書きなさい。'],coach_start:'この作文を読んで、あなた自身が「一緒にしたいこと」や「大切な人のためにがんばっていること」はありますか？'},{id:'E014',title:'ありがとうの種',grade:'小6',fit:'◎',level:1,type:'具体物記憶型',tags:['コロナ','植物','成長','先生への感謝'],body:`私が入学した年に世界中に新型コロナウイルスが広がり、入学式も普通に学校に通うこともできませんでした。六月に学校に通えるようになるまでは、先生やお友だちとはアイパッドの画面上でしか会うことができませんでした。\nある日、たん任の長田先生がちゅう選会をしてくださいました。学校で先生が育てたビワの種が当たるちゅう選会です。ドキドキしながら画面を見ていると、私の出席番号が呼ばれました。私はおどろいて、とてもうれしくて、「お母さん当たったよー!!」と大声で母に伝えました。\n登校できるようになってから種を受け取ると、すぐに母と種を植えました。しかし、一週間経っても一ヶ月経っても全く芽は出ませんでした。「残念だったね。」と母とあきらめかけていたある日、植木ばちに小さな芽を見つけました。私は飛びはねるほど大喜びして、それから毎日ビワの芽を母と観察したことを今でも覚えています。たくさんの宝石のような実が成るようにと、「ルビーちゃん」と名前を付けました。\nなかなか芽を出さなかったルビーちゃんは、コロナ禍で学校に毎日行くことができず、すぐに環境に慣れなかった私とどこか似ているなと思いました。芽を出してからのルビーちゃんは、すくすくと育ちました。今では、高さ八十センチ以上、葉の長さは三十センチ以上にまで成長しました。\n実が成るのは、芽が出てから六年〜八年かかるそうで、私が中学生の間に成るかもしれません。今からとても楽しみです。ビワの実が実るように、私も学んできたことをたくさんたくさん実らせることができるように頑張ります。\n五年間一緒に成長してくれたルビーちゃんありがとう、そして、大切な思い出の一つを作ってくださった長田先生ありがとうございます。`,structure:[{role:'intro',label:'①導入・状況',text:'コロナ禍で入学式もなく、オンラインで学校が始まった。'},{role:'event',label:'②具体物との出会い',text:'先生のくじ引きでビワの種が当たる。植えてもなかなか芽が出なかった。'},{role:'change',label:'③気づき',text:'やっと芽が出たルビーちゃんが、コロナ禍でなじめなかった自分と似ていると気づく。'},{role:'spread',label:'④成長の記録',text:'5年間大切に育て続け、80cm以上に成長した。'},{role:'end',label:'⑤未来への希望',text:'実が成る日を楽しみに、自分も成長すると締める。'}],imitation:'「育てたもの・大切にしてきたもの」と自分の成長を重ねて書こう。',prompts400:['大切に育ててきたもの（植物・ペット・何か）の体験を書きなさい。','コロナや困難な時期に頑張ったことを書きなさい。'],prompts800:['何かを長く続けることで気づいたこと、学んだことを書きなさい。'],coach_start:'「ルビーちゃん」のように、あなたが長く大切にしてきたもの（植物・ペット・物・習い事など）はありますか？'},{id:'E001',title:'百円のゴールドフィッシュ',grade:'小6',fit:'◎',level:1,type:'失敗反省型',tags:['命','金魚','責任','後悔'],body:`私は、家族とお祭りに行きました。友達と金魚すくいをして、取れたのはたったの五匹。お父さんは「その金魚を大切に育てないとだめだよ。」とニコッと笑って言いました。\n私は、新しい水槽にお祭りで取った金魚を放してあげます。インターネットで金魚について魚好きの弟とたくさん調べました。名前も付けました。唯一、茶色だった金魚には、「チャイタ」と名付けました。エサを毎日やっていても赤色の金魚が一匹ずつ死んでいきました。\nそして、チャイタだけが生き残りました。お父さんがあれほど金魚すくいを止めようとしていた理由が分かりました。「命は買うものじゃない。」そう言いたかったのかなと思いました。赤色の金魚達が死んでしまってから何日かたってチャイタも死んでしまいました。\n色々な事に後悔しました。お父さんの言う事を聞かなかった事、命で遊んでしまった事。屋台で金魚すくいに使ったのは、五百円。五匹で五百円だから一匹百円。百円の命なんてあるはずないのに私はさらにその金魚をすくって遊んで祭りを楽しんでいました。だから、次も同じ間違いをしないようにどんな命でもどんな物でも絶対に大切にしようと思いました。`,structure:[{role:'intro',label:'①導入・出来事',text:'お祭りで金魚すくいをして5匹すくった。お父さんが少し止めようとしていた。'},{role:'event',label:'②大切に育てようとした',text:'名前をつけ、調べながら世話をした。しかし金魚が一匹ずつ死んでいった。'},{role:'change',label:'③気づき',text:'「命は買うものじゃない」というお父さんの意図に気づく。'},{role:'spread',label:'④後悔と反省',text:'百円という値段で命と遊んでいた自分を後悔する。'},{role:'end',label:'⑤決意',text:'どんな命でも大切にしようという決意で締める。'}],imitation:'軽い気持ちでしたことが、後から大切な学びに変わった経験を書こう。',prompts400:['生き物や物を大切にしようと思った経験を書きなさい。','失敗から学んだことを書きなさい。'],prompts800:['責任を持つとはどういうことかを、自分の体験をもとに書きなさい。'],coach_start:'この作文の「百円の命」という言葉を読んでどう思いましたか？あなた自身に「大切にしなかった」と後悔した経験はありますか？'},{id:'E006',title:'違いの受け入れ合い',grade:'中1',fit:'◎',level:1,type:'体験変化型',tags:['障がい','工夫','共生','思い込み'],body:`私が小学生だったときのこと。ある日、総合の学習の時間に、足が不自由で車椅子にのっている人が学校に来てくれました。\nその日は一緒に鬼ごっこで遊ぶ時間もありました。その時の私は正直、「鬼ごっこっていっても、足が不自由な人は無事にできるんだろうか？」と思っていました。\n先生は、「誰でも参加できるようにルールを工夫してみましょう」と言い、みんなでルールを少し変えることになりました。例えば、「走るのは禁止」「タッチするときは声をかける」などのルールを加えました。私は「ちょっとつまんなくなるんじゃないかな」と思っていましたが、いざ始まってみると、予想に反してとてもおもしろく、むしろ頭を使うぶん普段よりも白熱しました。足が不自由な人も、私たちと同じように逃げたり、タイミングを見てタッチしたりしていました。\n遊び終わったあと、その人は「今日は、すごくたのしかった」と話してくれました。それを聞いて私は少し反省しました。自分が勝手に「足が不自由な人はうまく遊べない」と決めつけていたことと、「一緒に遊ぶのは難しい」と思い込んでしまったことに気づいたからです。\n大切なのは、全員が参加できるようにルールを工夫したり、理解し合おうとすることだと思います。ほんの少しの工夫や思いやりがあるだけで、遊びや、学校生活も、社会も、ずっと生きやすく楽しくなるはずです。だからこそ、私はこれからも、「ちがいを受け入れ、共に楽しむこと」を忘れずにいたいと思います。`,structure:[{role:'intro',label:'①導入・状況',text:'車椅子の方が学校に来て、一緒に遊ぶことになった。'},{role:'event',label:'②最初の思い込み→体験',text:'「無事にできるか？」と思っていた。ルールを工夫して鬼ごっこをしたら白熱した。'},{role:'change',label:'③気づき（思い込みが崩れる）',text:'「足が不自由な人はうまく遊べない」という思い込みに気づいて反省する。'},{role:'spread',label:'④考えの広がり',text:'工夫や思いやりがあれば社会は生きやすくなる。'},{role:'end',label:'⑤決意',text:'「ちがいを受け入れ、共に楽しむ」ことを忘れずにいたい。'}],imitation:'最初は無理だと思ったことが、工夫によってできた経験を書こう。',prompts400:['みんなが参加できるように工夫した経験を書きなさい。','自分の思い込みに気づいた経験を書きなさい。'],prompts800:['違いを受け入れるために、学校や社会でどんな工夫ができるかを書きなさい。'],coach_start:'「違いを受け入れ合う」ことについて、あなた自身が体験したことはありますか？オランダの学校と日本の学校で感じた違いもぜひ教えてください。'},{id:'E016',title:'ゾンビのお医者さん',grade:'小6',fit:'◎',level:1,type:'物語導入型',tags:['健康','不安','安心','医者'],body:`鏡に映った自分は、今日もゾンビだった。もう人間には戻れないのかもしれない。遠くの方で母が何かさけんでいる。まぶたが重くて目が開けられない。自分の体ではないみたいに体が重い。\n母の声が近づいて来る。何度も部屋に来てありとあらゆる方法で、私を起こそうとする。ねむい。ただそれしか考えられない。起き上がっては倒れをくり返し、ベッドで四つばいになってゆっくりゆっくりと動き、かみはボサボサで顔も青白い。\nいつからこんな体になってしまったのだろう。朝は起きられず、夜はよくねむれない。学校でもねむくて仕方がない。ついこの間、保護者面談があり授業中にねていたと担任の先生から母に話があった。嘘だ。ねている自覚なんてなかった。シャックだった。\n不安が大きくなり、母と病院へ行ってみることにした。先生はいつも通りの優しい口調でゆっくり話を聞いてくれた。「起立性調節障害ですね。学校に行けていただけですごいよ。好きな事をたくさんして、ご飯をいっぱい食べたらだんだん治るから心配いらないよ。」と、優しい声でしっかりと言ってくれた。\nゾンビから人間に戻れるんだ。今まで周りに言えず、一人で悩みを抱え、もう元の自分には戻れないのではないかとずっと不安で、きちんとできない自分が嫌だった。しかし先生のおかげで安心した気持ちと、自分に自信を取り戻せた。\n先生は私にとって体だけでなく、心のお医者さんだ。私に希望と自信をくれた先生、ありがとう。今日も元気に学校へ行って来ます。`,structure:[{role:'intro',label:'①物語的な導入',text:'「ゾンビ」の比喩でインパクトのある書き出し。朝起きられない自分の様子を描写。'},{role:'event',label:'②問題・困難',text:'授業中に寝ていたと言われてショック。不安が大きくなり病院へ。'},{role:'change',label:'③転換点',text:'「起立性調節障害」と診断され、先生の言葉で安心する。'},{role:'spread',label:'④気づきの広がり',text:'先生は「体のお医者さん」ではなく「心のお医者さん」だった。'},{role:'end',label:'⑤感謝と決意',text:'「今日も元気に学校へ行って来ます。」という希望で締める。'}],imitation:'不安だったことが、誰かの言葉で安心に変わった体験を書こう。',prompts400:['不安を乗り越えた体験を書きなさい。','誰かの言葉に救われた経験を書きなさい。'],prompts800:['「心のお医者さん」のような存在（支えてくれた人）について書きなさい。'],coach_start:'「ゾンビ」という書き出しのように、あなた自身が経験した「大変だったこと」を印象的な言葉で表現するとしたら何と言いますか？'},{id:'E002',title:'一番大切なもの',grade:'小6',fit:'◎',level:2,type:'体験変化型',tags:['家族','命','優先順位'],body:`そろばんの夏季大会の日、大会に向けて集中していたその時、隣の部屋から、ガタン！という音がして、すぐに妹の泣き声が聞こえてきた。お母さんが「頭から血が出てる！」と叫んだ。その瞬間、私は事の重大さに気づき、急いで妹の元に駆け寄った。お父さんが「救急車！」と叫んだ時、私は人生で初めて119に電話をかけた。緊張したけれど、妹が心配で迷いはなかった。\n大会中も妹のことが頭から離れなかった。普段なら満点の問題も気が散ってミスをしてしまった。\n大会が予定より早く終わったので、家まで走って帰った。家には手術を終えた妹が待っていた。私は自分の部屋に入ると赤ちゃんみたいに泣いた。大会で負けた悔しさと、妹が無事だった安堵の気持ちで涙が止まらなかった。妹が頭に包帯を巻いている姿を見るたび胸が痛んだ。他人の怪我にはここまで心を動かされなかったけれど、大切な家族の痛みは自分のこと以上に苦しかった。\n今回の出来事を通して、私にとって大切なものは何なのかがはっきり分かった。どんなに大会で勝つことがすごくても、命や家族の無事には到底かなわない。順位や点数は、たしかに努力の結果だけれど、それは「ただの数字」。これからもそろばんを頑張っていくつもりだけれど、私は「家族を大切にする心」も忘れずに持ち続けていきたい。`,structure:[{role:'intro',label:'①導入・緊迫の場面',text:'大会前日、妹が頭から血を流して倒れる。119番に電話する。'},{role:'event',label:'②大会での葛藤',text:'大会中も妹のことが頭から離れず、ミスをしてしまう。'},{role:'change',label:'③気づき',text:'帰宅して泣く。悔しさと安堵が混ざり合う。'},{role:'spread',label:'④価値観の変化',text:'「命や家族の無事は、順位という数字に勝る」と気づく。'},{role:'end',label:'⑤決意',text:'そろばんを続けながら、家族を大切にする心も持ち続けたい。'}],imitation:'大切にしていたことと、それより大切なものに気づいた体験を書こう。',prompts400:['自分が本当に大切にしているものについて書きなさい。'],prompts800:['努力してきたことと家族・命、どちらが大切かという問いに答えながら書きなさい。'],coach_start:'あなたが「一番大切なもの」は何ですか？その大切さに気づいたきっかけはありますか？'},{id:'E007',title:'誰かのための勇気',grade:'中1',fit:'◎',level:2,type:'体験変化型',tags:['外国人','地域','勇気','多文化'],body:`私の町内では、毎年お祭りを行っている。そこに昨年アメリカからJさんが引っ越してきた。町内の人達は話しかけようとしたが、言葉が通じないため、話すことができなかった。当日もJさんは一人でみんなのことを眺めていた。とても寂しそうだった。\nしかし、そこへTさんが話しかけたのである。Tさんは英語を話すことができない。しかし、Jさんと言葉が通じているように見えた。Jさんは笑顔になっていた。そのあとは、Tさんが盆踊りにJさんを誘い、町内の人達全員で踊りを教えた。Jさんはしあわせだと言っていた。\nこの出来事から私は言葉が通じない場合でも、誰かが、仲間外れなくみんなで楽しむという気持ちを持つ。そして行動に移す事で、笑顔で一緒に楽しむことができるという事がよく分かった。\nだから、私は日常の英語の授業を真剣に受けるようにしている。習い事でも英語を習い、誰かのためになれるように、と勉強している。私はそのような誰かのためにと考え、行動に移せる人になりたい。そして、将来外国人を助けられる役職につき、多くの人に誰かのためになることをする勇気の大切さを伝えたい。`,structure:[{role:'intro',label:'①導入・場面設定',text:'お祭りの場面。アメリカから来たJさんが一人でいて寂しそうだった。'},{role:'event',label:'②Tさんの行動',text:'英語ができないTさんが勇気を出して話しかけ、みんなで盆踊りを教えた。'},{role:'change',label:'③気づき',text:'言葉がなくても、勇気を持って行動すれば笑顔でつながれると気づく。'},{role:'spread',label:'④自分の変化',text:'英語を真剣に勉強するようになった。誰かのためになりたいという気持ち。'},{role:'end',label:'⑤決意',text:'「誰かのために行動する勇気」を持つ人になりたい。'}],imitation:'言葉が通じない、文化が違う、でも勇気を出してつながった体験を書こう。',prompts400:['言葉や文化の違いを超えてつながった体験を書きなさい。'],prompts800:['オランダでの生活を通じて学んだ「多文化共生」について書きなさい。'],coach_start:'オランダの学校や生活で、言葉や文化の違いを感じた場面はありましたか？その時どうしましたか？'},{id:'E019',title:'筆を持て',grade:'小5',fit:'◎',level:2,type:'具体物記憶型',tags:['書道','転校','自分らしさ'],body:`私は書道を習っています。最初に習った先生には、筆の持ち方から姿勢やすみのすり方も教えてもらいました。かたつむりのぐるぐるをすみで描いただけで「上手！」とほめてくれて、幼い私が書道を好きになるきっかけを作ってくれました。\n私の引っ越しと転校が決まって、最後に教室で挨拶をした時、先生はにっこり笑って言いました。「私も同じ、転勤族だったの。いっぱい学校変わっても、書道は変わらなかったよ。どうか、向こうでも筆を持ってね。」\n私は新しい土地の新しい学校で新生活をスタートさせました。毎日、慣れるのに必死で心がずっとざわざわしていました。そんなある日、母に連れられて、次に通うかもしれない書道教室へと見学に行きました。\n「とてもよい字です。」新しい先生は、私の作品を見てそう言ってくれました。「書道をやっていてよかったですね。筆を持てば、そこはいつもの書道です。」\nあ、と思いました。同時になぜか、ほっとしました。変わり過ぎた毎日に、自分はとても疲れていたのだなあと気付きました。そして、変わらないものがあったのに、見失いかけていたのかもしれないと思ったのです。\n筆を持ち、変わらない自分を持ち続けようと思います。変わらない場所がこの半紙の上と、私の心の中にあります。先生、ありがとうございます。これからも私は筆を持ちます。`,structure:[{role:'intro',label:'①導入・書道との出会い',text:'前の先生に書道を習った。引っ越し・転校が決まり、「筆を持て」と言われた。'},{role:'event',label:'②転校後の不安',text:'新しい環境に慣れるのに必死で心がざわざわしていた。'},{role:'change',label:'③転換点',text:'新しい書道教室で先生に「筆を持てば、そこはいつもの書道です」と言われる。'},{role:'spread',label:'④気づきの深まり',text:'前と今の先生の言葉が心の中でひとつになる。変わらないものの大切さに気づく。'},{role:'end',label:'⑤決意',text:'「変わらない自分を持ち続ける」という強い言葉で締める。'}],imitation:'引っ越しや転校など「環境の変化」の中で、変わらなかったものを書こう。',prompts400:['環境が変わっても変わらなかった自分の「大切なもの」について書きなさい。'],prompts800:['オランダから日本に帰国することについて、「変わるもの・変わらないもの」を書きなさい。'],coach_start:'「筆を持てば、そこはいつもの書道」という言葉のように、あなたにとって「どこにいても変わらない自分」はどんなものですか？オランダ生活を通して感じたことも教えてください。'},{id:'E013',title:'お腹いっぱい、ありがとう',grade:'小5',fit:'◎',level:2,type:'社会課題型',tags:['米農家','価格','感謝','祖父'],body:`「お米の値だんが、前週にくらべて安くなりました。」テレビから毎日、お米のニュースが流れてくる。このニュースを目にすると、わたしはいつも祖父のことを思いだす。\n祖父は米農家だ。七十四さいの祖父は、一年の半分以上米作りをしている。社会の授業で種まきから出荷までの流れや米作りに必要な機械のお金について学んだ。改めて、祖父の仕事の大変さが分かった。だから、お米のニュースが流れるとわたしの心はモヤモヤする。\n夏休み、祖父とお米のニュースについて話した。「おじいちゃん、お米を高く売りたい。」わたしは、祖父に聞いてみた。「はっきり言って高く売りたい。でも、米作りに見合った値だんであってほしい。それと同時にみんながお腹いっぱい食べて日本人の主食のお米を守ってほしい。」と祖父は言った。\n祖父はいつも、「陽菜子ちゃん、お米お腹いっぱい食べてね。」と言う。その言葉のうらには、利益が少ない事やそれでも、わたしに主食のお米をたくさん食べさせたいという祖父の思いがある事に気付いた。\n今年も新米の時期がやってきた。「おじいちゃん、ありがとう。」わたしは、これまで以上に心をこめて伝えた。`,structure:[{role:'intro',label:'①導入・ニュースの場面',text:'テレビでお米の値段のニュースを見る。祖父が米農家なのでモヤモヤする。'},{role:'event',label:'②問題の発見',text:'消費者と農家の立場が違う。どちらが正しいのかと考える。'},{role:'change',label:'③祖父の言葉（転換点）',text:'夏休みに祖父と話す。「みんながお腹いっぱい食べて、お米を守ってほしい」という言葉。'},{role:'spread',label:'④気づきの深まり',text:'「お腹いっぱい食べてね」という言葉の裏にある祖父の思いに気づく。'},{role:'end',label:'⑤変化した感謝',text:'今年のありがとうは「これまでとちがう」。心をこめて伝えた。'}],imitation:'ニュースで見たことを、身近な家族や生活とつなげて書こう。',prompts400:['食べ物を作る人への感謝を書きなさい。','ニュースを見て考えたことを書きなさい。'],prompts800:['消費者と生産者の両方の立場から、食べ物の値段について考えを書きなさい。'],coach_start:'食べ物について「ありがとう」の気持ちが変わった体験はありますか？日本やオランダで食べ物に関して気づいたことも教えてください。'},{id:'E017',title:'竜王になる',grade:'小6',fit:'◎',level:2,type:'夢目標型',tags:['将棋','努力','夢','奨励会'],body:`ぼくのあこがれの仕事はプロの将棋棋士です。棋士になって、将棋界の最高のタイトル竜王をかく得することがぼくの夢です。\n八月十七日、大阪府高槻市にある関西将棋会館で行われた奨励会試験で六級に合格することができました。「おめでとう。よくがん張ったね。」と、父も母もなみだ目で言ってくれました。\n棋士になるには、原則、奨励会に入会し、二十六歳までに四段にならなければいけません。合格率は二割と言われている厳しい試験です。\n将棋を始めたのは小学一年生の時です。このときは新型コロナが流行していて、父の仕事でアメリカにいたので日本の祖父と毎日オンラインで対局していました。最初は勝てませんでしたが、半年後に帰国するころにはぼくの方が強くなっていました。\n将棋のおかげでたくさんの知り合いができ、感謝の気持ちも持てるようになりました。最後にぼくの家族。両親は遠くまで大会に連れて行ってくれて、姉弟はいつもぼくの将棋を優先してくれました。将棋を教えてくれた祖父は去年亡くなりましたが、最後まで応援してくれました。\nそうしたみんなの思いや応援を支えにして、これからも将棋の勉強をがん張りたいと思います。大きな夢ですが、プロ棋士になって、竜王になりたいです。`,structure:[{role:'intro',label:'①夢の宣言',text:'プロ棋士になって「竜王」タイトルを取ることが夢。奨励会試験合格の報告。'},{role:'event',label:'②きっかけと努力の記録',text:'コロナ禍でアメリカに居た時に将棋を始める。祖父とオンライン対局で上達。'},{role:'change',label:'③将棋で得たもの',text:'将棋のおかげで仲間ができ、感謝の気持ちを持てるようになった。'},{role:'spread',label:'④感謝の広がり',text:'家族・先生・友達・祖父への感謝を具体的に書く。'},{role:'end',label:'⑤決意',text:'「みんなの応援を支えにして」竜王になりたいという強い決意。'}],imitation:'自分の夢ときっかけ、支えてくれた人への感謝を書こう。',prompts400:['自分の夢ときっかけを書きなさい。'],prompts800:['夢を持つことで自分がどう変わったか、支えてくれた人への感謝とともに書きなさい。'],coach_start:'あなたの夢や目標は何ですか？その夢を持つようになったきっかけや、オランダ生活での経験も教えてください。'},{id:'E003',title:'あきらめてきた私から あきらめない私へ',grade:'小6',fit:'◎',level:3,type:'夢目標型',tags:['コロナ','学校','夢','医者'],body:`私は今、小学六年生だ。入学式を経験しなかった私たちは、今年、新一年生の入学式に立ち合った。たくさんのことをあきらめてきた私だから、行事ができる喜びを知った。友だちと会えることが当たり前ではなかったから、となりに友だちがいることの幸せを知った。そんな私には夢がある。多くの人が新型コロナウィルスで苦しい思いをしてきた。病気で苦しむ人を少しでも助けられるように、少しでも減らせるように、私は医者になりたい。たくさんのことをあきらめてきた私だけれど、あきらめていたことが、いつの日かできるようになることを知った私だから、この夢をあきらめずに、いつかかなえたい。そして、医者になったら、病気とたたかう人と一緒に、生きることをあきらめない医者で私はありたい。`,structure:[{role:'intro',label:'①状況の説明',text:'コロナ禍でたくさんあきらめてきた。'},{role:'event',label:'②あきらめの積み重ね',text:'マスク・給食・行事自粛…。友達の顔も一部分しかわからなかった。'},{role:'change',label:'③転換点・気づき',text:'全学年での行事ができた時、「当たり前」のありがたさを知る。'},{role:'spread',label:'④夢の誕生',text:'コロナで苦しんだ人を助けたい。医者になりたいという夢。'},{role:'end',label:'⑤決意',text:'「あきらめてきた私だから、あきらめずに夢をかなえる」という強いメッセージ。'}],imitation:'困難な時期から生まれた夢・目標について書こう。',prompts400:['当たり前のことがありがたいと気づいた体験を書きなさい。'],prompts800:['海外生活で「当たり前じゃなかった」ことに気づいた体験と、それが自分の夢・目標にどうつながるかを書きなさい。'],coach_start:'オランダ生活の中で「日本での当たり前」が変わったり、「当たり前じゃないんだ」と気づいたことはありますか？'},{id:'E008',title:'同じ人間で同じ地球に住んでいる',grade:'中1',fit:'◎',level:3,type:'社会課題型',tags:['多文化','偏見','フィリピン','体験'],body:`「おはよう」「ニーハオ」「グットモーニング」学校に着くといろいろな言語であいさつをされる。私の小学校には、沢山の外国人がいた。みんな国関係なく仲良くしていた。けれど、日本語が全く話せない人達と仲良くしている子は少ない。\n私が五年生の時、一年間フィリピンの学校に行くことになった。タガログ語は少し聞き取れるくらいで、あとは何も分からない。休み時間みんなは楽しそうに笑って話しているけど、私は輪の中に入れなかった。私はそのとき日本の学校にいた日本語が話せない子たちを思い出した。その子達の気持ちが分かった気がした。\nしかし隣の子に「あなたはどこから来たの」と英語で聞かれた。その日からみんなは、私に授業を分かりやすく説明してくれたり、休み時間も一緒に遊んでくれた。少しずつタガログ語を書いたり話すことができるようになった。\nフィリピンの先生が「国や宗教が違うけれど、みんな同じ人間でみんな同じ地球に住んでいる」「いつも相手に対してリスペクトを持ってね」といつも言っていた。その言葉は中学生になった今でもずっと心に残っている。\n国や宗教、肌の色などが違くても自分の偏見で傷つくような発言や行動をするのは間違いだ。「寄り添おうとすること」「知ろうとすること」が大切だと感じた。`,structure:[{role:'intro',label:'①状況の紹介',text:'日本の学校には外国人がたくさんいたが、言葉が通じない子との交流は少なかった。'},{role:'event',label:'②体験（フィリピン留学）',text:'自分がフィリピンで言葉が通じない立場になる。孤独を感じる。'},{role:'change',label:'③転換点',text:'クラスメイトが声をかけてくれて助けてもらえた。'},{role:'spread',label:'④先生の言葉・価値観',text:'「同じ人間で同じ地球に住んでいる」というフィリピンの先生の言葉が心に残る。'},{role:'end',label:'⑤決意',text:'偏見をなくし、「寄り添う・知ろうとする」ことを続けたい。'}],imitation:'「外国・異文化の立場に立った」体験から気づいたことを書こう。',prompts400:['外国や異文化で困った体験・助けてもらった体験を書きなさい。'],prompts800:['オランダ生活でも同じ体験があったはず。「同じ人間」という視点で、多文化共生について書きなさい。'],coach_start:'オランダの学校で「言葉が通じない・文化が違う」と感じた具体的な場面を教えてください。その時どうしましたか？'},{id:'E018',title:'私の目標と夢',grade:'小5',fit:'◎',level:3,type:'夢目標型',tags:['野球','夢','医療'],body:`小学校高学年になり、少しずつ目標や夢について考えるようになってきました。私には、「目標」と「夢」が一つずつあります。\n私は、二年生から野球をしています。三才年上の兄のチームが人数不足ではい部の危機にあったので、部のそん続のために入部しました。ベンチに座って応えんしているだけで良かったあのころは、ただ楽しかったです。そのチームで全国大会に出場できたことは、良い思い出になっています。\n五年生になった今は意識が変わってきました。それは、野球を続けてイチローさんと対戦することです。私の野球チームの人数は二十五人で女子は私一人だけ。でも、かんとくもコーチも部のみんなも性別関係なくチームの一員として同じように接してくれています。何より、女子である私が、男子と対等に戦ったり楽しくプレーしたりする姿をたくさんの人に見てもらい、女子にも野球に興味をもってもらいたいです。\nそして、私には「夢」もあります。私の将来の夢は、医りょう関係の仕事につくことです。私は小さいときに病気にかかって入院をしたことがあります。体の状態を親身になって聞いてくれたり、丁ねいにしん察してくれたりする先生に安心できる存在を感じました。私もしょう来は、人の心も体も支えられる仕事につきたいです。`,structure:[{role:'intro',label:'①導入・「目標」と「夢」の宣言',text:'小学高学年になり、2つの目標・夢を持つようになった。'},{role:'event',label:'②野球の体験・目標',text:'チームのために入部→全国大会→リーダーとして成長。イチローと対戦が目標。'},{role:'change',label:'③「夢」の誕生',text:'入院体験がきっかけで医療関係の仕事への夢が生まれる。'},{role:'spread',label:'④支えてくれた人への感謝',text:'医療の先生など、体と心を支えてくれた存在への感謝。'},{role:'end',label:'⑤決意',text:'「人の心も体も支えられる仕事」につくという夢への決意。'}],imitation:'「目標（短期）」と「夢（将来）」を分けて書こう。',prompts400:['自分の目標と夢を書きなさい。'],prompts800:['オランダ生活で感じたことが、将来の夢にどうつながるかを書きなさい。'],coach_start:'あなたの「目標（近い将来やりたいこと）」と「夢（将来なりたいもの）」はそれぞれ何ですか？オランダでの生活が影響していることはありますか？'},{id:'E009',title:'笑顔のバトンをつないでいく',grade:'中1',fit:'◎',level:3,type:'体験変化型',tags:['通級','相談','支援'],body:`私は小学生の頃に通級指導教室という教室に通っていました。「イ」や「シ」、「チ」などのイ列の発音がうまく言えなかったので、先生が言い方のコツや舌の動かし方などを教えてくれました。通級は、ずっと座って発音練習というわけではありません。カードゲームや運動を先生と一緒にすることがあります。遊びながらコミュニケーションをとることで、実際の会話の中で、学んだ発音を使うことを経験させてくれました。\n中でも一番思い出に残っているのは、卒業時に行われたお別れ会です。私は通級での思い出を作文に書き、スピーチをしました。なぜ、スピーチを選んだのかというと、この五年間で話すことに自信がついたからです。もしも通級を知らなかったら、こんなにも人前で話すことに自信が持てなかったと思います。\n通級に通い、他のみんなとは違うことが恥ずかしいと思っていたこともありましたが、最後にはきちんと自分を認めることができました。\n私はこのようなサポートをしてくれる環境があることを、より多くの子どもやその保護者に伝えていきたいです。そうすることで、みんなが相談しやすい社会を作り、笑顔のバトンがずっとずっとつながっていくと信じています。`,structure:[{role:'intro',label:'①状況・通級との出会い',text:'発音の困難があり、小2から通級指導教室に通い始めた。'},{role:'event',label:'②通級での体験',text:'先生と遊びながら発音を練習。5年間で話すことに自信がついた。'},{role:'change',label:'③転換点・自己受容',text:'お別れ会でスピーチをした。「他と違うこと」を認められるようになった。'},{role:'spread',label:'④伝えたいこと',text:'サポートがあることを広めたい。相談は恥ずかしくない。'},{role:'end',label:'⑤「バトン」のメタファー',text:'「笑顔のバトン」をつないでいくというキャッチーな締め。'}],imitation:'困難を乗り越えた体験と、それを誰かに伝えたいという気持ちを書こう。',prompts400:['苦手なことを克服した体験を書きなさい。'],prompts800:['「違いがある」ことを認め合える社会について、自分の体験をもとに書きなさい。'],coach_start:'オランダや日本で、「苦手なこと・できないこと」を周りに助けてもらった経験はありますか？'},{id:'E004',title:'命って思っていたよりずっと重い',grade:'小5',fit:'◎',level:3,type:'社会課題型',tags:['平和','命','広島','日常'],body:`「命を大切にしましょう」。その言葉は、何度も親や先生から聞いてきました。でも、どこかあたり前すぎて、心には深く入ってきませんでした。\nでも、その気持ちが少しずつ変化したのは今年の六月に、平和学習のために広島の原爆資料館を訪れたからです。\n資料館に入った途端、空気がひんやりとして、私の足が少し止まりました。焼けた壁の影、ガラスの中に並べられたこげたお弁当箱、止まったままの時計。そこにあったのは、「物」ではなく、「命のあしあと」でした。\n私が一番心を打たれたのは、一つのランドセルでした。七才の女の子が使っていたもので、色もわからないほどこげていて、ベルトもふたも溶けていました。「私とそんなに年もちがわないのに…。」と思ったけれど涙は出ませんでした。ただ、心の中で何かが、静かに、動き出した気がしたのです。\nその夜、家に帰ると、いつもと変わらず弟と妹が笑いながらテレビを見ていました。「生きていてくれて、ありがとう」こんな気持ちになったのは初めてでした。\nその日から、私の中で小さな変化が始まりました。「いただきます」や「ごちそうさま」を心をこめて言うようになりました。\n命って、思っていたよりもずっと重い。その重さは、見えないけれど、たしかに私の中にあります。だから私は、これからもその命を大切に大切につないでいきたいと思います。`,structure:[{role:'intro',label:'①問いかけ・状況',text:'「命を大切に」という言葉が心に入ってこなかった。しかし広島訪問が変わるきっかけに。'},{role:'event',label:'②体験・描写',text:'原爆資料館でランドセルを見て、「心の中で何かが動き出した」感覚。'},{role:'change',label:'③帰宅後の変化',text:'弟妹の笑顔を見て「生きていてくれてありがとう」という気持ちが初めてわいた。'},{role:'spread',label:'④小さな変化の積み重ね',text:'「いただきます」など日常の変化が始まった。'},{role:'end',label:'⑤命の重さへの気づき',text:'「命の重さは見えないけれど、たしかに私の中にある」という詩的な締め。'}],imitation:'「当たり前」が当たり前じゃないと気づいた体験から、自分の変化を書こう。',prompts400:['平和・命・戦争について感じたことを書きなさい。'],prompts800:['歴史を学んで、自分の日常をどう見るようになったかを書きなさい。'],coach_start:'オランダにも戦争の歴史があります。歴史を学んで感じたこと、日本との共通点・違いはありますか？'},{id:'E010',title:'「普通」を「個性」に',grade:'中1',fit:'○',level:4,type:'意見文型',tags:['ジェンダー','個性','多様性'],body:`「なんでスカートはかないの？」小学生のころ、友達から急に質問された。私がスカートをはかずにズボンをはく本当の理由は「かっこいい」し「男の子っぽい」からだ。しかし、本当のことを話したら周りの人が離れていったり、変な目で見られると思い、家族にも友達にも話したことはない。\n小学校の卒業式、私はパンツスーツを着ることにした。カメラマンの人に、男の子だと思われた。でも不思議と嫌な気持ちにはならなかった。\n中学校の制服を買うとき、ある友達は「ズボンだったら浮くかもしれないじゃん」と言った。確かに新しい環境になって浮いてしまうのはとても怖い。私は「自分らしさ」を潰し、周りに合わせてスカートを買った。\n「普通」とは何なのだろうか。私は普通という言葉は人の数だけあっていいと思う。世の中に自分と全く同じことを思っている人はいないし、同じ心を持つ人もいない。なら、人それぞれの「普通」をその人の「個性」として受け入れることが重要なのだと思う。\n一人一人の思う「普通」を「個性」として受け入れることが、誰もが暮らしやすい平和な世界への第一歩なのではないか。だから私はこれからも自分が思う「普通」を大切にしていきたい。`,structure:[{role:'intro',label:'①具体的な体験で始まる',text:'「なんでスカートはかないの？」という一言から始まる。自分の本音を語れなかった。'},{role:'event',label:'②卒業式・制服の葛藤',text:'自分らしくいることと「浮くことへの恐れ」の葛藤。'},{role:'change',label:'③問いを立てる',text:'「普通」とは何か？という哲学的な問いを展開する。'},{role:'spread',label:'④社会的な視野',text:'ジェンダー平等・多様性など社会課題に広げる。'},{role:'end',label:'⑤自分なりの答え',text:'「普通」を「個性」として受け入れることが平和への一歩。'}],imitation:'自分の「普通と違う」と感じた体験を、社会的な視野に広げて書こう。',prompts400:['「人と違う」と感じた体験と、そこから学んだことを書きなさい。'],prompts800:['日本とオランダの「普通」の違いを体験から書き、多様性について考えを述べなさい。'],coach_start:'オランダと日本で「普通の定義」が違うと感じた場面はありましたか？どちらが「自分らしくいられる」感じがしましたか？'},{id:'E011',title:'小さな「嫌だ。」がつなぐ大きな権利',grade:'中1',fit:'○',level:4,type:'社会課題型',tags:['権利','技能実習生','人権'],body:`「嫌だ。」という小さな気持ちが僕に人権の大切さを教えてくれたのは、小学五年生のときでした。予防接種でお医者さんが「君には嫌なことを『嫌だ。』と言う権利がある。それが人権というもの。」と言ってくれました。怖さは消えなかったけれど、「嫌だ。」という気持ちを受け止めてもらえたことで納得して腕を差し出すことができました。\n最近、ニュースを見て、技能実習生のことを詳しく知りました。日本には四十万人以上の技能実習生がいて、職場の環境によってはとてもつらい立場に置かれている人たちがいることを知りました。技能実習制度は技術を学ぶ目的のはずですが、低賃金や厳しい契約で縛られ、「嫌だ」と言えない状況が一部で生まれています。\nあのとき僕の「嫌だ。」に耳を傾けてくれたお医者さんのように、誰が彼らの声を聞いているのでしょうか。\n人権は誰かが与えるものではなく、一人ひとりが尊重し合い、支え合って育てるものです。まだ中学生の僕には大きなことはできないかもしれませんが、そのことに気づく人が増えれば、誰もが自分らしく生きられる社会に近づくのではないでしょうか。小さな「嫌だ。」が、大きな希望につながると信じたいです。`,structure:[{role:'intro',label:'①個人体験から始まる',text:'注射が怖くて「嫌だ」と感じた体験。お医者さんから「人権」を教えてもらった。'},{role:'event',label:'②学校での問題',text:'「嫌だ」と言えない場面が学校でもある。'},{role:'change',label:'③社会的な問題へ',text:'技能実習生の「嫌だと言えない」状況をニュースで知る。'},{role:'spread',label:'④つながりの発見',text:'自分の「嫌だ」と技能実習生の「嫌だ」がつながる。'},{role:'end',label:'⑤人権の定義・決意',text:'「人権は育てるもの」という深い結論。小さな「嫌だ」が大きな希望に。'}],imitation:'個人の小さな体験を、社会の大きな問題につなげて書こう。',prompts400:['「嫌だ」と言えなかった・言えた体験を書きなさい。'],prompts800:['「声を上げる権利」について、オランダでの体験も交えながら書きなさい。'],coach_start:'「嫌だ」と言えずに我慢した経験や、逆に「嫌だ」と言えてよかった経験はありますか？'},{id:'E012',title:'平凡な日常に感謝',grade:'中3',fit:'○',level:4,type:'家族感謝型',tags:['家族','病気','備え','祖母'],body:`「カリン、時間やで、起きなあかんで」。祖母のこの声とともに私の毎日は始まります。我が家では海外で働いている母に代わって家事は祖母が担っています。\nそんな当たり前の日常は突然崩れたのです。「私、ガンになっちゃった」。祖母が家族に知らせました。診断結果は悪性黒色腫でした。「死なんといて」と私は祖母に泣きながら言いました。「おばあちゃん頑張るから泣かんといて」。祖母は三週間入院することになりました。\nその日から我が家では大変な毎日が始まりました。料理も洗濯も掃除も祖父と私が分担して行うことになり、私は夕食当番でした。家族みんなが祖母がいかに大変な家事をてきぱきこなしていたかを改めて思い知らされました。\n早期発見だったので、予定通り三週間後に祖母は家に無事戻りました。家族全員に笑顔が戻りました。\nきっと「普通」で「当たり前」の日常は奇跡の積み重ねなんだと思います。だから今私は当たり前の日常に感謝しながら毎日を送っています。今日もまた当たり前で平凡な、でも感謝に満ちた日常が始まります。「カリン、時間やで、起きなあかんで」`,structure:[{role:'intro',label:'①当たり前の日常の描写',text:'祖母の声で目覚める毎日。祖母が家事を担っている。'},{role:'event',label:'②突然の崩壊',text:'祖母が「ガン」を告知される。入院・手術。家族で家事を分担する大変な日々。'},{role:'change',label:'③回復・帰宅',text:'早期発見で三週間後に退院。家族全員に笑顔が戻った。'},{role:'spread',label:'④気づきの深まり',text:'「当たり前の日常は奇跡の積み重ね」という深い気づき。'},{role:'end',label:'⑤冒頭と対応した結末',text:'最初の「カリン、起きなあかんで」が再登場し、感謝に満ちた日常として締める。'}],imitation:'「失って初めてわかった大切さ」を書こう。冒頭と結末を対応させる工夫も参考に。',prompts400:['家族の大切さに気づいた体験を書きなさい。'],prompts800:['「当たり前の日常」への感謝について、海外生活との比較も交えながら書きなさい。'],coach_start:'あなた自身が「当たり前だと思っていたけど、実はありがたかった」と気づいたことはありますか？オランダ生活でも感じましたか？'},{id:'E015',title:'一生けん命生きる',grade:'小6',fit:'○',level:4,type:'夢目標型',tags:['看護師','死','戦争','命'],body:`私は看護師になりたい。元々一番のきっかけはお母さん。看護師だ。お母さんが一生けん命がんばっている姿を見たりして、かっこいいな、自分もだれかの役に立ちたいな、と幼稚園生の頃からの夢だ。今年の四月に、看護師になりたい気持ちがより強くなる出来事があった。ひいおばあちゃんが亡くなったのだ。\n「ピンコンピンコン」私が着いた時は64。私はひいおばあちゃんの手をにぎった。その手はどんどん冷たくなっていく。モニターの数字が少しずつ下がっていく。40…36…24…。一生けん命生きようとしているんだ、そう思った。みんなの声に心臓で返事をしてくれたんだ、そうも思った。その後に、30…16…0。\nひいおばあちゃんは大正生まれの百一歳だった。戦争も生き抜いてきた。友達とはなればなれになって、友達がにげた防空ごうにはばくだんが落ちた。ひいおばあちゃんは助かった。百一歳まで生きてきてくれてありがとう、と心から思った。\nひいおばあちゃんは一生けん命生きた人だった。そのおかげで、自分の命を大切に思える私でいられる。私は、命を大切に思える人が増えてほしい。その手助けが出来る看護師になりたいと思った。私は自分の命、周りの人の命を大切にする事をわすれず一生けん命生きる看護師になる。`,structure:[{role:'intro',label:'①夢の宣言',text:'看護師になりたい夢。きっかけはお母さん。'},{role:'event',label:'②ひいおばあちゃんの臨終',text:'モニターの数字が下がっていく描写。「一生けん命生きようとしている」という気づき。'},{role:'change',label:'③ひいおばあちゃんの戦争体験',text:'百一歳の生涯と戦争の話。「生きることは奇跡の連続」という気づき。'},{role:'spread',label:'④夢の強化',text:'「命を大切に思える人を増やしたい」という思いが看護師の夢に結びつく。'},{role:'end',label:'⑤「一生けん命生きる」という決意',text:'タイトルと同じ言葉で締める。'}],imitation:'大切な人の「一生けん命生きる姿」から学んだことと夢を書こう。',prompts400:['家族や身近な人の生き方から学んだことを書きなさい。'],prompts800:['「命を大切にする」とはどういうことか、体験をもとに書きなさい。'],coach_start:'あなたが「一生けん命生きている」と感じる人は誰ですか？その人から学んだことは？'},{id:'E005',title:'天国への直通ダイヤル',grade:'小6',fit:'○',level:4,type:'具体物記憶型',tags:['家族','死','思い出'],body:`ぼくが赤ちゃんのころ、プラスチックでできた赤くて小さいおもちゃの受話器がありました。これは、ベビーサークルという柵の付属品でした。\nぼくが成長した後、ベビーサークルは納戸の奥の方に片づけていました。この時、お母さんは赤い受話器だけ、ぼくの手元に残してくれました。\nぼくが生まれた七か月後、ひいおじいちゃんが亡くなりました。ぼくはひいおじいちゃんにだっこしてもらったこと、名前を呼んでくれた声、何も覚えていません。きっと家族に迷惑をかけたくなかったのと、毎日ぼくをだっこするのを楽しみにしてくれていて、痛みと苦しみを限界ぎりぎりまで辛抱していたのではないかと思います。\n「ひぃじぃじ、天国におるんよ。お電話プルルーってしてみよっか。」と、お母さんが言ってくれました。ぼくは、赤い受話器を持ってダイヤルを回してひいおじいちゃんに電話をかけました。いっぱいひいおじいちゃんに電話しました。この大切な思い出を忘れないように、お母さんが受話器をぼくに残してくれていたのです。\nぼくの手のひらは大きくなって、赤い受話器はとても小さく軽くなりました。でも、受話器はあたたかくて優しい感じがして、静かに待っているとまた電話が鳴りそうな気がします。`,structure:[{role:'intro',label:'①具体物の描写',text:'赤いおもちゃの受話器の説明。ベビーサークルとともに片付けられることになった。'},{role:'event',label:'②受話器が残った理由',text:'ひいおじいちゃんが生後7ヶ月で亡くなった。「天国に電話する」ためにお母さんが受話器を残してくれた。'},{role:'change',label:'③記憶と想像',text:'ひいおじいちゃんの姿は覚えていないが、家族の話から想像する。'},{role:'spread',label:'④現在の自分',text:'手が大きくなった今も、受話器は「あたたかくて優しい」感じがする。'},{role:'end',label:'⑤余韻のある締め',text:'「静かに待っているとまた電話が鳴りそうな気がします」という詩的な終わり。'}],imitation:'思い出の「物」から始めて、大切な人との記憶を書こう。',prompts400:['亡くなった人や会えない人への気持ちを書きなさい。'],prompts800:['「見えないけれど確かにある」大切なものについて書きなさい。'],coach_start:'あなたには「思い出の物」はありますか？その物から誰かを思い出すとしたら、それは誰ですか？'},{id:'E020',title:'じいじの、ひとめぼれ',grade:'小3',fit:'△',level:1,type:'家族感謝型',tags:['家族','祖父','笑い'],body:`「あのね、じいじ」私がそう聞く度、いつもおじいちゃんは決まってこう言います。「まだ、じいじじゃないよ」すると隣にいるおばあちゃんは、もう立派なじいじなのにねという顔で、優しく笑います。\n私はお父さん、お母さん、おじいちゃん、おばあちゃんと五人で一緒に住んでいます。晩御飯は家族そろって皆で食べ、一日の報告をするというルールがあります。中でも一番のおしゃべりは、じいじことおじいちゃん。毎日沢山の本を読むのでとても物知りで、私に色々な事を教えてくれます。\nところが突然、じいじが倒れて入院する事になってしまったのです。数ヶ月後、ようやく面会出来る事になりました。どうしても知りたくて聞いてみました。「おばあちゃんとの出会いは何だったの？」じいじは少し黙ってから、小さな声で一言。「ひとめぼれ」\nスカッとした鼻にひとめぼれして毎日会いに行ったそうです。「ぷっ」最初に笑ったのは、病院の先生です。その瞬間、病室がパッと明るくなり、全員が笑顔になりました。\nじいじ、教えてくれて本当にありがとう。早く帰ってきてね。じいじ、ひとめぼれしてくれてありがとう。`,structure:[{role:'intro',label:'①導入・家族の日常',text:'「じいじ」と呼ぶのを嫌がるおじいちゃん。毎晩の家族の食事シーン。'},{role:'event',label:'②入院・面会',text:'突然の入院で静かになる食卓。ようやく面会できた。'},{role:'change',label:'③「ひとめぼれ」の告白',text:'おばあちゃんとの出会いを聞いたら「ひとめぼれ（鼻！）」という笑える答え。'},{role:'spread',label:'④笑顔の広がり',text:'病室全体が笑顔になった。'},{role:'end',label:'⑤感謝の言葉',text:'「ひとめぼれしてくれてありがとう」という温かい締め。'}],imitation:'家族の「笑えるエピソード」から愛情や感謝を書こう。',prompts400:['家族の笑えるエピソードを書きなさい。'],prompts800:['「笑顔」が家族をつなぐ場面について書きなさい。'],coach_start:'あなたの家族の中で「笑える・かわいいエピソード」を教えてください！'}];
 
 const LEVEL_MAP={1:'lv1',2:'lv2',3:'lv3',4:'lv4'};
@@ -1901,225 +1626,6 @@ async function getS7FB(){
     document.getElementById('s7farea').scrollIntoView({behavior:'smooth'});
   }catch(err){alert('エラー：'+err.message);}
   btn.disabled=false;btn.textContent='🎓 最終添削してもらう';
-}
-
-
-// ===== 動画セクション =====
-const MATH_VIDEOS = [
-    {title:"計算達人「計算の順番変え」",id:"FHHQYBhhJ7A"},
-    {title:"計算達人「分配法則（整数編）」",id:"Gz6txevBIcw"},
-    {title:"計算達人「分配法則（小数編）」",id:"hVVE5Qno4GA"},
-    {title:"計算達人「分配法則（分数編）」",id:"MIXrK3CzNAY"},
-    {title:"計算達人「小数の分数変換」",id:"3sDYD3ZED-w"},
-    {title:"計算達人「小数化・分数化の判断」",id:"FDAbGUl_L3M"},
-    {title:"計算達人「□を求める計算（逆算）整数編①」",id:"kRHdR7-yDys"},
-    {title:"計算達人「□を求める計算（逆算）整数編②」",id:"IRmYEiHHBMc"},
-    {title:"計算達人「□を求める計算（逆算）小数編」",id:"KddyjkKvNcU"},
-    {title:"計算達人「□を求める計算（逆算）分数編」",id:"z-zgaB6EUY8"},
-    {title:"計算達人「□を求める計算（逆算）あまりのある割り算編」",id:"K1TXqwBxguQ"},
-    {title:"計算達人「キセル算（部分分数分解）」",id:"uXlxZxpUl1o"},
-    {title:"計算達人「単位分数の和」",id:"Tu6Lifae2X4"},
-    {title:"計算達人「単位変換①（長さと重さ）」",id:"zgGfO5YejQU"},
-    {title:"計算達人「単位変換②（面積と容積・体積）」",id:"tdivqESQANE"},
-    {title:"計算達人「単位変換③（時間）」",id:"TPUeOjD1TdE"},
-    {title:"計算達人「単位の計算問題①（長さと重さ）」",id:"mYhtr072oXs"},
-    {title:"計算達人「単位の計算問題②（面積と体積・容積）」",id:"g9rwKFRqseE"},
-    {title:"計算達人「単位の計算問題③（時間）」",id:"SGy20EcTgLY"},
-    {title:"計算達人「比の計算（比例式）①」",id:"b76GSSSxEMo"},
-    {title:"計算達人「比の計算（比例式）②＊単位の比」",id:"UsSrPHIIvx4"},
-    {title:"計算達人「分母・分子の□を求める計算（逆算の応用）」",id:"6cWJ1RdQUVo"},
-    {title:"計算達人「複数の□を求める計算①（比の利用）」",id:"2n07FgcPnKM"},
-    {title:"計算達人「複数の□を求める計算②（素因数分解）」",id:"ht_fTwzwa6Q"}
-];
-
-let _openVideoId = null;
-
-function initVideoSection() {
-  const list = document.getElementById('mathVideoList');
-  if (!list || list.dataset.built === '1') return;
-  list.innerHTML = '';
-  MATH_VIDEOS.forEach((v, i) => {
-    const item = document.createElement('div');
-    item.className = 'video-accordion';
-
-    const btn = document.createElement('button');
-    btn.className = 'vacc-btn';
-    btn.dataset.idx = i;
-    btn.dataset.wrapId = 'v_' + i;
-    btn.onclick = function() { toggleMathVideo(parseInt(this.dataset.idx), this.dataset.wrapId); };
-    btn.innerHTML =
-      '<span class="vacc-num">' + (i+1) + '</span>' +
-      '<span class="vacc-title">' + v.title + '</span>' +
-      '<span class="vacc-arrow" id="arr_' + i + '">▼</span>';
-
-    const wrap = document.createElement('div');
-    wrap.className = 'video-wrap';
-    wrap.id = 'v_' + i;
-    wrap.style.display = 'none';
-    const iframe = document.createElement('iframe');
-    iframe.src = 'https://www.youtube.com/embed/' + v.id + '?rel=0';
-    iframe.title = v.title;
-    iframe.frameBorder = '0';
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    iframe.allowFullscreen = true;
-    iframe.loading = 'lazy';
-    wrap.appendChild(iframe);
-
-    item.appendChild(btn);
-    item.appendChild(wrap);
-    list.appendChild(item);
-  });
-  list.dataset.built = '1';
-}
-
-
-function toggleMathVideo(idx, wrapId) {
-  const wrap = document.getElementById(wrapId);
-  const arr = document.getElementById('arr_' + idx);
-  if (!wrap) return;
-  const isOpen = wrap.style.display !== 'none';
-  // 他を全部閉じる
-  MATH_VIDEOS.forEach((_, i) => {
-    const w = document.getElementById('v_' + i);
-    const a = document.getElementById('arr_' + i);
-    if (w) w.style.display = 'none';
-    if (a) a.textContent = '▼';
-  });
-  if (!isOpen) {
-    wrap.style.display = 'block';
-    if (arr) arr.textContent = '▲';
-    wrap.scrollIntoView({behavior:'smooth', block:'nearest'});
-  }
-}
-
-
-// ===== 毎日レポートメール（オランダ時間22時） =====
-const REPORT_EMAILS = ['taisuke.sano@gmail.com', 'i.yayaco@gmail.com'];
-const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // EmailJSで設定後に置き換え
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // EmailJSで設定後に置き換え
-
-function getOlandaHour() {
-  // オランダ（CET=UTC+1、夏時間CEST=UTC+2）の現在時刻
-  const now = new Date();
-  const nlStr = now.toLocaleString('nl-NL', { timeZone: 'Europe/Amsterdam', hour: 'numeric', hour12: false });
-  return parseInt(nlStr);
-}
-
-function getNlDateKey() {
-  const now = new Date();
-  const d = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Amsterdam' }));
-  return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
-}
-
-function buildDailyReport() {
-  const todayKey = getNlDateKey();
-  const todayData = cal[todayKey];
-  const totalPts = calcTotalPts();
-  const totalYen = calcTotalYen();
-
-  let todayText = '（今日はまだ記録なし）';
-  if (todayData && todayData.pts !== undefined) {
-    const subjs = todayData.subjs || {};
-    const subjNames = { sakubun:'作文', mensetsu:'面接', kokugo:'国語', kanji:'漢字', sansu:'算数', review:'復習' };
-    const doneSubjs = Object.keys(subjs).filter(s => subjs[s]).map(s => subjNames[s] || s);
-    const todayPts = (todayData.pts||0) + (todayData.bonus||0);
-    todayText = doneSubjs.join('・') + '（' + todayPts + 'pt';
-    if (todayData.bonus > 0) todayText += ' うちボーナス+' + todayData.bonus + 'pt';
-    todayText += '）';
-    if (todayData.combo >= 3) todayText += ' 🔥' + todayData.combo + '日連続！';
-  }
-
-  const streak = getCurrentStreak();
-  const info = calcMilestoneInfo();
-  const nextMs = info.next ? info.next + 'pt（あと' + (info.next - totalPts) + 'pt）' : '全達成🎉';
-  const earnedYen = ptToYen(totalPts);
-  const subject = '📚 今日の明訓受験勉強レポート';
-  const body =
-    '今日の勉強記録\n' +
-    '━━━━━━━━━━━━━━\n' +
-    '📅 日付：' + todayKey + '\n' +
-    '📖 今日やったこと：' + todayText + '\n' +
-    '🔥 連続記録：' + streak + '日\n\n' +
-    'ポイント累計\n' +
-    '━━━━━━━━━━━━━━\n' +
-    '累計pt：' + totalPts + 'pt\n' +
-    '次のマイルストーン：' + nextMs + '\n' +
-    '達成済みご褒美：¥' + earnedYen + '\n\n' +
-    '引き続きがんばれ！ 🌸';
-
-  return { subject, body, todayText, streak, totalPts, totalYen: earnedYen };
-}
-
-async function sendDailyReport(manual=false) {
-  const sentKey = 'mk_reported_' + getNlDateKey();
-  if (!manual && localStorage.getItem(sentKey)) return; // 当日送信済み
-
-  const report = buildDailyReport();
-
-  try {
-    await emailjs.send(window.EMAILJS_SERVICE_ID_LIVE||EMAILJS_SERVICE_ID, window.EMAILJS_TEMPLATE_ID_LIVE||EMAILJS_TEMPLATE_ID, {
-      to_email_1: REPORT_EMAILS[0],
-      to_email_2: REPORT_EMAILS[1],
-      subject: report.subject,
-      message: report.body,
-      today_subjects: report.todayText,
-      streak: report.streak,
-      total_pts: report.totalPts,
-      total_yen: '達成済み¥' + report.totalYen + '分',
-    });
-    if (!manual) localStorage.setItem(sentKey, '1');
-    return true;
-  } catch(e) {
-    console.error('Email error:', e);
-    return false;
-  }
-}
-
-// 毎分チェック：オランダ時間22:00〜22:05に送信
-function startDailyMailCheck() {
-  setInterval(async () => {
-    const nlHour = getOlandaHour();
-    const now = new Date();
-    const nlMin = parseInt(now.toLocaleString('en-US', {
-      timeZone: 'Europe/Amsterdam', minute: 'numeric'
-    }));
-    if (nlHour === 22 && nlMin < 5) {
-      await sendDailyReport(false);
-    }
-  }, 60000); // 1分ごと
-}
-
-// 手動送信ボタン用
-async function manualSendReport() {
-  const btn = document.getElementById('manualReportBtn');
-  if (btn) { btn.disabled = true; btn.textContent = '送信中…'; }
-  const ok = await sendDailyReport(true);
-  if (btn) {
-    btn.disabled = false;
-    btn.textContent = ok ? '✅ 送信完了！' : '❌ 送信失敗';
-    setTimeout(() => { btn.textContent = '📧 今日のレポートをメール送信'; btn.disabled = false; }, 3000);
-  }
-}
-
-
-function saveEmailConfig() {
-  const pk = document.getElementById('ejsPublicKey')?.value.trim();
-  const sid = document.getElementById('ejsServiceId')?.value.trim();
-  const tid = document.getElementById('ejsTemplateId')?.value.trim();
-  if (pk) { localStorage.setItem('ejs_pk', pk); emailjs.init({ publicKey: pk }); }
-  if (sid) { localStorage.setItem('ejs_sid', sid); window.EMAILJS_SERVICE_ID_LIVE = sid; }
-  if (tid) { localStorage.setItem('ejs_tid', tid); window.EMAILJS_TEMPLATE_ID_LIVE = tid; }
-}
-function loadEmailConfig() {
-  const pk = localStorage.getItem('ejs_pk')||'';
-  const sid = localStorage.getItem('ejs_sid')||'';
-  const tid = localStorage.getItem('ejs_tid')||'';
-  const pkEl = document.getElementById('ejsPublicKey');
-  const sidEl = document.getElementById('ejsServiceId');
-  const tidEl = document.getElementById('ejsTemplateId');
-  if (pkEl && pk) { pkEl.value = pk; emailjs.init({ publicKey: pk }); }
-  if (sidEl && sid) { sidEl.value = sid; window.EMAILJS_SERVICE_ID_LIVE = sid; }
-  if (tidEl && tid) { tidEl.value = tid; window.EMAILJS_TEMPLATE_ID_LIVE = tid; }
 }
 
 </script>
