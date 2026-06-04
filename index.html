@@ -240,6 +240,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .vacc-arrow{font-size:12px;color:#5BA4CF;flex-shrink:0}
 .video-accordion .video-wrap{border-radius:0 0 10px 10px}
 </style>
+  <!-- EmailJS -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init({ publicKey: "YOUR_EMAILJS_PUBLIC_KEY" });
+    })();
+  </script>
 </head>
 <body>
 
@@ -286,11 +293,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   </div>
   <!-- 累計獲得金額バナー -->
   <div class="earn-banner" id="earnBanner">
-    <div class="earn-label">💰 これまで稼いだ金額</div>
-    <div class="earn-total" id="earnTotal">¥0</div>
-    <div class="earn-sub" id="earnSub">今月の目標まで <span id="earnToTarget">-</span></div>
+    <div class="earn-label" id="earnLabel">⭐ 累計ポイント</div>
+    <div class="earn-total" id="earnTotal">0 pt</div>
+    <div class="earn-sub" id="earnSub">次のご褒美まで <strong>-</strong></div>
     <div class="earn-bar-wrap"><div class="earn-bar" id="earnBar" style="width:0%"></div></div>
-    <div class="earn-cap" id="earnCap">今月Cap: ¥-</div>
+    <div class="earn-cap" id="earnCap">今月はまだ - pt 獲得できるよ！</div>
   </div>
 
   <!-- 今日の科目ボタン -->
@@ -315,6 +322,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div class="month-bonus-chips" id="bonusChips"></div>
   </div>
 
+
+  <!-- メール・設定 -->
+  <div class="card" id="emailCard">
+    <div class="ctitle">📧 日報メール設定</div>
+    <p style="font-size:13px;color:#666;margin-bottom:10px">毎日オランダ時間22:00に自動でレポートメールを送ります。</p>
+    <div style="background:#FFF3CD;border-radius:10px;padding:12px;margin-bottom:10px;font-size:13px;line-height:1.7;border-left:4px solid #F0A030">
+      <strong style="color:#7C4A00">⚙️ 初回設定が必要です</strong><br>
+      <a href="https://www.emailjs.com" target="_blank" style="color:#2D7DB3">EmailJS</a>に無料登録して、
+      Service ID・Template IDを取得してから下に入力してください。<br>
+      テンプレートの変数：<code>{{subject}}</code> <code>{{message}}</code> <code>{{today_subjects}}</code>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">
+      <input id="ejsPublicKey" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px"
+        placeholder="EmailJS Public Key（例：aBcDeFgH...）"
+        value="" oninput="saveEmailConfig()">
+      <input id="ejsServiceId" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px"
+        placeholder="Service ID（例：service_xxxxxx）"
+        value="" oninput="saveEmailConfig()">
+      <input id="ejsTemplateId" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px"
+        placeholder="Template ID（例：template_xxxxxx）"
+        value="" oninput="saveEmailConfig()">
+    </div>
+    <button id="manualReportBtn" class="bp" onclick="manualSendReport()" style="margin-bottom:6px">
+      📧 今日のレポートをメール送信
+    </button>
+    <p style="font-size:11px;color:#999;text-align:center">送信先：taisuke.sano@gmail.com・i.yayaco@gmail.com</p>
+  </div>
   <div class="card">
     <div class="monnav">
       <button class="bs" onclick="cm(-1)" style="padding:8px 14px">◀</button>
@@ -827,7 +861,7 @@ function resetKey(){localStorage.removeItem('mk_apikey');location.reload()}
 function init(){
   try{cal=JSON.parse(localStorage.getItem('mk_cal')||'{}');kanjiState=JSON.parse(localStorage.getItem('mk_kstate')||'{}')}catch(e){cal={};kanjiState={}}
   const t=new Date();cY=t.getFullYear();cM=t.getMonth()+1;
-  migrateCal();countdown();renderCal();initSakubun();renderIQ();upStats();renderEarnBanner();renderBonusChips();initTodayButtons();initVideoSection();
+  migrateCal();countdown();renderCal();initSakubun();renderIQ();upStats();renderEarnBanner();renderBonusChips();initTodayButtons();initVideoSection();startDailyMailCheck();loadEmailConfig();
 }
 
 async function callAPI(prompt,maxTokens=800){
@@ -854,6 +888,7 @@ function sw(id){
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
   document.getElementById('s-'+id).classList.add('on');
   event.currentTarget.classList.add('on');
+  if(id==='video') setTimeout(initVideoSection, 50);
 }
 function ksw(id){
   document.querySelectorAll('.subtabs .stab').forEach(t=>t.classList.remove('on'));
@@ -869,15 +904,23 @@ function cm(d){cM+=d;if(cM>12){cM=1;cY++}if(cM<1){cM=12;cY--}renderCal()}
 // ==========================================
 
 // 月別予算Cap（円）：階段式 6月〜11月
-const MONTH_CAPS = {
-  6:  10000,  // 6月  スタート
-  7:  14000,  // 7月
-  8:  17000,  // 8月 夏休み
-  9:  16000,  // 9月
-  10: 21000,  // 10月 直前期
-  11: 22000,  // 11月 ラスト（受験月）
+const MONTH_CAPS_PT = {
+  6:  80,   // 6月  スタート（約3pt/日×26日）
+  7:  120,  // 7月
+  8:  150,  // 8月 夏休み
+  9:  130,  // 9月
+  10: 160,  // 10月 直前期
+  11: 160,  // 11月 受験月
 };
-// 合計 = 100,000円
+// ptマイルストーン（累計）
+const MILESTONES = [10, 25, 50, 75, 100, 150, 200, 300];
+// 達成済みマイルストーンを記録するキー
+function getAchievedMilestones() {
+  try { return JSON.parse(localStorage.getItem('mk_milestones') || '[]'); } catch(e){ return []; }
+}
+function saveAchievedMilestones(arr) {
+  localStorage.setItem('mk_milestones', JSON.stringify(arr));
+}
 
 // 科目ポイント定義
 const SUBJ_PT = {
@@ -921,12 +964,8 @@ function calcDayBonus(subjs, comboCount) {
   return bonus;
 }
 
-function getMonthCap(yr, mo) {
-  // 2026年の月はズレ補正
-  const cap = MONTH_CAPS[mo];
-  if (cap) return cap;
-  // 範囲外は平均
-  return 16700;
+function getMonthCapPt(mo) {
+  return MONTH_CAPS_PT[mo] || 130;
 }
 
 function calcMonthEarnings(yr, mo) {
@@ -941,14 +980,34 @@ function calcMonthEarnings(yr, mo) {
   return pts;
 }
 
-function calcTotalYen() {
+function calcTotalPts() {
   let totalPts = 0;
   Object.keys(cal).forEach(k => {
     if (cal[k] && cal[k].pts !== undefined) {
       totalPts += (cal[k].pts||0) + (cal[k].bonus||0);
     }
   });
-  return totalPts * 10; // 10pt = 100円 → 1pt = 10円
+  return totalPts;
+}
+
+// 次のマイルストーン情報を返す
+function calcMilestoneInfo() {
+  const pts = calcTotalPts();
+  const achieved = getAchievedMilestones();
+  // 次のマイルストーン
+  const next = MILESTONES.find(m => m > pts) || null;
+  const prev = [...MILESTONES].reverse().find(m => m <= pts) || 0;
+  const pct = next ? Math.round((pts - prev) / (next - prev) * 100) : 100;
+  return { pts, next, prev, pct, achieved };
+}
+
+// コイン換算（親確認用・メール用のみ）
+function ptToYen(pts) {
+  // マイルストーン達成ptを合計して換算（10pt=¥100）
+  const achieved = getAchievedMilestones();
+  // 達成済みマイルストーンの最大値×10円
+  const maxAchieved = achieved.length > 0 ? Math.max(...achieved) : 0;
+  return maxAchieved * 10; // 例: 50pt達成→¥500
 }
 
 function getCurrentStreak() {
@@ -1005,7 +1064,7 @@ function updateTodayPreview() {
   else ca.style.display='none';
 
   const btn = document.getElementById('stbtn');
-  btn.textContent = '⭐ 今日の記録を保存！ (' + total + 'pt → ¥' + (total*10) + ')';
+  btn.textContent = '⭐ 今日の記録を保存！ +' + total + 'pt';
 }
 
 function stamp() {
@@ -1029,7 +1088,7 @@ function stamp() {
   // ボタン更新
   document.getElementById('stbtn').textContent = '⭐ 今日は記録済み！ +' + total + 'pt';
   document.getElementById('stbtn').disabled = true;
-  document.getElementById('stampHint').textContent = '今日 +' + total + 'pt（¥' + (total*10) + '）稼いだよ！';
+  document.getElementById('stampHint').textContent = '今日 +' + total + 'pt 記録したよ！';
 
   // 全科目ボタン無効化
   Object.keys(SUBJ_PT).forEach(s => {
@@ -1037,8 +1096,10 @@ function stamp() {
     if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; }
   });
 
+  // 取り消しボタン表示
+  showCancelBtn(total);
   // トースト
-  showPtToast('+' + total + 'pt 獲得！ ¥' + (total*10));
+  showPtToast('+' + total + 'pt 獲得！🌟');
 }
 
 function showPtToast(msg) {
@@ -1050,19 +1111,80 @@ function showPtToast(msg) {
 }
 
 function renderEarnBanner() {
-  const totalYen = calcTotalYen();
+  const info = calcMilestoneInfo();
   const t = new Date();
   const mo = t.getMonth() + 1;
-  const yr = t.getFullYear();
-  const cap = getMonthCap(yr, mo);
-  const moYen = calcMonthEarnings(yr, mo) * 10;
-  const pct = Math.min(100, Math.round(moYen / cap * 100));
+  const moPts = calcMonthEarnings(t.getFullYear(), mo);
+  const capPt = getMonthCapPt(mo);
+  const remainCap = Math.max(0, capPt - moPts);
 
-  document.getElementById('earnTotal').textContent = '¥' + totalYen.toLocaleString();
-  document.getElementById('earnBar').style.width = pct + '%';
-  document.getElementById('earnCap').textContent = '今月Cap: ¥' + cap.toLocaleString() + '（' + pct + '%達成）';
-  const remain = Math.max(0, cap - moYen);
-  document.getElementById('earnSub').innerHTML = '今月 ¥' + moYen.toLocaleString() + ' 獲得 / あと ¥' + remain.toLocaleString();
+  // メインの累計pt表示
+  const el = document.getElementById('earnTotal');
+  if (el) el.textContent = info.pts + ' pt';
+
+  // ラベル
+  const lblEl = document.getElementById('earnLabel');
+  if (lblEl) lblEl.textContent = '⭐ 累計ポイント';
+
+  // サブ：次のマイルストーンまで
+  const subEl = document.getElementById('earnSub');
+  if (subEl) {
+    if (info.next) {
+      subEl.innerHTML = '次のご褒美まで あと <strong>' + (info.next - info.pts) + ' pt</strong>'
+        + ' <span style="opacity:.7">（' + info.next + 'pt達成でコイン獲得！🪙）</span>';
+    } else {
+      subEl.innerHTML = '🎉 全マイルストーン達成！すごい！';
+    }
+  }
+
+  // プログレスバー：次のマイルストーンまでの進捗
+  const barEl = document.getElementById('earnBar');
+  if (barEl) barEl.style.width = info.pct + '%';
+
+  // 下段：今月残り獲得可能pt
+  const capEl = document.getElementById('earnCap');
+  if (capEl) {
+    capEl.textContent = remainCap > 0
+      ? '今月はまだ ' + remainCap + ' pt 獲得できるよ！'
+      : '今月の目標達成！🌟';
+  }
+
+  // マイルストーン達成チェック → 演出
+  checkMilestoneAchievement(info.pts);
+}
+
+function checkMilestoneAchievement(currentPts) {
+  const achieved = getAchievedMilestones();
+  let newAchieved = false;
+  MILESTONES.forEach(m => {
+    if (currentPts >= m && !achieved.includes(m)) {
+      achieved.push(m);
+      newAchieved = true;
+      // 達成演出
+      setTimeout(() => {
+        const yen = m * 10;
+        showMilestoneToast(m, yen);
+      }, 300);
+    }
+  });
+  if (newAchieved) saveAchievedMilestones(achieved);
+}
+
+function showMilestoneToast(pts, yen) {
+  // 既存トーストを使って大きな演出
+  const msgs = [
+    '🎉 ' + pts + 'pt 達成！',
+    '🪙 ¥' + yen + ' 分のコインをゲット！',
+    'お父さん・お母さんに報告しよう！'
+  ];
+  let i = 0;
+  const show = () => {
+    if (i >= msgs.length) return;
+    showPtToast(msgs[i]);
+    i++;
+    setTimeout(show, 1800);
+  };
+  show();
 }
 
 function renderBonusChips() {
@@ -1110,7 +1232,6 @@ function renderBonusChips() {
 function initTodayButtons() {
   const saved = getTodayData();
   if (saved) {
-    // 保存済み：ボタン状態を復元
     Object.keys(SUBJ_PT).forEach(s => {
       const btn = document.getElementById('sb-'+s);
       if (!btn) return;
@@ -1120,9 +1241,52 @@ function initTodayButtons() {
     const total = (saved.pts||0) + (saved.bonus||0);
     document.getElementById('stbtn').textContent = '⭐ 今日は記録済み！ +' + total + 'pt';
     document.getElementById('stbtn').disabled = true;
-    document.getElementById('stampHint').textContent = '今日 +' + total + 'pt（¥' + (total*10) + '）稼いだよ！';
     document.getElementById('todayPtLabel').textContent = '+' + total + 'pt';
+    // 取り消しボタンを表示
+    showCancelBtn(total);
+    document.getElementById('stampHint').textContent = '今日 +' + total + 'pt 記録済み';
   }
+}
+
+function showCancelBtn(total) {
+  let el = document.getElementById('cancelStampBtn');
+  if (!el) {
+    el = document.createElement('button');
+    el.id = 'cancelStampBtn';
+    el.className = 'bs';
+    el.style.cssText = 'width:100%;margin-top:6px;font-size:13px;color:#E24B4A;border-color:#E24B4A';
+    const hint = document.getElementById('stampHint');
+    if (hint) hint.parentNode.insertBefore(el, hint.nextSibling);
+  }
+  el.textContent = '🗑️ 今日の記録を取り消す（-' + total + 'pt）';
+  el.onclick = cancelStamp;
+  el.style.display = 'block';
+}
+
+function cancelStamp() {
+  if (!confirm('今日の記録を取り消しますか？
+ポイントも戻ります。')) return;
+  const k = getTodayKey();
+  delete cal[k];
+  sv();
+  // ボタン・UI全リセット
+  Object.keys(SUBJ_PT).forEach(s => {
+    const btn = document.getElementById('sb-'+s);
+    if (!btn) return;
+    btn.classList.remove('on');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  });
+  todaySubjects = {};
+  document.getElementById('stbtn').textContent = '⭐ 今日の記録を保存！';
+  document.getElementById('stbtn').disabled = false;
+  document.getElementById('stampHint').textContent = '科目を選んで保存してね';
+  document.getElementById('todayPtLabel').textContent = '+0pt';
+  document.getElementById('comboAlert').style.display = 'none';
+  const cancelBtn = document.getElementById('cancelStampBtn');
+  if (cancelBtn) cancelBtn.style.display = 'none';
+  renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
+  showPtToast('今日の記録を取り消しました 🗑️');
 }
 
 function upStats(){
@@ -1135,8 +1299,10 @@ function upStats(){
   const t=new Date();
   const moPts=calcMonthEarnings(t.getFullYear(),t.getMonth()+1);
   document.getElementById('stPt').textContent=moPts+'pt';
-  const totalYen=calcTotalYen();
-  document.getElementById('stYen').textContent='¥'+totalYen.toLocaleString();
+  const totalPts2=calcTotalPts();
+  const moPts2=calcMonthEarnings(t.getFullYear(),t.getMonth()+1);
+  document.getElementById('stPt').textContent=moPts2+'pt';
+  document.getElementById('stYen').textContent=totalPts2+'pt';
 }
 
 function sv(){
@@ -1150,8 +1316,8 @@ function renderCal(){
   const mn=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
   const t=new Date();
   const moEarn=calcMonthEarnings(cY,cM);
-  const moYen=moEarn*10;
-  document.getElementById('mlbl').innerHTML=cY+'年 '+mn[cM-1]+'<span class="mon-earn-lbl" style="margin-left:10px">¥'+moYen.toLocaleString()+'</span>';
+  const moPts=moEarn;
+  document.getElementById('mlbl').innerHTML=cY+'年 '+mn[cM-1]+'<span class="mon-earn-lbl" style="margin-left:10px">'+moPts+'pt</span>';
   const g=document.getElementById('cgrid');g.innerHTML='';
   ['日','月','火','水','木','金','土'].forEach(d=>{const h=document.createElement('div');h.className='ch';h.textContent=d;g.appendChild(h)});
   const fd=new Date(cY,cM-1,1).getDay(),dim=new Date(cY,cM,0).getDate();
@@ -1170,7 +1336,7 @@ function renderCal(){
       if(isBonus) el.classList.add('bonus-day');
       else if(isCombo) el.classList.add('combo');
       else el.classList.add('done');
-      el.innerHTML='<span class="cday-num">'+d+'</span><span class="cday-pt">¥'+(pts*10)+'</span>';
+      el.innerHTML='<span class="cday-num">'+d+'</span><span class="cday-pt">+'+pts+'pt</span>';
     }
     else{if(isT)el.classList.add('today');el.textContent=d}
     g.appendChild(el);
@@ -1566,8 +1732,15 @@ function showPhotoPreview(inputId, previewId, areaId){
   const url=URL.createObjectURL(file);
   const prev=document.getElementById(previewId);
   const area=document.getElementById(areaId);
-  prev.innerHTML='<img src="'+url+'" alt="添削する作文">'
-    +'<button class="pp-remove" onclick="clearPhoto(\''+inputId+'\',\''+previewId+'\',\''+areaId+'\')">✕ 削除</button>';
+  prev.innerHTML='<img src="'+url+'" alt="添削する作文">';
+  const removeBtn=document.createElement('button');
+  removeBtn.className='pp-remove';
+  removeBtn.textContent='✕ 削除';
+  removeBtn.dataset.input=inputId;
+  removeBtn.dataset.preview=previewId;
+  removeBtn.dataset.area=areaId;
+  removeBtn.onclick=function(){clearPhoto(this.dataset.input,this.dataset.preview,this.dataset.area);};
+  prev.appendChild(removeBtn);
   prev.style.display='block'; area.style.display='none';
 }
 
@@ -1764,25 +1937,42 @@ let _openVideoId = null;
 
 function initVideoSection() {
   const list = document.getElementById('mathVideoList');
-  if (!list) return;
+  if (!list || list.dataset.built === '1') return;
   list.innerHTML = '';
   MATH_VIDEOS.forEach((v, i) => {
     const item = document.createElement('div');
     item.className = 'video-accordion';
-    item.innerHTML =
-      '<button class="vacc-btn" onclick="toggleMathVideo(' + i + ',\'v_'+i+'\')">'
-      + '<span class="vacc-num">' + (i+1) + '</span>'
-      + '<span class="vacc-title">' + v.title + '</span>'
-      + '<span class="vacc-arrow" id="arr_' + i + '">▼</span>'
-      + '</button>'
-      + '<div class="video-wrap" id="v_' + i + '" style="display:none">'
-      + '<iframe src="https://www.youtube.com/embed/' + v.id + '?rel=0" title="' + v.title + '"'
-      + ' frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"'
-      + ' allowfullscreen loading="lazy"></iframe>'
-      + '</div>';
+
+    const btn = document.createElement('button');
+    btn.className = 'vacc-btn';
+    btn.dataset.idx = i;
+    btn.dataset.wrapId = 'v_' + i;
+    btn.onclick = function() { toggleMathVideo(parseInt(this.dataset.idx), this.dataset.wrapId); };
+    btn.innerHTML =
+      '<span class="vacc-num">' + (i+1) + '</span>' +
+      '<span class="vacc-title">' + v.title + '</span>' +
+      '<span class="vacc-arrow" id="arr_' + i + '">▼</span>';
+
+    const wrap = document.createElement('div');
+    wrap.className = 'video-wrap';
+    wrap.id = 'v_' + i;
+    wrap.style.display = 'none';
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://www.youtube.com/embed/' + v.id + '?rel=0';
+    iframe.title = v.title;
+    iframe.frameBorder = '0';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.loading = 'lazy';
+    wrap.appendChild(iframe);
+
+    item.appendChild(btn);
+    item.appendChild(wrap);
     list.appendChild(item);
   });
+  list.dataset.built = '1';
 }
+
 
 function toggleMathVideo(idx, wrapId) {
   const wrap = document.getElementById(wrapId);
@@ -1801,6 +1991,136 @@ function toggleMathVideo(idx, wrapId) {
     if (arr) arr.textContent = '▲';
     wrap.scrollIntoView({behavior:'smooth', block:'nearest'});
   }
+}
+
+
+// ===== 毎日レポートメール（オランダ時間22時） =====
+const REPORT_EMAILS = ['taisuke.sano@gmail.com', 'i.yayaco@gmail.com'];
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // EmailJSで設定後に置き換え
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // EmailJSで設定後に置き換え
+
+function getOlandaHour() {
+  // オランダ（CET=UTC+1、夏時間CEST=UTC+2）の現在時刻
+  const now = new Date();
+  const nlStr = now.toLocaleString('nl-NL', { timeZone: 'Europe/Amsterdam', hour: 'numeric', hour12: false });
+  return parseInt(nlStr);
+}
+
+function getNlDateKey() {
+  const now = new Date();
+  const d = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Amsterdam' }));
+  return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+}
+
+function buildDailyReport() {
+  const todayKey = getNlDateKey();
+  const todayData = cal[todayKey];
+  const totalPts = calcTotalPts();
+  const totalYen = calcTotalYen();
+
+  let todayText = '（今日はまだ記録なし）';
+  if (todayData && todayData.pts !== undefined) {
+    const subjs = todayData.subjs || {};
+    const subjNames = { sakubun:'作文', mensetsu:'面接', kokugo:'国語', kanji:'漢字', sansu:'算数', review:'復習' };
+    const doneSubjs = Object.keys(subjs).filter(s => subjs[s]).map(s => subjNames[s] || s);
+    const todayPts = (todayData.pts||0) + (todayData.bonus||0);
+    todayText = doneSubjs.join('・') + '（' + todayPts + 'pt';
+    if (todayData.bonus > 0) todayText += ' うちボーナス+' + todayData.bonus + 'pt';
+    todayText += '）';
+    if (todayData.combo >= 3) todayText += ' 🔥' + todayData.combo + '日連続！';
+  }
+
+  const streak = getCurrentStreak();
+  const info = calcMilestoneInfo();
+  const nextMs = info.next ? info.next + 'pt（あと' + (info.next - totalPts) + 'pt）' : '全達成🎉';
+  const earnedYen = ptToYen(totalPts);
+  const subject = '📚 今日の明訓受験勉強レポート';
+  const body =
+    '今日の勉強記録\n' +
+    '━━━━━━━━━━━━━━\n' +
+    '📅 日付：' + todayKey + '\n' +
+    '📖 今日やったこと：' + todayText + '\n' +
+    '🔥 連続記録：' + streak + '日\n\n' +
+    'ポイント累計\n' +
+    '━━━━━━━━━━━━━━\n' +
+    '累計pt：' + totalPts + 'pt\n' +
+    '次のマイルストーン：' + nextMs + '\n' +
+    '達成済みご褒美：¥' + earnedYen + '\n\n' +
+    '引き続きがんばれ！ 🌸';
+
+  return { subject, body, todayText, streak, totalPts, totalYen: earnedYen };
+}
+
+async function sendDailyReport(manual=false) {
+  const sentKey = 'mk_reported_' + getNlDateKey();
+  if (!manual && localStorage.getItem(sentKey)) return; // 当日送信済み
+
+  const report = buildDailyReport();
+
+  try {
+    await emailjs.send(window.EMAILJS_SERVICE_ID_LIVE||EMAILJS_SERVICE_ID, window.EMAILJS_TEMPLATE_ID_LIVE||EMAILJS_TEMPLATE_ID, {
+      to_email_1: REPORT_EMAILS[0],
+      to_email_2: REPORT_EMAILS[1],
+      subject: report.subject,
+      message: report.body,
+      today_subjects: report.todayText,
+      streak: report.streak,
+      total_pts: report.totalPts,
+      total_yen: '達成済み¥' + report.totalYen + '分',
+    });
+    if (!manual) localStorage.setItem(sentKey, '1');
+    return true;
+  } catch(e) {
+    console.error('Email error:', e);
+    return false;
+  }
+}
+
+// 毎分チェック：オランダ時間22:00〜22:05に送信
+function startDailyMailCheck() {
+  setInterval(async () => {
+    const nlHour = getOlandaHour();
+    const now = new Date();
+    const nlMin = parseInt(now.toLocaleString('en-US', {
+      timeZone: 'Europe/Amsterdam', minute: 'numeric'
+    }));
+    if (nlHour === 22 && nlMin < 5) {
+      await sendDailyReport(false);
+    }
+  }, 60000); // 1分ごと
+}
+
+// 手動送信ボタン用
+async function manualSendReport() {
+  const btn = document.getElementById('manualReportBtn');
+  if (btn) { btn.disabled = true; btn.textContent = '送信中…'; }
+  const ok = await sendDailyReport(true);
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = ok ? '✅ 送信完了！' : '❌ 送信失敗';
+    setTimeout(() => { btn.textContent = '📧 今日のレポートをメール送信'; btn.disabled = false; }, 3000);
+  }
+}
+
+
+function saveEmailConfig() {
+  const pk = document.getElementById('ejsPublicKey')?.value.trim();
+  const sid = document.getElementById('ejsServiceId')?.value.trim();
+  const tid = document.getElementById('ejsTemplateId')?.value.trim();
+  if (pk) { localStorage.setItem('ejs_pk', pk); emailjs.init({ publicKey: pk }); }
+  if (sid) { localStorage.setItem('ejs_sid', sid); window.EMAILJS_SERVICE_ID_LIVE = sid; }
+  if (tid) { localStorage.setItem('ejs_tid', tid); window.EMAILJS_TEMPLATE_ID_LIVE = tid; }
+}
+function loadEmailConfig() {
+  const pk = localStorage.getItem('ejs_pk')||'';
+  const sid = localStorage.getItem('ejs_sid')||'';
+  const tid = localStorage.getItem('ejs_tid')||'';
+  const pkEl = document.getElementById('ejsPublicKey');
+  const sidEl = document.getElementById('ejsServiceId');
+  const tidEl = document.getElementById('ejsTemplateId');
+  if (pkEl && pk) { pkEl.value = pk; emailjs.init({ publicKey: pk }); }
+  if (sidEl && sid) { sidEl.value = sid; window.EMAILJS_SERVICE_ID_LIVE = sid; }
+  if (tidEl && tid) { tidEl.value = tid; window.EMAILJS_TEMPLATE_ID_LIVE = tid; }
 }
 
 </script>
