@@ -451,7 +451,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div class="sc"><div class="v" id="st1">0</div><div class="l">練習日</div></div>
     <div class="sc"><div class="v" id="st2">0</div><div class="l">連続🔥</div></div>
     <div class="sc" style="background:#FFF3CD"><div class="v" id="stPt" style="color:#F0A030">0pt</div><div class="l">今月pt</div></div>
-    <div class="sc" style="background:#EBF5FF"><div class="v" id="stYen" style="color:#1A5B8A;font-size:17px">¥0</div><div class="l">総獲得</div></div>
+    <div class="sc" style="background:#EBF5FF"><div class="v" id="stYen" style="color:#1A5B8A;font-size:17px">0pt</div><div class="l">累計pt</div></div>
   </div>
   <!-- 累計獲得金額バナー -->
   <div class="earn-banner" id="earnBanner">
@@ -497,6 +497,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div style="display:flex;gap:10px;font-size:13px;color:#666;margin-bottom:8px;flex-wrap:wrap">
       <span style="color:#3A7BD5">🟢コンボ日</span><span style="color:#F0A030">🟡バランスボーナス日</span>
     </div>
+  </div>
+  <!-- データバックアップ -->
+  <div class="card">
+    <div class="ctitle">💾 スタディログ バックアップ</div>
+    <p style="font-size:13px;color:#666;margin-bottom:10px">端末を変える時や念のため、データをコピーして保存できます。</p>
+    <div class="brow" style="flex-wrap:wrap;gap:8px">
+      <button class="bp" onclick="exportData()" style="flex:1">📋 データをコピー</button>
+      <button class="bs" onclick="showImportBox()" style="flex:1">📥 データを貼り付け</button>
+    </div>
+    <div id="importBox" style="display:none;margin-top:10px">
+      <textarea class="ta" id="importTxt" style="min-height:80px;font-size:11px" placeholder="コピーしたデータをここに貼り付けてください"></textarea>
+      <button class="bamb" onclick="importData()" style="width:100%;margin-top:6px">復元する</button>
+    </div>
+    <p id="exportMsg" style="font-size:12px;color:#1A5B8A;text-align:center;margin-top:6px;display:none"></p>
   </div>
 
   <!-- メール・設定 -->
@@ -1078,7 +1092,7 @@ function updateTodayPreview() {
   else ca.style.display='none';
 
   const btn = document.getElementById('stbtn');
-  btn.textContent = '⭐ 今日の記録を保存！ (' + total + 'pt → ¥' + (total*10) + ')';
+  btn.textContent = '⭐ 今日の記録を保存！ +' + total + 'pt';
 }
 
 function stamp() {
@@ -1102,7 +1116,7 @@ function stamp() {
   // ボタン更新
   document.getElementById('stbtn').textContent = '⭐ 今日は記録済み！ +' + total + 'pt';
   document.getElementById('stbtn').disabled = true;
-  document.getElementById('stampHint').textContent = '今日 +' + total + 'pt（¥' + (total*10) + '）稼いだよ！';
+  document.getElementById('stampHint').textContent = '今日 +' + total + 'pt 記録したよ！';
 
   // 全科目ボタン無効化
   Object.keys(SUBJ_PT).forEach(s => {
@@ -1111,7 +1125,8 @@ function stamp() {
   });
 
   // トースト
-  showPtToast('+' + total + 'pt 獲得！ ¥' + (total*10));
+  showPtToast('+' + total + 'pt 獲得！🌟');
+  showCancelBtn(k, total);
 }
 
 function showPtToast(msg) {
@@ -1123,19 +1138,39 @@ function showPtToast(msg) {
 }
 
 function renderEarnBanner() {
-  const totalYen = calcTotalYen();
+  const totalPts = calcTotalPts();
+  const info = calcMilestoneInfo();
   const t = new Date();
   const mo = t.getMonth() + 1;
-  const yr = t.getFullYear();
-  const cap = getMonthCap(yr, mo);
-  const moYen = calcMonthEarnings(yr, mo) * 10;
-  const pct = Math.min(100, Math.round(moYen / cap * 100));
+  const moPts = calcMonthEarnings(t.getFullYear(), mo);
+  const capPt = getMonthCapPt(mo);
+  const remainCap = Math.max(0, capPt - moPts);
 
-  document.getElementById('earnTotal').textContent = '¥' + totalYen.toLocaleString();
-  document.getElementById('earnBar').style.width = pct + '%';
-  document.getElementById('earnCap').textContent = '今月Cap: ¥' + cap.toLocaleString() + '（' + pct + '%達成）';
-  const remain = Math.max(0, cap - moYen);
-  document.getElementById('earnSub').innerHTML = '今月 ¥' + moYen.toLocaleString() + ' 獲得 / あと ¥' + remain.toLocaleString();
+  const el = document.getElementById('earnTotal');
+  if (el) el.textContent = totalPts + ' pt';
+
+  const lblEl = document.getElementById('earnLabel');
+  if (lblEl) lblEl.textContent = '⭐ 累計ポイント';
+
+  const subEl = document.getElementById('earnSub');
+  if (subEl) {
+    if (info && info.next) {
+      subEl.innerHTML = '次のご褒美まで あと <strong>' + (info.next - totalPts) + ' pt</strong>'
+        + ' <span style="opacity:.7">（' + info.next + 'pt達成でコイン獲得！🪙）</span>';
+    } else {
+      subEl.innerHTML = '🎉 全マイルストーン達成！すごい！';
+    }
+  }
+
+  const barEl = document.getElementById('earnBar');
+  if (barEl && info) barEl.style.width = info.pct + '%';
+
+  const capEl = document.getElementById('earnCap');
+  if (capEl) capEl.textContent = remainCap > 0
+    ? '今月はまだ ' + remainCap + ' pt 獲得できるよ！'
+    : '今月の目標達成！🌟';
+
+  checkMilestoneAchievement(totalPts);
 }
 
 function renderBonusChips() {
@@ -1183,7 +1218,6 @@ function renderBonusChips() {
 function initTodayButtons() {
   const saved = getTodayData();
   if (saved) {
-    // 保存済み：ボタン状態を復元
     Object.keys(SUBJ_PT).forEach(s => {
       const btn = document.getElementById('sb-'+s);
       if (!btn) return;
@@ -1193,9 +1227,52 @@ function initTodayButtons() {
     const total = (saved.pts||0) + (saved.bonus||0);
     document.getElementById('stbtn').textContent = '⭐ 今日は記録済み！ +' + total + 'pt';
     document.getElementById('stbtn').disabled = true;
-    document.getElementById('stampHint').textContent = '今日 +' + total + 'pt（¥' + (total*10) + '）稼いだよ！';
     document.getElementById('todayPtLabel').textContent = '+' + total + 'pt';
+    document.getElementById('stampHint').textContent = '今日 +' + total + 'pt 記録済み';
+    showCancelBtn(getTodayKey(), total);
   }
+}
+
+function showCancelBtn(dateKey, total) {
+  let el = document.getElementById('cancelStampBtn');
+  if (!el) {
+    el = document.createElement('button');
+    el.id = 'cancelStampBtn';
+    el.className = 'bs';
+    el.style.cssText = 'width:100%;margin-top:8px;font-size:13px;color:#E24B4A;border-color:#E24B4A';
+    const hint = document.getElementById('stampHint');
+    if (hint && hint.parentNode) hint.parentNode.insertBefore(el, hint.nextSibling);
+  }
+  el.textContent = '🗑️ 今日の記録を取り消す（-' + total + 'pt）';
+  el.dataset.dateKey = dateKey;
+  el.onclick = () => cancelRecord(dateKey);
+  el.style.display = 'block';
+}
+
+function cancelRecord(dateKey) {
+  const d = cal[dateKey];
+  if (!d) return;
+  const pts = (d.pts||0) + (d.bonus||0);
+  const isToday = dateKey === getTodayKey();
+  if (!confirm((isToday ? '今日' : dateKey) + 'の記録を取り消しますか？\n-' + pts + 'pt 戻ります。')) return;
+  delete cal[dateKey];
+  sv(); renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
+  if (isToday) {
+    Object.keys(SUBJ_PT).forEach(s => {
+      const btn = document.getElementById('sb-'+s);
+      if (!btn) return;
+      btn.classList.remove('on'); btn.disabled = false; btn.style.opacity = '1';
+    });
+    todaySubjects = {};
+    document.getElementById('stbtn').textContent = '⭐ 今日の記録を保存！';
+    document.getElementById('stbtn').disabled = false;
+    document.getElementById('stampHint').textContent = '科目を選んで保存してね';
+    document.getElementById('todayPtLabel').textContent = '+0pt';
+    document.getElementById('comboAlert').style.display = 'none';
+    const cb = document.getElementById('cancelStampBtn');
+    if (cb) cb.style.display = 'none';
+  }
+  showPtToast('記録を取り消しました 🗑️');
 }
 
 function upStats(){
@@ -1208,8 +1285,8 @@ function upStats(){
   const t=new Date();
   const moPts=calcMonthEarnings(t.getFullYear(),t.getMonth()+1);
   document.getElementById('stPt').textContent=moPts+'pt';
-  const totalYen=calcTotalYen();
-  document.getElementById('stYen').textContent='¥'+totalYen.toLocaleString();
+  const totalPtsAll=calcTotalPts();
+  document.getElementById('stYen').textContent=totalPtsAll+'pt';
 }
 
 function sv(){
@@ -1223,8 +1300,8 @@ function renderCal(){
   const mn=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
   const t=new Date();
   const moEarn=calcMonthEarnings(cY,cM);
-  const moYen=moEarn*10;
-  document.getElementById('mlbl').innerHTML=cY+'年 '+mn[cM-1]+'<span class="mon-earn-lbl" style="margin-left:10px">¥'+moYen.toLocaleString()+'</span>';
+  const moPts=moEarn;
+  document.getElementById('mlbl').innerHTML=cY+'年 '+mn[cM-1]+'<span class="mon-earn-lbl" style="margin-left:10px">'+moEarn+'pt</span>';
   const g=document.getElementById('cgrid');g.innerHTML='';
   ['日','月','火','水','木','金','土'].forEach(d=>{const h=document.createElement('div');h.className='ch';h.textContent=d;g.appendChild(h)});
   const fd=new Date(cY,cM-1,1).getDay(),dim=new Date(cY,cM,0).getDate();
@@ -1243,7 +1320,10 @@ function renderCal(){
       if(isBonus) el.classList.add('bonus-day');
       else if(isCombo) el.classList.add('combo');
       else el.classList.add('done');
-      el.innerHTML='<span class="cday-num">'+d+'</span><span class="cday-pt">¥'+(pts*10)+'</span>';
+      el.innerHTML='<span class="cday-num">'+d+'</span><span class="cday-pt">+'+pts+'pt</span>';
+      el.title = 'タップで記録を取り消せます';
+      el.onclick = (e) => { e.stopPropagation(); cancelRecord(k); };
+      el.style.cursor = 'pointer';
     }
     else{if(isT)el.classList.add('today');el.textContent=d}
     g.appendChild(el);
@@ -1627,6 +1707,71 @@ async function getS7FB(){
   }catch(err){alert('エラー：'+err.message);}
   btn.disabled=false;btn.textContent='🎓 最終添削してもらう';
 }
+
+
+function exportData() {
+  const data = {
+    cal: cal,
+    kanjiState: kanjiState,
+    milestones: getAchievedMilestones(),
+    mk_essays: localStorage.getItem('mk_essays')||'0',
+    mk_qs: localStorage.getItem('mk_qs')||'0',
+    exported: new Date().toISOString()
+  };
+  const json = JSON.stringify(data);
+  navigator.clipboard.writeText(json).then(() => {
+    const msg = document.getElementById('exportMsg');
+    if (msg) { msg.textContent = '✅ コピーしました！メモ帳などに貼り付けて保存してね'; msg.style.display='block'; }
+    showPtToast('データをコピーしました！');
+  }).catch(() => {
+    const msg = document.getElementById('exportMsg');
+    if (msg) { msg.textContent = '下のボックスから手動でコピーしてください'; msg.style.display='block'; }
+    const box = document.getElementById('importBox');
+    const txt = document.getElementById('importTxt');
+    if (box && txt) { box.style.display='block'; txt.value=json; txt.select(); }
+  });
+}
+
+function showImportBox() {
+  const box = document.getElementById('importBox');
+  if (box) box.style.display = box.style.display==='none' ? 'block' : 'none';
+}
+
+function importData() {
+  const txt = document.getElementById('importTxt')?.value.trim();
+  if (!txt) { alert('データを貼り付けてください'); return; }
+  try {
+    const data = JSON.parse(txt);
+    if (!data.cal) { alert('データの形式が正しくありません'); return; }
+    if (!confirm('現在のデータをすべて上書きします。よろしいですか？')) return;
+    cal = data.cal;
+    if (data.kanjiState) kanjiState = data.kanjiState;
+    if (data.milestones) saveAchievedMilestones(data.milestones);
+    if (data.mk_essays) localStorage.setItem('mk_essays', data.mk_essays);
+    if (data.mk_qs) localStorage.setItem('mk_qs', data.mk_qs);
+    sv();
+    renderCal(); upStats(); renderEarnBanner(); renderBonusChips(); initTodayButtons();
+    const box = document.getElementById('importBox');
+    if (box) box.style.display = 'none';
+    const msg = document.getElementById('exportMsg');
+    if (msg) { msg.textContent = '✅ データを復元しました！'; msg.style.display='block'; }
+    showPtToast('データを復元しました！');
+  } catch(e) {
+    alert('データの読み込みに失敗しました: ' + e.message);
+  }
+}
+
+
+const MONTH_CAPS_PT = {6:80,7:120,8:150,9:130,10:160,11:160};
+const MILESTONES = [10, 25, 50, 75, 100, 150, 200, 300];
+function getAchievedMilestones(){ try{return JSON.parse(localStorage.getItem('mk_milestones')||'[]');}catch(e){return[];} }
+function saveAchievedMilestones(arr){ localStorage.setItem('mk_milestones',JSON.stringify(arr)); }
+function getMonthCapPt(mo){ return (MONTH_CAPS_PT[mo]||130); }
+function calcTotalPts(){ let p=0; Object.keys(cal).forEach(k=>{ if(cal[k]&&cal[k].pts!==undefined) p+=(cal[k].pts||0)+(cal[k].bonus||0); }); return p; }
+function calcMilestoneInfo(){ const pts=calcTotalPts(); const next=MILESTONES.find(m=>m>pts)||null; const prev=[...MILESTONES].reverse().find(m=>m<=pts)||0; const pct=next?Math.round((pts-prev)/(next-prev)*100):100; return{pts,next,prev,pct}; }
+function checkMilestoneAchievement(pts){ const achieved=getAchievedMilestones(); let changed=false; MILESTONES.forEach(m=>{ if(pts>=m&&!achieved.includes(m)){achieved.push(m);changed=true;setTimeout(()=>showMilestoneToast(m,m*10),300);} }); if(changed)saveAchievedMilestones(achieved); }
+function showMilestoneToast(pts,yen){ const msgs=['🎉 '+pts+'pt 達成！','🪙 ¥'+yen+' 分のコインをゲット！','お父さん・お母さんに報告しよう！']; let i=0; const show=()=>{if(i>=msgs.length)return;showPtToast(msgs[i]);i++;setTimeout(show,1800);}; show(); }
+function ptToYen(pts){ const achieved=getAchievedMilestones(); const maxA=achieved.length>0?Math.max(...achieved):0; return maxA*10; }
 
 </script>
 </body>
