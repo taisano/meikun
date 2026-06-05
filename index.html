@@ -1800,7 +1800,17 @@ function saveAchievedMilestones(arr){ localStorage.setItem('mk_milestones',JSON.
 function getMonthCapPt(mo){ return (MONTH_CAPS_PT[mo]||130); }
 function calcTotalPts(){ let p=0; Object.keys(cal).forEach(k=>{ if(cal[k]&&cal[k].pts!==undefined) p+=(cal[k].pts||0)+(cal[k].bonus||0); }); return p; }
 function calcMilestoneInfo(){ const pts=calcTotalPts(); const next=MILESTONES.find(m=>m>pts)||null; const prev=[...MILESTONES].reverse().find(m=>m<=pts)||0; const pct=next?Math.round((pts-prev)/(next-prev)*100):100; return{pts,next,prev,pct}; }
-function checkMilestoneAchievement(pts){ const achieved=getAchievedMilestones(); let changed=false; MILESTONES.forEach(m=>{ if(pts>=m&&!achieved.includes(m)){achieved.push(m);changed=true;setTimeout(()=>showMilestoneToast(m,m*10),300);} }); if(changed)saveAchievedMilestones(achieved); }
+function checkMilestoneAchievement(pts) {
+  const prev = getAchievedMilestones();
+  // 現在のptで達成すべきマイルストーンを完全再計算
+  const current = MILESTONES.filter(m => m <= pts);
+  // 新たに達成したものだけトースト
+  current.forEach(m => {
+    if (!prev.includes(m)) setTimeout(() => showMilestoneToast(m, m * 10), 300);
+  });
+  // 常に現在ptに基づいた達成リストで上書き保存
+  saveAchievedMilestones(current);
+}
 function showMilestoneToast(pts,yen){ const msgs=['🎉 '+pts+'pt 達成！','🪙 ¥'+yen+' 分のコインをゲット！','お父さん・お母さんに報告しよう！']; let i=0; const show=()=>{if(i>=msgs.length)return;showPtToast(msgs[i]);i++;setTimeout(show,1800);}; show(); }
 function ptToYen(pts){ const achieved=getAchievedMilestones(); const maxA=achieved.length>0?Math.max(...achieved):0; return maxA*10; }
 
