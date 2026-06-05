@@ -1151,16 +1151,30 @@ function renderEarnBanner() {
   const capPt = getMonthCapPt(mo);
   const remainCap = Math.max(0, capPt - moPts);
 
+  // マイルストーン達成チェックを先に実行（localStorageに保存）
+  checkMilestoneAchievement(totalPts);
+
   // 累計pt表示
   const el = document.getElementById('earnTotal');
   if (el) el.textContent = totalPts + ' pt';
 
-  // 累計獲得金額（マイルストーン達成分のみ）
+  // 累計獲得金額（チェック後に取得するので正しい値になる）
   const achieved = typeof getAchievedMilestones === 'function' ? getAchievedMilestones() : [];
-  const earnedYen = achieved.length > 0 ? Math.max(...achieved) * 10 : 0;
+  // 達成済みマイルストーンの合計を換算（各ステップ×10円）
+  // 例: 10pt達成→¥100, 25pt達成→さらに¥150追加 = 合計¥250
+  const milestoneYenMap = {10:100, 25:250, 50:500, 75:750, 100:1000, 150:1500, 200:2000, 300:3000};
+  const earnedYen = achieved.length > 0
+    ? Math.max(...achieved.map(m => milestoneYenMap[m] || m * 10))
+    : 0;
   const yenEl = document.getElementById('earnYen');
   if (yenEl) {
-    yenEl.textContent = earnedYen > 0 ? '累計獲得 ¥' + earnedYen.toLocaleString() : '¥0（マイルストーン達成でコインに変換）';
+    if (earnedYen > 0) {
+      yenEl.textContent = '累計獲得 ¥' + earnedYen.toLocaleString();
+      yenEl.style.color = 'rgba(255,255,255,1)';
+    } else {
+      yenEl.textContent = '¥0';
+      yenEl.style.color = 'rgba(255,255,255,0.6)';
+    }
   }
 
   // ラベル
@@ -1181,17 +1195,13 @@ function renderEarnBanner() {
   const barEl = document.getElementById('earnBar');
   if (barEl && info) barEl.style.width = info.pct + '%';
 
-  // 今月残りpt（正しい計算）
+  // 今月残りpt
   const capEl = document.getElementById('earnCap');
   if (capEl) {
-    if (remainCap > 0) {
-      capEl.textContent = '今月はまだ ' + remainCap + ' pt 獲得できるよ！';
-    } else {
-      capEl.textContent = '今月の目標達成！🌟';
-    }
+    capEl.textContent = remainCap > 0
+      ? '今月はまだ ' + remainCap + ' pt 獲得できるよ！'
+      : '今月の目標達成！🌟';
   }
-
-  checkMilestoneAchievement(totalPts);
 }
 
 function renderBonusChips() {
