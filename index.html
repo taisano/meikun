@@ -409,6 +409,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .vacc-arrow{font-size:12px;color:#5BA4CF;flex-shrink:0}
 .video-accordion .video-wrap{border-radius:0 0 10px 10px}
 </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -1772,6 +1773,150 @@ function calcMilestoneInfo(){ const pts=calcTotalPts(); const next=MILESTONES.fi
 function checkMilestoneAchievement(pts){ const achieved=getAchievedMilestones(); let changed=false; MILESTONES.forEach(m=>{ if(pts>=m&&!achieved.includes(m)){achieved.push(m);changed=true;setTimeout(()=>showMilestoneToast(m,m*10),300);} }); if(changed)saveAchievedMilestones(achieved); }
 function showMilestoneToast(pts,yen){ const msgs=['🎉 '+pts+'pt 達成！','🪙 ¥'+yen+' 分のコインをゲット！','お父さん・お母さんに報告しよう！']; let i=0; const show=()=>{if(i>=msgs.length)return;showPtToast(msgs[i]);i++;setTimeout(show,1800);}; show(); }
 function ptToYen(pts){ const achieved=getAchievedMilestones(); const maxA=achieved.length>0?Math.max(...achieved):0; return maxA*10; }
+
+
+// ===== 日報メール（EmailJS） =====
+const REPORT_EMAILS = ['taisuke.sano@gmail.com', 'i.yayaco@gmail.com'];
+
+function getOlandaHour() {
+  try {
+    const s = new Date().toLocaleString('en-US', {timeZone:'Europe/Amsterdam', hour:'numeric', hour12:false});
+    return parseInt(s);
+  } catch(e) { return -1; }
+}
+function getNlDateKey() {
+  try {
+    const d = new Date(new Date().toLocaleString('en-US', {timeZone:'Europe/Amsterdam'}));
+    return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+  } catch(e) {
+    const t = new Date();
+    return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
+  }
+}
+
+function buildDailyReport() {
+  const todayKey = getNlDateKey();
+  const todayData = cal[todayKey];
+  const totalPts = calcTotalPts();
+  let todayText = '（今日はまだ記録なし）';
+  if (todayData && todayData.pts !== undefined) {
+    const subjs = todayData.subjs || {};
+    const sn = {sakubun:'作文',mensetsu:'面接',kokugo:'国語',kanji:'漢字',sansu:'算数',review:'復習'};
+    const done = Object.keys(subjs).filter(s=>subjs[s]).map(s=>sn[s]||s);
+    const tp = (todayData.pts||0)+(todayData.bonus||0);
+    todayText = done.join('・')+'（'+tp+'pt'+(todayData.bonus>0?' うちボーナス+'+todayData.bonus+'pt':'')+')';
+    if ((todayData.combo||0)>=3) todayText += ' 🔥'+todayData.combo+'日連続！';
+  }
+  const streak = getCurrentStreak();
+  const info = calcMilestoneInfo();
+  const nextMs = info && info.next ? info.next+'pt（あと'+(info.next-totalPts)+'pt）' : '全達成🎉';
+  const achieved = getAchievedMilestones ? getAchievedMilestones() : [];
+  const earnedYen = achieved.length > 0 ? Math.max(...achieved)*10 : 0;
+  const subject = '📚 今日の明訓受験勉強レポート';
+  const body =
+    '今日の勉強記録\n' +
+    '━━━━━━━━━━━━━━\n' +
+    '📅 日付：' + todayKey + '\n' +
+    '📖 今日やったこと：' + todayText + '\n' +
+    '🔥 連続記録：' + streak + '日\n\n' +
+    'ポイント累計\n' +
+    '━━━━━━━━━━━━━━\n' +
+    '累計pt：' + totalPts + 'pt\n' +
+    '次のマイルストーン：' + nextMs + '\n' +
+    '達成済みご褒美：¥' + earnedYen + '\n\n' +
+    '引き続きがんばれ！ 🌸';
+  return { subject, body, todayText, streak, totalPts, earnedYen };
+}
+
+async function sendDailyReport(manual=false) {
+  const sentKey = 'mk_reported_' + getNlDateKey();
+  if (!manual && localStorage.getItem(sentKey)) return false;
+
+  // EmailJS設定を確認
+  const pk  = localStorage.getItem('ejs_pk')  || '';
+  const sid = localStorage.getItem('ejs_sid') || '';
+  const tid = localStorage.getItem('ejs_tid') || '';
+
+  if (!pk || !sid || !tid) {
+    if (manual) alert('EmailJSの設定（Public Key・Service ID・Template ID）を入力してください。');
+    return false;
+  }
+
+  // EmailJS初期化（毎回やっても安全）
+  try { emailjs.init({ publicKey: pk }); } catch(e) { console.warn('emailjs init:', e); }
+
+  const report = buildDailyReport();
+  try {
+    await emailjs.send(sid, tid, {
+      to_email:   REPORT_EMAILS[0],
+      to_email_2: REPORT_EMAILS[1],
+      subject:    report.subject,
+      message:    report.body,
+      today_subjects: report.todayText,
+      streak:     String(report.streak),
+      total_pts:  String(report.totalPts),
+    });
+    if (!manual) localStorage.setItem(sentKey, '1');
+    return true;
+  } catch(err) {
+    console.error('EmailJS error:', err);
+    if (manual) alert('送信エラー：' + (err.text || err.message || JSON.stringify(err)));
+    return false;
+  }
+}
+
+async function manualSendReport() {
+  const btn = document.getElementById('manualReportBtn');
+  if (btn) { btn.disabled = true; btn.textContent = '送信中…'; }
+  const ok = await sendDailyReport(true);
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = ok ? '✅ 送信完了！' : '❌ 送信失敗（設定を確認してね）';
+    setTimeout(() => { btn.textContent = '📧 今日のレポートをメール送信'; }, 4000);
+  }
+}
+
+function startDailyMailCheck() {
+  setInterval(async () => {
+    try {
+      const h = getOlandaHour();
+      const now = new Date();
+      const min = parseInt(now.toLocaleString('en-US', {timeZone:'Europe/Amsterdam', minute:'numeric'}));
+      if (h === 22 && min < 5) await sendDailyReport(false);
+    } catch(e) {}
+  }, 60000);
+}
+
+function saveEmailConfig() {
+  const pkEl  = document.getElementById('ejsPublicKey');
+  const sidEl = document.getElementById('ejsServiceId');
+  const tidEl = document.getElementById('ejsTemplateId');
+  const pk  = pkEl  ? pkEl.value.trim()  : '';
+  const sid = sidEl ? sidEl.value.trim() : '';
+  const tid = tidEl ? tidEl.value.trim() : '';
+  if (pk)  localStorage.setItem('ejs_pk',  pk);
+  if (sid) localStorage.setItem('ejs_sid', sid);
+  if (tid) localStorage.setItem('ejs_tid', tid);
+  // 設定保存確認メッセージ
+  const msg = document.getElementById('exportMsg');
+  if (msg && (pk || sid || tid)) {
+    msg.textContent = '✅ 設定を保存しました';
+    msg.style.display = 'block';
+    setTimeout(() => { msg.style.display = 'none'; }, 2000);
+  }
+}
+
+function loadEmailConfig() {
+  const pk  = localStorage.getItem('ejs_pk')  || '';
+  const sid = localStorage.getItem('ejs_sid') || '';
+  const tid = localStorage.getItem('ejs_tid') || '';
+  const pkEl  = document.getElementById('ejsPublicKey');
+  const sidEl = document.getElementById('ejsServiceId');
+  const tidEl = document.getElementById('ejsTemplateId');
+  if (pkEl  && pk)  pkEl.value  = pk;
+  if (sidEl && sid) sidEl.value = sid;
+  if (tidEl && tid) tidEl.value = tid;
+}
 
 </script>
 </body>
