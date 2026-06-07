@@ -1714,35 +1714,71 @@ async function submitKokuPhotoReview(){
 
 
 function renderQUI(reply,boxId,optsId,resId,nxtId){
-  const tm=reply.match(/\u300c\u6587\u7ae0\u300d([\s\S]*?)(?:\u300c\u554f\u984c\u300d|\u300c\u8a2d\u554f\u300d|$)/);
-  const qm=reply.match(/\u300c\u554f\u984c\u300d([\s\S]*?)(?:\u300c\u9078\u629e\u80a2\u300d|\u30a2[\u3000 \u3001\uff0e.]|$)/)||reply.match(/\u300c\u8a2d\u554f\u300d([\s\S]*?)(?:\u300c\u9078\u629e\u80a2\u300d|\u30a2[\u3000 \u3001\uff0e.]|$)/);
-  const am=reply.match(/\u300c\u6b63\u89e3\u300d[\s]*([アイウエ])/)||reply.match(/\u6b63\u89e3[：:][\s]*([アイウエ])/);
-  const bm=reply.match(/\u300c\u89e3\u8aac\u300d([\s\S]*?)$/)||reply.match(/\u89e3\u8aac[：:]([\s\S]*?)$/);
-  let optLines=[];
-  const omBlock=reply.match(/\u300c\u9078\u629e\u80a2\u300d([\s\S]*?)(?:\u300c\u6b63\u89e3\u300d|\u6b63\u89e3|$)/);
-  if(omBlock){optLines=omBlock[1].trim().split('\n').filter(l=>/^[\u30a2\u30a4\u30a6\u30a8]/.test(l.trim()));}
-  if(optLines.length===0){optLines=reply.split('\n').filter(l=>/^[\u30a2\u30a4\u30a6\u30a8][\u3000 \u3001\uff0e\uff0e:]/.test(l.trim())||/^[\u30a2\u30a4\u30a6\u30a8]\s/.test(l.trim()));}
-  const qb=document.getElementById(boxId);let html='';
-  if(tm)html+='<p style="font-size:14px;color:#555;margin-bottom:10px;border-bottom:1px solid #e0e0e0;padding-bottom:10px">'+tm[1].trim().replace(/\n/g,'<br>')+'</p>';
-  if(qm)html+='<p style="font-weight:700;font-size:16px;margin-top:4px">'+qm[1].trim().replace(/\n/g,'<br>')+'</p>';
-  qb.innerHTML=html||(md2html(reply));
-  const opts=document.getElementById(optsId);opts.innerHTML='';
-  const resEl=document.getElementById(resId);if(resEl)resEl.style.display='none';
-  if(optLines.length>0&&am){
-    optLines.forEach(line=>{
-      const lt=line.trim().match(/^([\u30a2\u30a4\u30a6\u30a8])/);if(!lt)return;
-      const btn=document.createElement('button');btn.className='qopt';btn.textContent=line.trim();
-      btn.onclick=()=>{
-        document.querySelectorAll('#'+optsId+' .qopt').forEach(b=>b.disabled=true);
-        const ok=lt[1]===am[1];btn.classList.add(ok?'ok':'ng');
-        if(resEl){resEl.className='qans '+(ok?'ok':'ng');resEl.innerHTML=(ok?'\u2705 \u6b63\u89e3\uff01':'\u274c \u4e0d\u6b63\u89e3\u3002\u6b63\u89e3\u306f '+am[1])+(bm?'<br><br>'+bm[1].trim():'');resEl.style.display='block';}
-        const qc=parseInt(localStorage.getItem('mk_qs')||'0')+1;localStorage.setItem('mk_qs',qc);upStats();
-        if(typeof onQAnswered==='function') setTimeout(onQAnswered,800);
+  // 【文章】【問題】【選択肢】【正解】【解説】を抽出
+  const sec = (tag) => {
+    const m = reply.match(new RegExp('【' + tag + '】([\\s\\S]*?)(?=【|$)'));
+    return m ? m[1].trim() : '';
+  };
+  const textPart = sec('文章');
+  const qPart    = sec('問題') || sec('設問');
+  const optsPart = sec('選択肢');
+  const ansPart  = sec('正解');
+  const expPart  = sec('解説');
+
+  // 正解の記号
+  const ansMatch = ansPart.match(/[アイウエ]/) ||
+                   reply.match(/【正解】\s*([アイウエ])/) && reply.match(/【正解】\s*([アイウエ])/);
+  const correct = ansPart.match(/[アイウエ]/) ? ansPart.match(/[アイウエ]/)[0] : '';
+
+  // 選択肢を行分割
+  let optLines = [];
+  if (optsPart) {
+    optLines = optsPart.split('\n').map(l=>l.trim()).filter(l=>/^[アイウエ]/.test(l));
+  }
+  if (optLines.length === 0) {
+    // フォールバック: 全文からア〜エ行を拾う
+    optLines = reply.split('\n').map(l=>l.trim()).filter(l=>/^[アイウエ][　 、．）\):]/.test(l)||/^[アイウエ]\s/.test(l));
+  }
+
+  // 文章表示
+  const qb = document.getElementById(boxId);
+  let html = '';
+  if (textPart) html += '<div style="font-size:14px;color:#444;line-height:1.9;padding:12px;background:#F8FBFF;border-radius:10px;margin-bottom:12px;border-left:3px solid #9B8FD4">' + textPart.replace(/\n/g,'<br>') + '</div>';
+  if (qPart)   html += '<p style="font-weight:700;font-size:15px;margin:8px 0 12px">' + qPart.replace(/\n/g,'<br>') + '</p>';
+  if (!textPart && !qPart) html = '<div style="white-space:pre-wrap;font-size:14px">' + reply + '</div>';
+  qb.innerHTML = html;
+
+  // 選択肢ボタン
+  const opts = document.getElementById(optsId);
+  opts.innerHTML = '';
+  const resEl = document.getElementById(resId);
+  if (resEl) resEl.style.display = 'none';
+
+  if (optLines.length > 0 && correct) {
+    optLines.forEach(line => {
+      const m = line.match(/^([アイウエ])/);
+      if (!m) return;
+      const btn = document.createElement('button');
+      btn.className = 'qopt';
+      btn.textContent = line;
+      btn.onclick = () => {
+        document.querySelectorAll('#' + optsId + ' .qopt').forEach(b => b.disabled = true);
+        const ok = m[1] === correct;
+        btn.classList.add(ok ? 'ok' : 'ng');
+        if (resEl) {
+          resEl.className = 'qans ' + (ok ? 'ok' : 'ng');
+          resEl.innerHTML = (ok ? '✅ 正解！' : '❌ 不正解。正解は ' + correct) + (expPart ? '<br><br>' + expPart : '');
+          resEl.style.display = 'block';
+        }
+        const qc = parseInt(localStorage.getItem('mk_qs')||'0') + 1;
+        localStorage.setItem('mk_qs', qc); upStats();
+        if (typeof onQAnswered === 'function') setTimeout(onQAnswered, 800);
       };
       opts.appendChild(btn);
     });
   } else {
-    qb.innerHTML=md2html(reply);
+    // 選択肢が取れなかった場合は全文表示
+    qb.innerHTML = '<div style="white-space:pre-wrap;font-size:14px;line-height:1.8">' + reply + '</div>';
   }
 }
 
