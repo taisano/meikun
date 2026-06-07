@@ -480,6 +480,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div id="comboAlert" style="display:none;background:#FFF3CD;border-radius:10px;padding:8px 12px;font-size:13px;color:#856404;margin-bottom:8px;text-align:center"></div>
     <button class="stbtn" id="stbtn" onclick="stamp()">⭐ 今日の記録を保存！</button>
     <p style="font-size:12px;color:#999;text-align:center;margin-top:4px" id="stampHint">科目を選んで保存してね</p>
+    <button id="resetSelBtn" onclick="resetSubjSelection()" style="display:none;width:100%;margin-top:6px;padding:8px;background:#fff;color:#E24B4A;border:1.5px solid #E24B4A;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer">🔄 選択をリセット</button>
   </div>
 
   <!-- 月間ボーナス進捗 -->
@@ -646,6 +647,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       <div id="s4farea" style="display:none">
         <div class="fbox"><div class="pills" id="s4pills"></div><p id="s4ftxt"></p></div>
       </div>
+      <div style="padding:10px;background:#EBF5FF;border-radius:10px;border-left:3px solid #5BA4CF;margin-top:10px">
+        <div style="font-size:12px;color:#666;margin-bottom:6px">✏️ 作文を書いたらポイントを追加しよう！</div>
+        <button id="tabpt-sakubun" class="stbtn" onclick="addPtFromTab('sakubun',2,'作文')">⭐ 作文 +2pt 追加</button>
+      </div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(3)">← 戻る</button>
         <button class="step-next" onclick="goStep(5)">次へ：AIコーチと深める →</button>
@@ -755,7 +760,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       <!-- 3問完了後のポイントエリア -->
       <div id="koku-complete-area" style="display:none;margin-top:10px;background:#F0FFF4;border-radius:12px;padding:14px;border:2px solid #9B8FD4">
         <div style="font-size:16px;font-weight:700;color:#6B4FBA;margin-bottom:8px">🎉 3問セット完了！</div>
-        <button class="stbtn" style="background:#9B8FD4" onclick="addPtFromTab('kokugo',1,'国語')">⭐ +1pt 追加する（自己申告）</button>
+        <button id="tabpt-kokugo" class="stbtn" style="background:#9B8FD4" onclick="addPtFromTab('kokugo',1,'国語')">⭐ +1pt 追加する（自己申告）</button>
         <div style="margin-top:8px">
           <button class="bs" style="width:100%;font-size:13px;color:#9B8FD4;border-color:#9B8FD4" onclick="showKokuPhotoReview()">📸 AIに採点してもらう（写真アップロード）</button>
         </div>
@@ -874,7 +879,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div id="kanji-pt-area" style="display:none;margin-top:14px;background:#F0FFF4;border-radius:12px;padding:14px;border:2px solid #5BA4CF">
       <div style="font-size:15px;font-weight:700;color:#1A5B8A;margin-bottom:8px">🎉 クイズ完了！</div>
       <p style="font-size:13px;color:#555;margin-bottom:10px">どのくらい正解できた？自分で判断してポイントを追加しよう</p>
-      <button class="stbtn" onclick="addPtFromTab('kanji',1,'漢字')">⭐ +1pt 追加する（自己申告）</button>
+      <button id="tabpt-kanji" class="stbtn" onclick="addPtFromTab('kanji',1,'漢字')">⭐ +1pt 追加する（自己申告）</button>
       <div style="margin-top:8px">
         <button class="bs" style="width:100%;font-size:13px" onclick="showKanjiPhotoReview()">📸 AIに採点してもらう（写真アップロード）</button>
       </div>
@@ -939,7 +944,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div id="math-complete-area" style="display:none;margin-top:10px;background:#F0FFF4;border-radius:12px;padding:14px;border:2px solid #5BA4CF">
       <div style="font-size:16px;font-weight:700;color:#1A5B8A;margin-bottom:8px">🎉 3問セット完了！</div>
       <p style="font-size:14px;color:#555;margin-bottom:10px">自分で解けた？チェックして記録しよう！</p>
-      <button class="stbtn" onclick="addPtFromTab('sansu',1,'算数')">⭐ +1pt 追加する（自己申告）</button>
+      <button id="tabpt-sansu" class="stbtn" onclick="addPtFromTab('sansu',1,'算数')">⭐ +1pt 追加する（自己申告）</button>
       <div style="margin-top:8px">
         <button class="bs" style="width:100%;font-size:13px" onclick="showMathPhotoReview()">📸 AIに採点してもらう（写真アップロード）</button>
       </div>
@@ -970,6 +975,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div class="card" id="ipcard" style="display:none">
     <div class="ctitle">🎤 <span id="iqdisplay"></span></div>
     <textarea class="ta" id="ians" style="min-height:120px" placeholder="答えを書いてみよう。声に出して練習するのが一番！"></textarea>
+    <div style="padding:10px;background:#EBF5FF;border-radius:10px;border-left:3px solid #5BA4CF;margin:10px 0 0">
+      <div style="font-size:12px;color:#666;margin-bottom:6px">🎤 面接練習をしたらポイントを追加しよう！</div>
+      <button id="tabpt-mensetsu" class="stbtn" onclick="addPtFromTab('mensetsu',2,'面接')">⭐ 面接 +2pt 追加</button>
+    </div>
     <div class="brow">
       <button class="bp" onclick="getIFB()">アドバイスをもらう</button>
       <button class="bs" onclick="document.getElementById('ipcard').style.display='none'">閉じる</button>
@@ -1241,24 +1250,42 @@ function getCurrentStreak() {
 }
 
 function toggleSubj(s) {
-  // 1回目タップ: ONにする。2回目タップ: OFFにしてキャンセルではなく、何もしない（ONのまま）
-  // → 要件「もう1回押すとキャンセルにならない」= 1回押したら確定、追加でカウントアップしない
   const savedToday = getTodayData();
-  if (savedToday) {
-    // 保存済みの場合は各タブから直接addPtFromTabを使う
-    showPtToast('各学習タブのボタンからポイントを追加してね！');
+  const limit = getDailyLimit();
+  const currentTotal = getTodayTotalPt();
+  // 既存の保存分 + 今回選択中のプレビュー合計が上限に達していたら追加不可
+  const previewPts = calcDayPtsFromCounts(todaySubjects);
+  if (currentTotal + previewPts >= limit) {
+    showPtToast('今日の上限 ' + limit + 'pt に達したよ！');
     return;
   }
-  // 未選択→選択（ON）、選択済み→そのままONを維持（キャンセルしない）
-  if (!todaySubjects[s]) {
-    todaySubjects[s] = true;
-    const btn = document.getElementById('sb-'+s);
-    if (btn) btn.classList.add('on');
-    updateTodayPreview();
-  }
-  // すでにONの場合は何もしない（キャンセルにならない）
+  // タップするたびに+1カウント
+  todaySubjects[s] = (todaySubjects[s] || 0) + 1;
+  updateSubjBtnDisplay(s, todaySubjects[s]);
+  updateTodayPreview();
 }
 
+function updateSubjBtnDisplay(s, count) {
+  const btn = document.getElementById('sb-' + s);
+  if (!btn) return;
+  const basePt = SUBJ_PT[s] || 1;
+  const icons = {sakubun:'✏️ 作文練習', mensetsu:'🎤 面接練習', kokugo:'📖 国語', kanji:'🖊️ 漢字', sansu:'🔢 算数', review:'🔄 復習'};
+  if (count > 0) {
+    btn.classList.add('on');
+    btn.innerHTML = (icons[s]||s) + '<br><span class="subj-pt">+' + (basePt * count) + 'pt（×' + count + '）</span>';
+  } else {
+    btn.classList.remove('on');
+    btn.innerHTML = (icons[s]||s) + '<br><span class="subj-pt">+' + basePt + 'pt</span>';
+  }
+}
+
+function calcDayPtsFromCounts(counts) {
+  let base = 0;
+  Object.keys(counts).forEach(s => {
+    if (counts[s] > 0) base += (SUBJ_PT[s] || 1) * counts[s];
+  });
+  return base;
+}
 function getTodayKey() {
   const t = new Date();
   return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
@@ -1269,64 +1296,111 @@ function getTodayData() {
 }
 
 function updateTodayPreview() {
-  const base = calcDayPts(todaySubjects);
+  // todaySubjects は {sakubun:2, sansu:1} のようなカウント形式
+  const previewPts = calcDayPtsFromCounts(todaySubjects);
+  const savedPts = getTodayTotalPt();
+  const total = savedPts + previewPts;
+  const limit = getDailyLimit();
+  const remain = Math.max(0, limit - total);
   const streak = getCurrentStreak();
-  const bonus = calcDayBonus(todaySubjects, streak + 1); // +1で今日追加後
-  const total = base + bonus;
+
+  // ボーナス計算用にsubjs（科目セット）を作る
+  const allSubjs = {};
+  const saved = cal[getTodayKey()];
+  if (saved && saved.subjs) Object.assign(allSubjs, saved.subjs);
+  Object.keys(todaySubjects).forEach(s => { if (todaySubjects[s] > 0) allSubjs[s] = true; });
+  const bonus = calcDayBonus(allSubjs, streak + (saved ? 0 : 1));
+
   const label = document.getElementById('todayPtLabel');
-  label.textContent = '+' + total + 'pt';
-  label.className = 'badge ' + (bonus > 0 ? 'bc' : 'ba');
-
-  // コンボ/ボーナスメッセージ
-  const ca = document.getElementById('comboAlert');
-  let msgs = [];
-  if (bonus > 0) {
-    const hasSakubun = todaySubjects.sakubun;
-    const otherCount = ['kokugo','kanji','sansu','mensetsu','review'].filter(s=>todaySubjects[s]).length;
-    if (hasSakubun && otherCount >= 3) msgs.push('🎯 バランスボーナス +3pt');
-    if (streak + 1 >= 10) msgs.push('🔥 10日コンボ！ +5pt');
-    else if (streak + 1 >= 5) msgs.push('🔥 5日コンボ！ +2pt');
-    else if (streak + 1 >= 3) msgs.push('🔥 3日コンボ！ +1pt');
+  if (label) {
+    label.textContent = previewPts > 0 ? '+' + previewPts + 'pt（合計' + total + 'pt / 上限' + limit + 'pt）' : '今日の上限: ' + limit + 'pt';
+    label.className = 'badge ' + (bonus > 0 ? 'bc' : 'ba');
   }
-  if (msgs.length > 0) { ca.style.display='block'; ca.textContent = msgs.join('　'); }
-  else ca.style.display='none';
 
-  const btn = document.getElementById('stbtn');
-  btn.textContent = '⭐ 今日の記録を保存！ +' + total + 'pt';
+  const ca = document.getElementById('comboAlert');
+  if (ca) {
+    const msgs = [];
+    if (bonus > 0) {
+      if (allSubjs.sakubun && ['kokugo','kanji','sansu','mensetsu','review'].filter(s=>allSubjs[s]).length >= 3)
+        msgs.push('🎯 バランスボーナス +3pt');
+      if (streak + 1 >= 10) msgs.push('🔥 10日コンボ！ +5pt');
+      else if (streak + 1 >= 5) msgs.push('🔥 5日コンボ！ +2pt');
+      else if (streak + 1 >= 3) msgs.push('🔥 3日コンボ！ +1pt');
+    }
+    msgs.push('📊 上限: ' + limit + 'pt（残り' + remain + 'pt）');
+    ca.style.display = 'block';
+    ca.textContent = msgs.join('　');
+  }
+
+  const stbtn = document.getElementById('stbtn');
+  if (stbtn) {
+    if (remain <= 0 && previewPts === 0) {
+      stbtn.textContent = '🌟 今日の上限達成！ +' + savedPts + 'pt';
+      stbtn.disabled = true;
+    } else if (previewPts > 0) {
+      stbtn.textContent = '⭐ +' + previewPts + 'pt を記録に追加！';
+      stbtn.disabled = false;
+    } else {
+      stbtn.textContent = '⭐ 今日の記録を保存！';
+      stbtn.disabled = false;
+    }
+  }
+  // リセットボタン表示制御
+  const rb = document.getElementById('resetSelBtn');
+  if (rb) rb.style.display = previewPts > 0 ? 'block' : 'none';
+}
+
+function resetSubjSelection() {
+  todaySubjects = {};
+  Object.keys(SUBJ_PT).forEach(s => updateSubjBtnDisplay(s, 0));
+  document.getElementById('resetSelBtn').style.display = 'none';
+  const ca = document.getElementById('comboAlert');
+  if (ca) ca.style.display = 'none';
+  const stbtn = document.getElementById('stbtn');
+  if (stbtn) { stbtn.textContent = '⭐ 今日の記録を保存！'; stbtn.disabled = false; }
+  const label = document.getElementById('todayPtLabel');
+  if (label) { label.textContent = '今日の上限: ' + getDailyLimit() + 'pt'; label.className = 'badge ba'; }
+  const hint = document.getElementById('stampHint');
+  if (hint) hint.textContent = '科目を選んで保存してね';
 }
 
 function stamp() {
   const k = getTodayKey();
-  if (getTodayData()) return; // 既保存
+  const previewPts = calcDayPtsFromCounts(todaySubjects);
+  if (previewPts === 0) { alert('科目をタップして選んでね！（タップするたびに+1回分追加）'); return; }
 
-  const subjs = {...todaySubjects};
-  if (Object.keys(subjs).filter(s=>subjs[s]).length === 0) {
-    alert('最低1つ科目を選んでね！');
-    return;
+  const remaining = getTodayRemainingPt();
+  if (remaining <= 0) { showPtToast('今日の上限に達したよ！🌟'); return; }
+
+  const addPts = Math.min(previewPts, remaining);
+  const streak = getCurrentStreak();
+
+  // 科目セット（サブジェクト）
+  const subjs = {};
+  Object.keys(todaySubjects).forEach(s => { if (todaySubjects[s] > 0) subjs[s] = true; });
+
+  if (!cal[k] || cal[k].pts === undefined) {
+    const bonus = calcDayBonus(subjs, streak + 1);
+    cal[k] = {subjs, pts: addPts, bonus, combo: streak + 1};
+  } else {
+    Object.keys(subjs).forEach(s => { cal[k].subjs[s] = true; });
+    const bonus = calcDayBonus(cal[k].subjs, cal[k].combo || streak + 1);
+    cal[k].pts = (cal[k].pts || 0) + addPts;
+    cal[k].bonus = bonus;
   }
 
-  const streak = getCurrentStreak();
-  const base = calcDayPts(subjs);
-  const bonus = calcDayBonus(subjs, streak + 1);
-  const total = base + bonus;
+  // 選択リセット
+  todaySubjects = {};
+  Object.keys(SUBJ_PT).forEach(s => updateSubjBtnDisplay(s, 0));
 
-  cal[k] = {subjs, pts: base, bonus, combo: streak + 1};
   sv(); renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
+  refreshStampUI();
+  updateAllTabPtButtons();
 
-  // ボタン更新
-  document.getElementById('stbtn').textContent = '⭐ 今日は記録済み！ +' + total + 'pt';
-  document.getElementById('stbtn').disabled = true;
-  document.getElementById('stampHint').textContent = '今日 +' + total + 'pt 記録したよ！';
-
-  // 全科目ボタン無効化
-  Object.keys(SUBJ_PT).forEach(s => {
-    const btn = document.getElementById('sb-'+s);
-    if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; }
-  });
-
-  // トースト
-  showPtToast('+' + total + 'pt 獲得！🌟');
-  showCancelBtn(k, total);
+  const newTotal = getTodayTotalPt();
+  const newRemain = getTodayRemainingPt();
+  showPtToast('+' + addPts + 'pt 追加！合計' + newTotal + 'pt🌟' + (newRemain > 0 ? '（あと' + newRemain + 'pt）' : ''));
+  showCancelBtn(k, newTotal);
 }
 
 function showPtToast(msg) {
@@ -1443,21 +1517,13 @@ function renderBonusChips() {
 }
 
 function initTodayButtons() {
+  refreshStampUI();
+  // 保存済みの科目ボタンを無効化（変更不可）
   const saved = getTodayData();
   if (saved) {
-    Object.keys(SUBJ_PT).forEach(s => {
-      const btn = document.getElementById('sb-'+s);
-      if (!btn) return;
-      if (saved.subjs && saved.subjs[s]) btn.classList.add('on');
-      btn.disabled = true; btn.style.opacity = '0.7';
-    });
-    const total = (saved.pts||0) + (saved.bonus||0);
-    document.getElementById('stbtn').textContent = '⭐ 今日は記録済み！ +' + total + 'pt';
-    document.getElementById('stbtn').disabled = true;
-    document.getElementById('todayPtLabel').textContent = '+' + total + 'pt';
-    document.getElementById('stampHint').textContent = '今日 +' + total + 'pt 記録済み';
-    showCancelBtn(getTodayKey(), total);
+    showCancelBtn(getTodayKey(), (saved.pts||0) + (saved.bonus||0));
   }
+  updateAllTabPtButtons();
 }
 
 function showCancelBtn(dateKey, total) {
@@ -1485,19 +1551,14 @@ function cancelRecord(dateKey) {
   delete cal[dateKey];
   sv(); renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
   if (isToday) {
-    Object.keys(SUBJ_PT).forEach(s => {
-      const btn = document.getElementById('sb-'+s);
-      if (!btn) return;
-      btn.classList.remove('on'); btn.disabled = false; btn.style.opacity = '1';
-    });
     todaySubjects = {};
-    document.getElementById('stbtn').textContent = '⭐ 今日の記録を保存！';
-    document.getElementById('stbtn').disabled = false;
-    document.getElementById('stampHint').textContent = '科目を選んで保存してね';
-    document.getElementById('todayPtLabel').textContent = '+0pt';
-    document.getElementById('comboAlert').style.display = 'none';
+    Object.keys(SUBJ_PT).forEach(s => updateSubjBtnDisplay(s, 0));
+    const ca = document.getElementById('comboAlert');
+    if (ca) ca.style.display = 'none';
     const cb = document.getElementById('cancelStampBtn');
     if (cb) cb.style.display = 'none';
+    refreshStampUI();
+    updateAllTabPtButtons();
   }
   showPtToast('記録を取り消しました 🗑️');
 }
@@ -2368,6 +2429,137 @@ function deleteRecord(id){
   studyRecords=studyRecords.filter(r=>r.id!==id);
   localStorage.setItem('mk_studyrec',JSON.stringify(studyRecords));
   renderRecords(_currentRecordFilter);
+}
+
+// ============================================================
+// ポイント管理システム（日割り上限・各タブ加算）
+// ============================================================
+
+// 1日の上限pt = 月の残りpt ÷ 残り日数（最低3pt保証）
+function getDailyLimit() {
+  const t = new Date();
+  const yr = t.getFullYear(), mo = t.getMonth()+1, today = t.getDate();
+  const daysInMonth = new Date(yr, mo, 0).getDate();
+  const remainDays = Math.max(1, daysInMonth - today + 1);
+  const capPt = getMonthCapPt(mo);
+  const moPts = calcMonthEarnings(yr, mo);
+  const remainMonthPt = Math.max(0, capPt - moPts);
+  return Math.max(3, Math.ceil(remainMonthPt / remainDays));
+}
+
+// 今日の総取得pt
+function getTodayTotalPt() {
+  const k = getTodayKey();
+  if (!cal[k] || cal[k].pts === undefined) return 0;
+  return (cal[k].pts||0) + (cal[k].bonus||0);
+}
+
+// 今日の残りpt
+function getTodayRemainingPt() {
+  return Math.max(0, getDailyLimit() - getTodayTotalPt());
+}
+
+// 各学習タブからポイント追加
+function addPtFromTab(subj, pts, label) {
+  const remaining = getTodayRemainingPt();
+  if (remaining <= 0) {
+    showPtToast('今日の上限に達したよ！🌟 明日またがんばろう！');
+    return false;
+  }
+  const addPts = Math.min(pts, remaining);
+  const k = getTodayKey();
+  const streak = getCurrentStreak();
+
+  if (!cal[k] || cal[k].pts === undefined) {
+    const subjs = {}; subjs[subj] = true;
+    const bonus = calcDayBonus(subjs, streak + 1);
+    cal[k] = {subjs, pts: addPts, bonus, combo: streak + 1};
+  } else {
+    if (!cal[k].subjs) cal[k].subjs = {};
+    cal[k].subjs[subj] = true;
+    const bonus = calcDayBonus(cal[k].subjs, cal[k].combo || streak + 1);
+    cal[k].pts = (cal[k].pts||0) + addPts;
+    cal[k].bonus = bonus;
+  }
+
+  sv(); renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
+  refreshStampUI();
+  updateAllTabPtButtons();
+
+  const newTotal = getTodayTotalPt();
+  const newRemain = getTodayRemainingPt();
+  showPtToast('+' + addPts + 'pt 獲得！' + (newRemain > 0 ? '（今日あと' + newRemain + 'pt）' : ' 今日の上限達成🌟'));
+  showCancelBtn(k, newTotal);
+  return true;
+}
+
+// スタンプ画面のUI全体を現在の保存データに合わせてリフレッシュ
+function refreshStampUI() {
+  const saved = cal[getTodayKey()];
+  const limit = getDailyLimit();
+  const total = saved ? (saved.pts||0) + (saved.bonus||0) : 0;
+  const remain = Math.max(0, limit - total);
+
+  // ラベル更新
+  const label = document.getElementById('todayPtLabel');
+  if (label) {
+    label.textContent = '+' + total + 'pt / 上限' + limit + 'pt';
+    label.className = 'badge ' + (total > 0 ? 'bc' : 'ba');
+  }
+
+  // スタンプボタン更新
+  const stbtn = document.getElementById('stbtn');
+  if (stbtn) {
+    if (remain <= 0) {
+      stbtn.textContent = '🌟 今日の上限達成！ +' + total + 'pt';
+      stbtn.disabled = true;
+    } else if (total > 0) {
+      stbtn.textContent = '⭐ さらに記録を追加！（あと' + remain + 'pt）';
+      stbtn.disabled = false;
+    } else {
+      stbtn.textContent = '⭐ 今日の記録を保存！';
+      stbtn.disabled = false;
+    }
+  }
+
+  // ヒント更新
+  const hint = document.getElementById('stampHint');
+  if (hint) {
+    if (remain <= 0) hint.textContent = '今日の上限達成！🎉';
+    else if (total > 0) hint.textContent = '今日 +' + total + 'pt | あと' + remain + 'pt 獲得できるよ';
+    else hint.textContent = '今日の上限: ' + limit + 'pt（科目を選んで保存してね）';
+  }
+
+  // 科目ボタン：保存済み科目をON表示
+  if (saved && saved.subjs) {
+    Object.keys(SUBJ_PT).forEach(s => {
+      const btn = document.getElementById('sb-'+s);
+      if (!btn) return;
+      if (saved.subjs[s]) btn.classList.add('on');
+    });
+  }
+}
+
+// 各タブのptボタン表示を更新
+function updateTabPtButton(subj) {
+  const btn = document.getElementById('tabpt-' + subj);
+  if (!btn) return;
+  const remain = getTodayRemainingPt();
+  const pts = SUBJ_PT[subj] || 1;
+  const names = {sakubun:'作文', mensetsu:'面接', kokugo:'国語', kanji:'漢字', sansu:'算数', review:'復習'};
+  if (remain <= 0) {
+    btn.textContent = '🌟 今日の上限達成！';
+    btn.disabled = true;
+    btn.style.background = '#bbb';
+  } else {
+    btn.textContent = '⭐ ' + (names[subj]||subj) + ' +' + pts + 'pt 追加（あと' + remain + 'pt）';
+    btn.disabled = false;
+    btn.style.background = '';
+  }
+}
+
+function updateAllTabPtButtons() {
+  ['sakubun','mensetsu','kokugo','kanji','sansu'].forEach(updateTabPtButton);
 }
 
 const MONTH_CAPS_PT = {6:1000,7:1400,8:1700,9:1600,10:2100,11:2200}; // 1pt=10円換算
