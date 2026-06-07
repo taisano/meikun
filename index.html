@@ -1241,13 +1241,22 @@ function getCurrentStreak() {
 }
 
 function toggleSubj(s) {
-  const btn = document.getElementById('sb-'+s);
+  // 1回目タップ: ONにする。2回目タップ: OFFにしてキャンセルではなく、何もしない（ONのまま）
+  // → 要件「もう1回押すとキャンセルにならない」= 1回押したら確定、追加でカウントアップしない
   const savedToday = getTodayData();
-  if (savedToday) return; // 保存済みは変更不可
-  todaySubjects[s] = !todaySubjects[s];
-  if (todaySubjects[s]) btn.classList.add('on');
-  else btn.classList.remove('on');
-  updateTodayPreview();
+  if (savedToday) {
+    // 保存済みの場合は各タブから直接addPtFromTabを使う
+    showPtToast('各学習タブのボタンからポイントを追加してね！');
+    return;
+  }
+  // 未選択→選択（ON）、選択済み→そのままONを維持（キャンセルしない）
+  if (!todaySubjects[s]) {
+    todaySubjects[s] = true;
+    const btn = document.getElementById('sb-'+s);
+    if (btn) btn.classList.add('on');
+    updateTodayPreview();
+  }
+  // すでにONの場合は何もしない（キャンセルにならない）
 }
 
 function getTodayKey() {
@@ -1597,16 +1606,21 @@ function onQAnswered(){
     document.getElementById('koku-complete-area').style.display='block';
     document.getElementById('koku-complete-area').scrollIntoView({behavior:'smooth'});
   } else {
-    // 次の問題ボタン表示
-    const nb=document.getElementById('koku-next-btn-inner');
-    if(nb){nb.style.display='block';}else{
-      const div=document.createElement('div');div.style.marginTop='10px';
-      const btn=document.createElement('button');btn.id='koku-next-btn-inner';btn.className='bpurp';
-      btn.textContent='次の問題 → ('+(kokuSet.count+1)+'/'+kokuSet.total+')';
-      btn.onclick=()=>{div.remove();genQ(kokuSet.type);};
-      div.appendChild(btn);
-      document.getElementById('qarea').appendChild(div);
-    }
+    // qarea の中に「次の問題」ボタンを追加（既存あれば削除して再作成）
+    const old=document.getElementById('koku-next-btn-wrap');
+    if(old) old.remove();
+    const wrap=document.createElement('div');
+    wrap.id='koku-next-btn-wrap';
+    wrap.style.marginTop='12px';
+    const btn=document.createElement('button');
+    btn.className='bpurp';
+    btn.style.width='100%';
+    btn.textContent='次の問題 → ('+(kokuSet.count+1)+'/'+kokuSet.total+')';
+    btn.onclick=()=>{ wrap.remove(); genQ(kokuSet.type); };
+    wrap.appendChild(btn);
+    const qa=document.getElementById('qarea');
+    if(qa){ qa.style.display='block'; qa.appendChild(wrap); }
+    wrap.scrollIntoView({behavior:'smooth'});
   }
 }
 
