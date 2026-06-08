@@ -73,6 +73,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .stbtn{display:block;width:100%;padding:14px;background:#5BA4CF;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;text-align:center;margin-bottom:8px;-webkit-tap-highlight-color:transparent;transition:background .15s}
 .stbtn:active{background:#1A5B8A}
 .stbtn:disabled{background:#ccc;cursor:default}
+.mini-tab{background:#EBF5FF;color:#1A5B8A;border:2px solid #C8E6FA;border-radius:10px;padding:10px 6px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.mini-tab.on{background:#5BA4CF;color:#fff;border-color:#5BA4CF}
+.step-bar{display:flex}
 .monnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .monnav span{font-size:16px;font-weight:700;color:#1a1a1a}
 .bp{padding:12px 18px;background:#5BA4CF;color:#fff;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-weight:600;-webkit-tap-highlight-color:transparent;transition:background .15s}
@@ -242,6 +245,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .stbtn{display:block;width:100%;padding:14px;background:#5BA4CF;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;text-align:center;margin-bottom:8px;-webkit-tap-highlight-color:transparent;transition:background .15s}
 .stbtn:active{background:#1A5B8A}
 .stbtn:disabled{background:#ccc;cursor:default}
+.mini-tab{background:#EBF5FF;color:#1A5B8A;border:2px solid #C8E6FA;border-radius:10px;padding:10px 6px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.mini-tab.on{background:#5BA4CF;color:#fff;border-color:#5BA4CF}
+.step-bar{display:flex}
 .monnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .monnav span{font-size:16px;font-weight:700;color:#1a1a1a}
 .bp{padding:12px 18px;background:#5BA4CF;color:#fff;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-weight:600;-webkit-tap-highlight-color:transparent;transition:background .15s}
@@ -554,23 +560,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 <!-- 作文 7ステップメソッド -->
 <div id="s-sakubun" class="sec">
 
-  <!-- ステップバー -->
-  <div class="step-bar" id="stepBar">
-    <button class="step-btn on" onclick="goStep(1)"><span class="snum">📖</span>読む</button>
-    <button class="step-btn" onclick="goStep(2)"><span class="snum">🔍</span>分解</button>
-    <button class="step-btn" onclick="goStep(3)"><span class="snum">📝</span>型まね</button>
-    <button class="step-btn" onclick="goStep(4)"><span class="snum">✏️</span>400字</button>
-    <button class="step-btn" onclick="goStep(5)"><span class="snum">🤖</span>AIコーチ</button>
-    <button class="step-btn" onclick="goStep(6)"><span class="snum">📄</span>800字</button>
-    <button class="step-btn" onclick="goStep(7)"><span class="snum">🏆</span>完成</button>
+  <!-- 入口選択 -->
+  <div id="sk-entry" class="card" style="text-align:center;padding:20px 16px">
+    <div class="ctitle" style="margin-bottom:6px">✏️ 作文練習</div>
+    <p style="font-size:13px;color:#666;margin-bottom:16px">今日はどちらの練習をしますか？</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button onclick="startEntry('daily')" style="background:linear-gradient(135deg,#5BA4CF,#3A7BD5);color:#fff;border:none;border-radius:14px;padding:18px 10px;font-size:14px;font-weight:700;cursor:pointer;line-height:1.5">
+        🌱 毎日の<br>作文トレーニング<br><span style="font-size:11px;font-weight:400;opacity:.9">5〜10分・短い練習</span>
+      </button>
+      <button onclick="startEntry('honban')" style="background:linear-gradient(135deg,#F0A030,#E08020);color:#fff;border:none;border-radius:14px;padding:18px 10px;font-size:14px;font-weight:700;cursor:pointer;line-height:1.5">
+        🏆 本番作文<br>チャレンジ<br><span style="font-size:11px;font-weight:400;opacity:.9">400字・800字を書く</span>
+      </button>
+    </div>
   </div>
 
-  <!-- Step 1: 良い作文を読む -->
-  <div id="sk-step1">
+  <!-- ステップバー -->
+  <div class="step-bar" id="stepBar" style="display:none">
+    <button class="step-btn on" onclick="goStep(1)"><span class="snum">📖</span>読む</button>
+    <button class="step-btn" onclick="goStep(2)"><span class="snum">🔍</span>しくみ</button>
+    <button class="step-btn" onclick="goStep(3)"><span class="snum">🌱</span>タネ</button>
+    <button class="step-btn" onclick="goStep(4)"><span class="snum">🧱</span>骨組み</button>
+    <button class="step-btn" onclick="goStep(5)"><span class="snum">✨</span>ミニ練習</button>
+    <button class="step-btn" onclick="goStep(6)"><span class="snum">✏️</span>400字</button>
+    <button class="step-btn" onclick="goStep(7)"><span class="snum">🏆</span>本番</button>
+  </div>
+
+  <!-- Step 1: 読む -->
+  <div id="sk-step1" style="display:none">
     <div class="card">
       <div class="ctitle">📖 良い作文を読もう <span class="badge ba">Step 1</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:10px">まずは受賞作品を読んで「良い作文」のイメージをつかもう！レベル順に並んでいるよ。</p>
-      <!-- フィルター -->
+      <p style="font-size:13px;color:#666;margin-bottom:10px">まずは良い作文を読んで、「いい文章ってどんな感じか」をつかもう。<br>すぐに書かなくて大丈夫。心に残ったところを見つけよう。</p>
       <div class="filter-row" id="essayFilters">
         <button class="fchip on" onclick="filterEssays('all',this)">すべて</button>
         <button class="fchip" onclick="filterEssays('lv1',this)">Level 1⭐</button>
@@ -581,64 +600,183 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       </div>
       <div class="essay-grid" id="essayGrid"></div>
     </div>
-    <!-- 作文表示エリア -->
     <div class="card" id="essayViewer" style="display:none">
       <div class="ctitle" id="evTitle"></div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px" id="evMeta"></div>
       <div class="essay-body" id="evBody"></div>
+      <!-- 読んだあとのミニ質問 -->
+      <div style="background:#EBF5FF;border-radius:12px;padding:14px;margin-top:14px">
+        <div style="font-size:14px;font-weight:700;color:#1A5B8A;margin-bottom:10px">💬 読んで気づいたこと（任意・書かなくてもOK）</div>
+        <div style="display:grid;gap:8px">
+          <div><label style="font-size:12px;color:#666">一番心に残ったところは？</label><input class="ta" id="read_q1" style="min-height:0;padding:8px;margin-top:3px" placeholder="例：最後の一文がかっこいいと思った"></div>
+          <div><label style="font-size:12px;color:#666">作者はどんな体験をしている？</label><input class="ta" id="read_q2" style="min-height:0;padding:8px;margin-top:3px" placeholder="例：サッカーの試合に負けた体験"></div>
+          <div><label style="font-size:12px;color:#666">いいなと思った言い方を1つ選ぼう</label><input class="ta" id="read_q3" style="min-height:0;padding:8px;margin-top:3px" placeholder="例：「前の自分は〜と思っていた」という書き方"></div>
+        </div>
+      </div>
       <div class="step-nav">
-        <button class="step-next" onclick="goStep(2)">次へ：構成を分解する →</button>
+        <button class="step-next" onclick="goStep(2)">次へ：しくみを見る →</button>
       </div>
     </div>
   </div>
 
-  <!-- Step 2: 構成を分解して見る -->
+  <!-- Step 2: しくみ -->
   <div id="sk-step2" style="display:none">
     <div class="card">
-      <div class="ctitle">🔍 構成を分解しよう <span class="badge bb">Step 2</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:10px">この作文はどんな「型」で書かれているか、段落ごとに色分けして見てみよう！</p>
+      <div class="ctitle">🔍 作文のしくみを見よう <span class="badge bb">Step 2</span></div>
+      <p style="font-size:13px;color:#666;margin-bottom:10px">この作文はどんな順番で書かれているかな？段落ごとに色分けして確認しよう！</p>
       <div id="structureView"></div>
       <div style="margin-top:12px;padding:12px;background:#F4F8FC;border-radius:10px">
-        <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:8px">📌 この作文の「型」</div>
+        <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:8px">📌 この作文のしくみ</div>
         <div id="essayTypeLabel" style="font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:6px"></div>
-        <div id="structureSteps" style="font-size:14px;color:#555;line-height:1.9"></div>
+        <div id="structureSteps" style="font-size:14px;color:#555;line-height:2"></div>
+      </div>
+      <div style="margin-top:12px;padding:12px;background:#FFF3CD;border-radius:10px;font-size:13px;line-height:1.9">
+        <strong style="color:#7C4A00">この作文は、</strong><br>
+        <span id="structureSummary" style="color:#555"></span>
+        <br>の順番で書かれています。
       </div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(1)">← 戻る</button>
-        <button class="step-next" onclick="goStep(3)">次へ：型をまねる →</button>
+        <button class="step-next" onclick="goStep(3)">次へ：作文のタネ →</button>
       </div>
     </div>
   </div>
 
-  <!-- Step 3: 型をまねる -->
+  <!-- Step 3: タネ -->
   <div id="sk-step3" style="display:none">
     <div class="card">
-      <div class="ctitle">📝 型をまねて書こう <span class="badge bc">Step 3</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:10px">テンプレートに自分の体験を当てはめてみよう。まずはメモでOK！</p>
-      <div id="tmplArea"></div>
+      <div class="ctitle">🌱 作文のタネを見つけよう <span class="badge bc">Step 3</span></div>
+      <p style="font-size:13px;color:#666;margin-bottom:12px">まだ作文を書かなくて大丈夫。<br>自分の体験、気持ち、気づいたことをメモして、材料を集めよう。</p>
+      <div style="display:grid;gap:10px">
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">📌 書きたいテーマ</label><input class="ta" id="seed_theme" style="min-height:0;padding:10px;margin-top:4px" placeholder="例：努力・命・思いやり・家族・挑戦・オランダでの体験"></div>
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">📅 最近あった出来事</label><input class="ta" id="seed_event" style="min-height:0;padding:10px;margin-top:4px" placeholder="例：学校・家・習い事・友達とのことなど"></div>
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">💭 その時の気持ち</label><input class="ta" id="seed_feel" style="min-height:0;padding:10px;margin-top:4px" placeholder="例：うれしかった・くやしかった・びっくりした・申し訳なかった"></div>
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">👥 だれが関わっていたか</label><input class="ta" id="seed_who" style="min-height:0;padding:10px;margin-top:4px" placeholder="例：友達・先生・家族・チームメイト"></div>
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">💡 その経験から気づいたこと</label><textarea class="ta" id="seed_notice" style="min-height:70px;margin-top:4px" placeholder="例：失敗しても諦めないことが大切だとわかった"></textarea></div>
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">🚀 これからどうしたいか</label><input class="ta" id="seed_future" style="min-height:0;padding:10px;margin-top:4px" placeholder="例：次は〜をしてみたい、〜を大切にしたい"></div>
+      </div>
+      <div style="margin-top:12px">
+        <button class="bp" onclick="askSeedAI()">🤖 AIに質問してもらう</button>
+      </div>
+      <div id="seed_ai_area" style="display:none;margin-top:10px">
+        <div class="fbox" style="background:#F0FFF4"><p id="seed_ai_txt"></p></div>
+      </div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(2)">← 戻る</button>
-        <button class="step-next" onclick="goStep(4)">次へ：400字で書く →</button>
+        <button class="step-next" onclick="goStep(4)">次へ：骨組みを作る →</button>
       </div>
     </div>
   </div>
 
-  <!-- Step 4: 400字で書く -->
+  <!-- Step 4: 骨組み -->
   <div id="sk-step4" style="display:none">
     <div class="card">
-      <div class="ctitle">✏️ 400字で書こう <span class="badge ba">Step 4</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:8px">まずは400字（原稿用紙1枚分）でまとめてみよう。</p>
+      <div class="ctitle">🧱 作文の骨組みを作ろう <span class="badge ba">Step 4</span></div>
+      <p style="font-size:13px;color:#666;margin-bottom:12px">集めたタネを、作文の順番に並べよう。<br>骨組みを作っておくと、400字を書くときに迷いにくくなります。</p>
+      <div style="display:grid;gap:10px" id="outline_area">
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">① はじめに思ったこと</label><textarea class="ta" id="ol_intro" style="min-height:60px;margin-top:4px" placeholder="最初に伝えたい考えや気持ち"></textarea></div>
+        <div><label style="font-size:13px;font-weight:700;color:#5BA4CF">② 実際にあったこと</label><textarea class="ta" id="ol_event" style="min-height:70px;margin-top:4px" placeholder="具体的な出来事・場面"></textarea></div>
+        <div><label style="font-size:13px;font-weight:700;color:#F0A030">③ そこで気づいたこと</label><textarea class="ta" id="ol_notice" style="min-height:60px;margin-top:4px" placeholder="体験からわかったこと・変わったこと"></textarea></div>
+        <div><label style="font-size:13px;font-weight:700;color:#9B8FD4">④ 自分が変わったこと</label><textarea class="ta" id="ol_change" style="min-height:60px;margin-top:4px" placeholder="前の自分と今の自分の違い"></textarea></div>
+        <div><label style="font-size:13px;font-weight:700;color:#E24B4A">⑤ これからどうしたいか</label><textarea class="ta" id="ol_future" style="min-height:60px;margin-top:4px" placeholder="これからの行動・決意"></textarea></div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="bp" onclick="buildOutlineAI()">🤖 AIで骨組みを作る</button>
+        <button class="bs" onclick="clearOutline()">🔄 クリア</button>
+      </div>
+      <div id="outline_ai_area" style="display:none;margin-top:10px">
+        <div class="fbox" style="background:#EBF5FF"><p id="outline_ai_txt"></p></div>
+      </div>
+      <div class="step-nav">
+        <button class="step-back" onclick="goStep(3)">← 戻る</button>
+        <button class="step-next" onclick="goStep(5)">次へ：ミニ練習 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5: ミニ練習 -->
+  <div id="sk-step5" style="display:none">
+    <div class="card">
+      <div class="ctitle">✨ ミニ練習：いい文を体に入れよう <span class="badge bc">Step 5</span></div>
+      <p style="font-size:13px;color:#666;margin-bottom:12px">いきなり長い作文を書かずに、まずは短い文を練習しよう。<br>一文、書き出し、気づき、まとめを練習すると、作文がぐっと良くなります。</p>
+      <!-- 練習タイプ選択 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <button class="mini-tab on" onclick="selectMiniMode('ichi',this)">📝 一文練習</button>
+        <button class="mini-tab" onclick="selectMiniMode('kaki',this)">🌅 書き出し</button>
+        <button class="mini-tab" onclick="selectMiniMode('kizuki',this)">💡 気づき</button>
+        <button class="mini-tab" onclick="selectMiniMode('matome',this)">🎯 まとめ</button>
+      </div>
+      <!-- 各練習モード -->
+      <div id="mini-ichi">
+        <div style="background:#EBF5FF;border-radius:10px;padding:12px;margin-bottom:10px">
+          <div style="font-size:12px;color:#888;margin-bottom:4px">📖 お手本</div>
+          <div style="font-size:13px;color:#555;margin-bottom:6px">普通：「試合に負けてくやしかったです。」</div>
+          <div style="font-size:13px;color:#1A5B8A;font-weight:600">良い文：「試合に負けたことよりも、最後まで本気を出しきれなかった自分がくやしかったです。」</div>
+        </div>
+        <label style="font-size:13px;font-weight:700;color:#1A5B8A">自分の体験を一文で書いてみよう</label>
+        <textarea class="ta" id="mini_ichi_in" style="min-height:80px;margin-top:6px" placeholder="自分の体験・気持ちを一文で書いてみよう"></textarea>
+        <button class="bp" style="margin-top:8px" onclick="getMiniAI('ichi')">🤖 フィードバックをもらう</button>
+        <div id="mini_ichi_fb" style="display:none;margin-top:8px"><div class="fbox"><p id="mini_ichi_txt"></p></div></div>
+      </div>
+      <div id="mini-kaki" style="display:none">
+        <div style="background:#EBF5FF;border-radius:10px;padding:12px;margin-bottom:10px">
+          <div style="font-size:12px;color:#888;margin-bottom:4px">📖 お手本</div>
+          <div style="font-size:13px;color:#555;margin-bottom:6px">普通：「私は努力が大切だと思います。」</div>
+          <div style="font-size:13px;color:#1A5B8A;font-weight:600">良い文：「前の私は、努力はがんばった分だけすぐ結果が出るものだと思っていました。」</div>
+        </div>
+        <label style="font-size:13px;font-weight:700;color:#1A5B8A">作文の最初の一文を書いてみよう</label>
+        <textarea class="ta" id="mini_kaki_in" style="min-height:80px;margin-top:6px" placeholder="作文の書き出しを書いてみよう"></textarea>
+        <button class="bp" style="margin-top:8px" onclick="getMiniAI('kaki')">🤖 フィードバックをもらう</button>
+        <div id="mini_kaki_fb" style="display:none;margin-top:8px"><div class="fbox"><p id="mini_kaki_txt"></p></div></div>
+      </div>
+      <div id="mini-kizuki" style="display:none">
+        <div style="background:#EBF5FF;border-radius:10px;padding:12px;margin-bottom:10px">
+          <div style="font-size:12px;color:#888;margin-bottom:4px">📖 お手本</div>
+          <div style="font-size:13px;color:#555;margin-bottom:6px">浅い気づき：「親切にすることは大事だと思った。」</div>
+          <div style="font-size:13px;color:#1A5B8A;font-weight:600">深い気づき：「相手が困っていることに気づくには、自分のことだけでなく、周りを見ることが大切だと思った。」</div>
+        </div>
+        <label style="font-size:13px;font-weight:700;color:#1A5B8A">自分の体験から気づいたことを書いてみよう</label>
+        <textarea class="ta" id="mini_kizuki_in" style="min-height:80px;margin-top:6px" placeholder="体験から気づいたことを書いてみよう"></textarea>
+        <button class="bp" style="margin-top:8px" onclick="getMiniAI('kizuki')">🤖 フィードバックをもらう</button>
+        <div id="mini_kizuki_fb" style="display:none;margin-top:8px"><div class="fbox"><p id="mini_kizuki_txt"></p></div></div>
+      </div>
+      <div id="mini-matome" style="display:none">
+        <div style="background:#EBF5FF;border-radius:10px;padding:12px;margin-bottom:10px">
+          <div style="font-size:12px;color:#888;margin-bottom:4px">📖 お手本</div>
+          <div style="font-size:13px;color:#555;margin-bottom:6px">弱いまとめ：「これからもがんばりたいです。」</div>
+          <div style="font-size:13px;color:#1A5B8A;font-weight:600">良いまとめ：「これからは、結果だけでなく、そこまでの努力や人との関わりも大切にしたいです。」</div>
+        </div>
+        <label style="font-size:13px;font-weight:700;color:#1A5B8A">作文の最後の一文を書いてみよう</label>
+        <textarea class="ta" id="mini_matome_in" style="min-height:80px;margin-top:6px" placeholder="作文の最後の一文を書いてみよう"></textarea>
+        <button class="bp" style="margin-top:8px" onclick="getMiniAI('matome')">🤖 フィードバックをもらう</button>
+        <div id="mini_matome_fb" style="display:none;margin-top:8px"><div class="fbox"><p id="mini_matome_txt"></p></div></div>
+      </div>
+      <!-- ポイントボタン -->
+      <div style="padding:10px;background:#EBF5FF;border-radius:10px;border-left:3px solid #5BA4CF;margin-top:14px">
+        <div style="font-size:12px;color:#666;margin-bottom:6px">✨ ミニ練習をしたらポイントを追加しよう！</div>
+        <button id="tabpt-sakubun-mini" class="stbtn" onclick="addPtFromTab('sakubun',1,'作文ミニ練習')">⭐ ミニ練習 +1pt 追加</button>
+      </div>
+      <div class="step-nav">
+        <button class="step-back" onclick="goStep(4)">← 戻る</button>
+        <button class="step-next" onclick="goStep(6)">次へ：400字チャレンジ →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 6: 400字 -->
+  <div id="sk-step6" style="display:none">
+    <div class="card">
+      <div class="ctitle">✏️ 400字チャレンジ <span class="badge ba">Step 6</span></div>
+      <p style="font-size:13px;color:#666;margin-bottom:8px">骨組みとミニ練習で作った文を使って、400字にまとめよう。今日は400字だけでOKです。</p>
+      <!-- 骨組み参照 -->
+      <details style="margin-bottom:10px">
+        <summary style="font-size:13px;color:#1A5B8A;font-weight:700;cursor:pointer;padding:8px;background:#EBF5FF;border-radius:8px">🧱 骨組みを見る（タップで開く）</summary>
+        <div style="margin-top:8px;font-size:13px;line-height:1.9;padding:10px;background:#F8FBFF;border-radius:8px" id="outline_ref"></div>
+      </details>
       <div style="font-size:13px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
-        <strong style="color:#1A5B8A">書くヒント：</strong><br>
-        <span id="step4hint"></span>
+        <strong style="color:#1A5B8A">書くヒント：</strong><br><span id="step4hint"></span>
       </div>
-      <div class="char-target">
-        <span style="font-size:13px;color:#666;font-weight:600;align-self:center">目標：</span>
-        <button class="ctbtn on" onclick="setCT(400,this)">400字</button>
-        <button class="ctbtn" onclick="setCT(800,this)">800字</button>
-        <button class="ctbtn" onclick="setCT(1200,this)">1200字</button>
-      </div>
-      <textarea class="ta" id="s4in" style="min-height:240px" placeholder="ここに作文を書こう！" oninput="s4cc()"></textarea>
+      <textarea class="ta" id="s4in" style="min-height:240px" placeholder="ここに作文を書こう！（400字目標）" oninput="s4cc()"></textarea>
       <div class="cc" id="s4cnt">0字</div>
       <div class="brow">
         <button class="bp" id="s4fbtn" onclick="getS4FB()">AI先生に添削してもらう</button>
@@ -648,78 +786,41 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
         <div class="fbox"><div class="pills" id="s4pills"></div><p id="s4ftxt"></p></div>
       </div>
       <div style="padding:10px;background:#EBF5FF;border-radius:10px;border-left:3px solid #5BA4CF;margin-top:10px">
-        <div style="font-size:12px;color:#666;margin-bottom:6px">✏️ 作文を書いたらポイントを追加しよう！</div>
-        <button id="tabpt-sakubun" class="stbtn" onclick="addPtFromTab('sakubun',2,'作文')">⭐ 作文 +2pt 追加</button>
+        <div style="font-size:12px;color:#666;margin-bottom:6px">✏️ 400字を書いたらポイントを追加しよう！</div>
+        <button id="tabpt-sakubun" class="stbtn" onclick="addPtFromTab('sakubun',2,'400字作文')">⭐ 400字作文 +2pt 追加</button>
       </div>
       <div class="step-nav">
-        <button class="step-back" onclick="goStep(3)">← 戻る</button>
-        <button class="step-next" onclick="goStep(5)">次へ：AIコーチと深める →</button>
+        <button class="step-back" onclick="goStep(5)">← 戻る</button>
+        <button class="bp" style="font-size:14px;padding:12px 20px" onclick="finish400()">✅ 400字で完成にする！</button>
+        <button class="step-next" onclick="goStep(7)">800字に広げる →</button>
       </div>
     </div>
   </div>
 
-  <!-- Step 5: AIコーチが質問しながら深める -->
-  <div id="sk-step5" style="display:none">
+  <!-- Step 7: 本番 -->
+  <div id="sk-step7" style="display:none">
     <div class="card">
-      <div class="ctitle">🤖 AIコーチと深めよう <span class="badge bb">Step 5</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:10px">AIコーチが質問するから、答えながら作文のネタを深めよう！</p>
-      <div class="chat-area" id="chatArea"></div>
-      <div style="display:flex;gap:6px">
-        <textarea class="ta" id="chatIn" style="min-height:60px;flex:1" placeholder="答えを書いてね…"></textarea>
-        <button class="bp" style="align-self:flex-end;padding:14px 16px" onclick="sendChat()">送る</button>
+      <div class="ctitle">🏆 本番作文チャレンジ <span class="badge bc">Step 7</span></div>
+      <p style="font-size:13px;color:#666;margin-bottom:8px">もっと長く書ける日は、800字に広げてみよう。<br>400字で終わっても大丈夫！</p>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <button class="bs" onclick="copyS4toS6()" style="font-size:13px">400字をコピーして始める</button>
       </div>
-      <div class="step-nav">
-        <button class="step-back" onclick="goStep(4)">← 戻る</button>
-        <button class="step-next" onclick="goStep(6)">次へ：800字に広げる →</button>
+      <div style="font-size:13px;background:#FFF3CD;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
+        <strong style="color:#7C4A00">ヒント：</strong><br><span id="step6hint"></span>
       </div>
-    </div>
-  </div>
-
-  <!-- Step 6: 800字に広げる -->
-  <div id="sk-step6" style="display:none">
-    <div class="card">
-      <div class="ctitle">📄 800字に広げよう <span class="badge ba">Step 6</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:8px">Step 5で出てきたネタも使って、800字に広げよう！</p>
-      <div style="font-size:13px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
-        <strong style="color:#1A5B8A">広げるポイント：</strong><br>
-        <span id="step6hint"></span>
-      </div>
-      <textarea class="ta" id="s6in" style="min-height:300px" placeholder="Step 4の作文をコピーして、ここに広げた版を書こう！" oninput="s6cc()"></textarea>
+      <textarea class="ta" id="s6in" style="min-height:280px" placeholder="400字の作文をもとに、800字に広げよう！" oninput="s6cc()"></textarea>
       <div class="cc" id="s6cnt">0字</div>
       <div class="brow">
         <button class="bp" id="s6fbtn" onclick="getS6FB()">AI先生に添削してもらう</button>
-        <button class="bs" onclick="copyS4toS6()">400字版をここにコピー</button>
+        <button class="bs" onclick="document.getElementById('s6in').value='';s6cc()">クリア</button>
       </div>
       <div id="s6farea" style="display:none">
         <div class="fbox"><div class="pills" id="s6pills"></div><p id="s6ftxt"></p></div>
       </div>
-      <div class="step-nav">
-        <button class="step-back" onclick="goStep(5)">← 戻る</button>
-        <button class="step-next" onclick="goStep(7)">次へ：1200字に完成 →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Step 7: 1200字に完成 -->
-  <div id="sk-step7" style="display:none">
-    <div class="card">
-      <div class="ctitle">🏆 1200字の完成版！ <span class="badge ba">Step 7</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:8px">明訓中学A方式の本番は1200字（400字×3枚）。仕上げの一本を書こう！</p>
-      <div style="font-size:13px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
-        <strong style="color:#1A5B8A">仕上げのチェック：</strong><br>
-        ① 意見がはっきり書けているか　② 体験（オランダ生活！）が入っているか　③ 気づきや学びが書けているか　④ 締めくくりが決まっているか　⑤ 誤字脱字はないか
-      </div>
-      <textarea class="ta" id="s7in" style="min-height:380px" placeholder="完成版を書こう！（目標1200字）" oninput="s7cc()"></textarea>
-      <div class="cc" id="s7cnt">0字</div>
-      <div class="brow">
-        <button class="bp" id="s7fbtn" onclick="getS7FB()">🎓 最終添削してもらう</button>
-        <button class="bs" onclick="copyS6toS7()">800字版をここにコピー</button>
-      </div>
-      <div id="s7farea" style="display:none">
-        <div class="fbox"><div class="pills" id="s7pills"></div><p id="s7ftxt"></p></div>
-      </div>
-      <div style="margin-top:12px;padding:12px;background:#EBF5FF;border-radius:10px;text-align:center">
-        <p style="font-size:14px;color:#1A5B8A;font-weight:600">🌸 ここまで来たら、あとは手書きで清書するだけ！<br>縦書き・400字詰め原稿用紙3枚 でがんばれ！</p>
+      <!-- 完成保存ボタン -->
+      <div style="padding:10px;background:#FFF3CD;border-radius:10px;border-left:3px solid #F0A030;margin-top:10px">
+        <div style="font-size:12px;color:#856404;margin-bottom:6px">🏆 完成版を保存してポイントを追加しよう！</div>
+        <button class="bamb" onclick="saveAndAddPt()">🏆 完成版を保存 +3pt</button>
       </div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(6)">← 戻る</button>
@@ -728,6 +829,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   </div>
 
 </div>
+
 
 <!-- 国語 -->
 <div id="s-kokugo" class="sec">
@@ -1038,6 +1140,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 </div>
 </div>
 
+<!-- 動画 -->
+<div id="s-video" class="sec">
+  <div class="card">
+    <div class="ctitle">▶️ 国語・小論文の動画</div>
+    <div class="video-list" id="kokugo-videos">
+      <div class="video-item">
+        <div class="video-title">小論文の書き方①</div>
+        <div class="video-wrap"><iframe src="https://www.youtube.com/embed/l_FM-7W1w2Q" frameborder="0" allowfullscreen loading="lazy"></iframe></div>
+      </div>
+      <div class="video-item">
+        <div class="video-title">小論文の書き方②</div>
+        <div class="video-wrap"><iframe src="https://www.youtube.com/embed/fwbfbwkz5Lg" frameborder="0" allowfullscreen loading="lazy"></iframe></div>
+      </div>
+      <div class="video-item">
+        <div class="video-title">小論文の書き方③</div>
+        <div class="video-wrap"><iframe src="https://www.youtube.com/embed/N_o3psXDhDo" frameborder="0" allowfullscreen loading="lazy"></iframe></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:10px">
+    <div class="ctitle">▶️ 算数動画 <span class="badge ba">計算達人シリーズ</span></div>
+    <p style="font-size:13px;color:#666;margin-bottom:10px">タップすると動画が開きます</p>
+    <div id="math-video-list"></div>
+  </div>
+</div>
+
 <script>
 
 const IQS=[
@@ -1088,7 +1216,7 @@ function init(){
   try{cal=JSON.parse(localStorage.getItem('mk_cal')||'{}');kanjiState=JSON.parse(localStorage.getItem('mk_kstate')||'{}')}catch(e){cal={};kanjiState={}}
   const t=new Date();cY=t.getFullYear();cM=t.getMonth()+1;
   migrateCal();countdown();renderCal();initSakubun();renderIQ();upStats();renderEarnBanner();renderBonusChips();initTodayButtons();
-  loadStudyRecords();renderRecords('all');
+  loadStudyRecords();renderRecords('all');initVideoSection();
 }
 
 async function callAPI(prompt,maxTokens=800){
@@ -2203,7 +2331,23 @@ const LEVEL_MAP={1:'lv1',2:'lv2',3:'lv3',4:'lv4'};
 const LEVEL_LABEL={1:'Level 1',2:'Level 2',3:'Level 3',4:'上級'};
 let sk_step=1,sk_essay=null,sk_chatHistory=[],sk_charTarget=400,_lastFilter='all';
 
-function initSakubun(){renderEssayGrid('all');}
+let sk_entryMode='daily'; // 'daily' or 'honban'
+
+function startEntry(mode){
+  sk_entryMode=mode;
+  document.getElementById('sk-entry').style.display='none';
+  document.getElementById('stepBar').style.display='flex';
+  goStep(1);
+}
+
+function initSakubun(){
+  renderEssayGrid('all');
+  // 初期状態: 入口画面を表示、ステップバーと各ステップを非表示
+  const entry=document.getElementById('sk-entry');
+  if(entry) entry.style.display='block';
+  document.getElementById('stepBar').style.display='none';
+  for(let i=1;i<=7;i++){const el=document.getElementById('sk-step'+i);if(el)el.style.display='none';}
+}
 
 function renderEssayGrid(filter){
   _lastFilter=filter;
@@ -2235,7 +2379,7 @@ function selectEssay(e){
   const v=document.getElementById('essayViewer');v.style.display='block';
   document.getElementById('evTitle').innerHTML=`📖 ${e.title} <span class="badge ba">${e.grade}・${e.type}</span>`;
   document.getElementById('evMeta').innerHTML=`<span class="pill pila">受験${e.fit}</span><span class="pill pilb">${e.tags.join('・')}</span>`;
-  document.getElementById('evBody').textContent=e.body.replace(/\\n/g,'\n');
+  document.getElementById('evBody').textContent=e.body.replace(/\n/g,'\n');
   v.scrollIntoView({behavior:'smooth'});
 }
 
@@ -2244,31 +2388,152 @@ function goStep(n){
   sk_step=n;
   for(let i=1;i<=7;i++){const el=document.getElementById('sk-step'+i);if(el)el.style.display=(i===n)?'block':'none';}
   document.querySelectorAll('.step-btn').forEach((btn,idx)=>{btn.classList.remove('on','done');if(idx+1===n)btn.classList.add('on');else if(idx+1<n)btn.classList.add('done');});
-  if(n===2)renderStructure();if(n===3)renderTemplate();if(n===4)renderStep4();if(n===5)initChat();if(n===6)renderStep6();
+  if(n===2)renderStructure();
+  if(n===4)prefillOutlineFromSeed();
+  if(n===6){renderStep4hint();renderOutlineRef();}
+  if(n===7)renderStep6();
   document.getElementById('s-sakubun').scrollIntoView({behavior:'smooth'});
 }
 
 function renderStructure(){
   const e=sk_essay;const sv=document.getElementById('structureView');
   const rc={intro:'para-intro',event:'para-event',change:'para-change',spread:'para-spread',end:'para-end'};
-  sv.innerHTML=e.structure.map(p=>`<div class="para-block ${rc[p.role]||''}"><div class="para-label">${p.label}</div>${p.text}</div>`).join('');
+  const labelMap={intro:'はじめに思ったこと',event:'実際にあったこと',change:'そこで気づいたこと',spread:'自分が変わったこと',end:'これからどうしたいか'};
+  sv.innerHTML=e.structure.map(p=>`<div class="para-block ${rc[p.role]||''}"><div class="para-label">${labelMap[p.role]||p.label}</div>${p.text}</div>`).join('');
   document.getElementById('essayTypeLabel').textContent='【'+e.type+'】';
-  const ts={'体験変化型':'①ある出来事　②最初の考え　③実際に体験する　④考えが変わる　⑤これからどうしたいか','失敗反省型':'①軽い気持ちの行動　②予想外の結果　③後悔　④大切なことに気づく　⑤次はどうするか','夢目標型':'①自分の夢・目標　②きっかけ　③努力してきたこと　④支えてくれた人　⑤これからの決意','社会課題型':'①身近な出来事　②社会の問題に気づく　③自分の体験や調査　④自分の意見　⑤自分にできること','具体物記憶型':'①印象的な物・音・植物　②それにまつわる思い出　③気持ちの変化　④感謝　⑤これからの自分','物語導入型':'①インパクトのある書き出し　②問題・困難　③転換点　④気づきの広がり　⑤感謝と決意','家族感謝型':'①家族との日常　②変化・出来事　③気づき　④感謝の深まり　⑤未来への言葉','意見文型':'①具体的な体験から始める　②問いを立てる　③社会的な視野に広げる　④自分の意見　⑤結論・決意'};
-  document.getElementById('structureSteps').innerHTML=(ts[e.type]||'').split('　').map(s=>s?`<span style="display:inline-block;margin-right:8px;margin-bottom:4px">${s}</span>`:'').join('');
+  const ts={'体験変化型':'① はじめの考え　② 実際の体験　③ 体験からの気づき　④ 自分の変化　⑤ これからの行動','失敗反省型':'① 軽い気持ちの行動　② 予想外の結果　③ 後悔と気づき　④ 大切なことを学ぶ　⑤ 次はどうするか','夢目標型':'① 自分の夢・目標　② きっかけ　③ 努力してきたこと　④ 支えてくれた人　⑤ これからの決意','社会課題型':'① 身近な出来事　② 社会の問題に気づく　③ 自分の体験や考え　④ 自分の意見　⑤ 自分にできること','具体物記憶型':'① 印象的な物・音・植物　② それにまつわる思い出　③ 気持ちの変化　④ 感謝　⑤ これからの自分','物語導入型':'① インパクトのある書き出し　② 問題・困難　③ 転換点　④ 気づきの広がり　⑤ 感謝と決意','家族感謝型':'① 家族との日常　② 変化・出来事　③ 気づき　④ 感謝の深まり　⑤ 未来への言葉','意見文型':'① 具体的な体験から始める　② 問いを立てる　③ 社会的な視野に広げる　④ 自分の意見　⑤ 結論・決意'};
+  const steps=ts[e.type]||'';
+  document.getElementById('structureSteps').innerHTML=steps.split('　').map(s=>s?`<span style="display:inline-block;margin-right:8px;margin-bottom:4px">${s}</span>`:'').join('');
+  document.getElementById('structureSummary').innerHTML=steps.replace(/　/g,'<br>');
 }
 
-function renderTemplate(){
-  const e=sk_essay;const rl={intro:'導入',event:'出来事',change:'気づき（転換点）',spread:'考えの広がり',end:'結末・決意'};
-  document.getElementById('tmplArea').innerHTML=`<div style="font-size:14px;background:#FFF3CD;padding:10px 12px;border-radius:10px;margin-bottom:12px;border-left:4px solid #F59E0B"><strong style="color:#7C4A00">💡 まねるポイント：</strong><br><span style="color:#1a1a1a">${e.imitation}</span></div>${e.structure.map(p=>`<div class="tmpl-block"><div class="tmpl-label">${p.label}（${rl[p.role]||p.role}）</div><div class="tmpl-hint">→ あなたの「${p.text.split('。')[0]}」はどんなこと？</div><textarea class="ta" style="min-height:70px;margin-top:6px" placeholder="自分の体験をここにメモしよう…"></textarea></div>`).join('')}`;
+// Step 3: タネ - AIに質問してもらう
+async function askSeedAI(){
+  const theme=document.getElementById('seed_theme').value;
+  const event=document.getElementById('seed_event').value;
+  const feel=document.getElementById('seed_feel').value;
+  const notice=document.getElementById('seed_notice').value;
+  if(!theme&&!event){alert('テーマか出来事を少し書いてからボタンを押してね！');return;}
+  const area=document.getElementById('seed_ai_area');
+  const txt=document.getElementById('seed_ai_txt');
+  area.style.display='block';txt.textContent='考え中…';
+  try{
+    const reply=await callAPI(`小学6年生（11歳・帰国子女・オランダ在住）の作文のタネ出しをサポートしてください。\nテーマ：${theme||'未記入'}\n出来事：${event||'未記入'}\n気持ち：${feel||'未記入'}\n気づき：${notice||'未記入'}\n\n子どもの体験を深めるための追加質問を3つだけ、やさしい日本語で出してください。答えは教えない。質問だけ。否定しない。具体的に思い出せる質問にしてください。マークダウン不使用。`,500);
+    txt.innerHTML=md2html(reply);
+    saveStudyRecord('sakubun_seed','作文タネメモ',(theme+' '+event+' '+notice).slice(0,200));
+  }catch(e){txt.textContent='エラー：'+e.message;}
 }
 
-function renderStep4(){const e=sk_essay;document.getElementById('step4hint').innerHTML=(e.prompts400[0]||'')+'<br>💡 '+e.imitation;}
+// Step 4: 骨組み - AIで作る
+function prefillOutlineFromSeed(){
+  // タネのnoticeをol_noticeにプレフィル（未入力時のみ）
+  const notice=document.getElementById('seed_notice').value;
+  const future=document.getElementById('seed_future').value;
+  if(notice&&!document.getElementById('ol_notice').value) document.getElementById('ol_notice').value=notice;
+  if(future&&!document.getElementById('ol_future').value) document.getElementById('ol_future').value=future;
+}
+
+async function buildOutlineAI(){
+  const theme=document.getElementById('seed_theme').value;
+  const event=document.getElementById('seed_event').value;
+  const feel=document.getElementById('seed_feel').value;
+  const notice=document.getElementById('seed_notice').value;
+  const future=document.getElementById('seed_future').value;
+  if(!event&&!theme){alert('先にStep 3でタネを入力してね！');return;}
+  const area=document.getElementById('outline_ai_area');
+  const txt=document.getElementById('outline_ai_txt');
+  area.style.display='block';txt.textContent='骨組みを作っています…';
+  try{
+    const e=sk_essay;
+    const reply=await callAPI(`小学6年生（11歳・帰国子女・オランダ在住）の作文の骨組みを作ってください。\nテーマ：${theme}\n出来事：${event}\n気持ち：${feel}\n気づき：${notice}\n将来：${future}\nお手本の作文タイプ：${e?e.type:'体験変化型'}\n\n完成作文ではなく、箇条書きの骨組みだけ作る。以下の5項目を各1〜2文で。子どもの言葉を残す。大人っぽくしすぎない。\n①はじめに思ったこと\n②実際にあったこと\n③そこで気づいたこと\n④自分が変わったこと\n⑤これからどうしたいか\nマークダウン不使用。`,600);
+    txt.innerHTML=md2html(reply);
+    // 骨組みを各フィールドに展開（シンプルにAI結果を参考表示）
+    saveStudyRecord('sakubun_outline','作文骨組み',reply.slice(0,300));
+  }catch(e){txt.textContent='エラー：'+e.message;}
+}
+
+function clearOutline(){
+  ['ol_intro','ol_event','ol_notice','ol_change','ol_future'].forEach(id=>{
+    document.getElementById(id).value='';
+  });
+  document.getElementById('outline_ai_area').style.display='none';
+}
+
+// Step 5: ミニ練習
+function selectMiniMode(mode,btn){
+  ['ichi','kaki','kizuki','matome'].forEach(m=>{
+    document.getElementById('mini-'+m).style.display=(m===mode)?'block':'none';
+  });
+  document.querySelectorAll('.mini-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+const MINI_PROMPTS={
+  ichi:{
+    label:'一文練習',
+    prompt:(txt)=>`小学6年生の「一文練習」のフィードバックをしてください。\n書いた文：「${txt}」\n\n以下の3点をやさしい言葉で短く教えてください。マークダウン不使用。\n【良いところ】1つ\n【もっと良くするヒント】1つ\n【改善例】1文だけ示す`
+  },
+  kaki:{
+    label:'書き出し練習',
+    prompt:(txt)=>`小学6年生の「書き出し練習」のフィードバックをしてください。\n書き出し：「${txt}」\n\n以下をやさしく短く。マークダウン不使用。\n【テーマが伝わるか】\n【読みたくなる始まりか】\n【もう少し自然な例】1文`
+  },
+  kizuki:{
+    label:'気づき練習',
+    prompt:(txt)=>`小学6年生の「気づき練習」のフィードバックをしてください。\n書いた気づき：「${txt}」\n\n以下をやさしく短く。マークダウン不使用。\n【出来事だけで終わっていないか】\n【自分の考えが入っているか】\n【もう少し深くする質問】1つ`
+  },
+  matome:{
+    label:'まとめ練習',
+    prompt:(txt)=>`小学6年生の「まとめ練習」のフィードバックをしてください。\nまとめの文：「${txt}」\n\n以下をやさしく短く。マークダウン不使用。\n【これからの行動があるか】\n【体験とつながっているか】\n【もう少し良いまとめ例】1文`
+  }
+};
+
+async function getMiniAI(mode){
+  const inEl=document.getElementById('mini_'+mode+'_in');
+  const txt=inEl.value.trim();
+  if(!txt){alert('文を書いてからボタンを押してね！');return;}
+  const fbEl=document.getElementById('mini_'+mode+'_fb');
+  const txtEl=document.getElementById('mini_'+mode+'_txt');
+  fbEl.style.display='block';txtEl.textContent='フィードバック中…';
+  try{
+    const reply=await callAPI(MINI_PROMPTS[mode].prompt(txt),400);
+    txtEl.innerHTML=md2html(reply);
+    fbEl.scrollIntoView({behavior:'smooth'});
+    saveStudyRecord('sakubun_mini','ミニ練習('+MINI_PROMPTS[mode].label+')',txt.slice(0,200));
+  }catch(e){txtEl.textContent='エラー：'+e.message;}
+}
+
+// Step 6: 400字
+function renderStep4hint(){
+  const e=sk_essay;
+  if(e) document.getElementById('step4hint').innerHTML=(e.prompts400[0]||'')+'<br>💡 '+e.imitation;
+}
+
+function renderOutlineRef(){
+  const fields=[
+    {id:'ol_intro',label:'① はじめに思ったこと'},
+    {id:'ol_event',label:'② 実際にあったこと'},
+    {id:'ol_notice',label:'③ そこで気づいたこと'},
+    {id:'ol_change',label:'④ 自分が変わったこと'},
+    {id:'ol_future',label:'⑤ これからどうしたいか'},
+  ];
+  const el=document.getElementById('outline_ref');
+  el.innerHTML=fields.map(f=>{
+    const val=document.getElementById(f.id)?document.getElementById(f.id).value:'';
+    return val?`<div style="margin-bottom:8px"><strong style="color:#1A5B8A">${f.label}</strong><br>${val}</div>`:'';
+  }).join('');
+}
 
 function setCT(n,btn){sk_charTarget=n;document.querySelectorAll('.ctbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');s4cc();}
-
-function s4cc(){const l=document.getElementById('s4in').value.length;const el=document.getElementById('s4cnt');el.textContent=l+'字 / 目標'+sk_charTarget+'字';el.className='cc'+(l>=sk_charTarget*0.9?' ok':l>sk_charTarget*0.5?' mid':'');}
+function s4cc(){const l=document.getElementById('s4in').value.length;const el=document.getElementById('s4cnt');el.textContent=l+'字 / 目標400字';el.className='cc'+(l>=360?' ok':l>200?' mid':'');}
 function s6cc(){const l=document.getElementById('s6in').value.length;const el=document.getElementById('s6cnt');el.textContent=l+'字 / 目標800字';el.className='cc'+(l>=720?' ok':l>400?' mid':'');}
-function s7cc(){const l=document.getElementById('s7in').value.length;const el=document.getElementById('s7cnt');el.textContent=l+'字 / 目標1200字';el.className='cc'+(l>=1080?' ok':l>600?' mid':'');}
+
+function finish400(){
+  const txt=document.getElementById('s4in').value.trim();
+  if(txt.length<50){alert('もう少し書いてみよう！');return;}
+  saveStudyRecord('sakubun_400','400字作文完成',txt.slice(0,400));
+  showPtToast('400字完成！すごい！🎉');
+  alert('400字作文を完成にしました！すごい！\n学習記録に保存しました。');
+}
 
 async function getS4FB(){
   const txt=document.getElementById('s4in').value.trim();
@@ -2276,7 +2541,7 @@ async function getS4FB(){
   const e=sk_essay;const btn=document.getElementById('s4fbtn');
   btn.disabled=true;btn.textContent='添削中…';document.getElementById('s4farea').style.display='none';
   try{
-    const reply=await callAPI(`新潟明訓中学A方式入試作文添削。11歳・小6・帰国子女（オランダ在住）。\nモデル作文タイプ：${e.type}\nまねるポイント：${e.imitation}\n作文：${txt}\n\n【総合評価】A/B/Cのどれか1字＋一言コメント\n【良かった点】2〜3つ（箇条書き）\n【改善のヒント】2〜3つ（具体的・小6向けの言葉で）\n【書き直しのヒント】1〜2文だけ改善例を示す\n\n帰国子女ならではの体験を活かしているかも評価してください。励ます口調で！\n【重要】マークダウン記法（**や##）は使わず、普通の日本語テキストで書いてください。`,1000);
+    const reply=await callAPI(`新潟明訓中学A方式入試作文添削。11歳・小6・帰国子女（オランダ在住）。\nモデル：${e?e.type:'体験変化型'}\n作文：${txt}\n\n【総合評価】A/B/Cのどれか1字＋一言コメント\n【良かった点】2〜3つ（箇条書き）\n【改善のヒント】最大3つ（具体的・小6向け）\n【次に直すならここ】優先順位1位だけ\n\n子どもの言葉を大人っぽくしすぎない。完成文を丸ごと作らない。帰国子女らしさも評価。励ます口調で！マークダウン不使用。`,1000);
     const sm=reply.match(/【総合評価】([ABC])/);
     const sp=document.getElementById('s4pills');sp.innerHTML='';
     if(sm){const p=document.createElement('span');p.className='pill pila';p.textContent='評価：'+sm[1];sp.appendChild(p);}
@@ -2284,75 +2549,100 @@ async function getS4FB(){
     document.getElementById('s4ftxt').innerHTML=md2html(reply);
     document.getElementById('s4farea').style.display='block';
     const c=parseInt(localStorage.getItem('mk_essays')||'0')+1;localStorage.setItem('mk_essays',c);upStats();renderEarnBanner();
-    saveStudyRecord('sakubun','作文AI添削 '+new Date().toLocaleDateString('ja'),(txt||'').slice(0,400));renderRecords(_currentRecordFilter||'all');
+    saveStudyRecord('sakubun','400字AI添削',txt.slice(0,400));renderRecords(_currentRecordFilter||'all');
     document.getElementById('s4farea').scrollIntoView({behavior:'smooth'});
   }catch(err){alert('エラー：'+err.message);}
   btn.disabled=false;btn.textContent='AI先生に添削してもらう';
 }
 
-function initChat(){
-  const e=sk_essay;sk_chatHistory=[];
-  const area=document.getElementById('chatArea');area.innerHTML='';
-  const draft=document.getElementById('s4in').value.trim();
-  const msg0=draft.length>50?`こんにちは！今まで書いた作文を読んだよ。「${e.title}」をお手本に、もっと深めていこう！AIコーチとして質問しながら一緒に考えるね。`:`こんにちは！「${e.title}」をお手本に作文を書いていくよ。AIコーチとして一緒に考えていくね！`;
-  addChatMsg('ai',msg0);
-  setTimeout(()=>{addChatMsg('ai',e.coach_start);sk_chatHistory=[{role:'assistant',content:msg0+'\n'+e.coach_start}];},400);
+// Step 7: 本番
+function renderStep6(){
+  const e=sk_essay;
+  if(e) document.getElementById('step6hint').innerHTML=(e.prompts800[0]||'')+'<br>💡 Step 5で出てきたエピソードや気持ちを加えよう！';
 }
-
-function addChatMsg(role,text){
-  const area=document.getElementById('chatArea');
-  const div=document.createElement('div');div.className='msg msg-'+role;div.textContent=text;
-  area.appendChild(div);area.scrollTop=area.scrollHeight;
-}
-
-async function sendChat(){
-  const txt=document.getElementById('chatIn').value.trim();if(!txt)return;
-  addChatMsg('user',txt);document.getElementById('chatIn').value='';
-  sk_chatHistory.push({role:'user',content:txt});
-  try{
-    const e=sk_essay;const draft=document.getElementById('s4in').value.trim();
-    const sysPrompt=`あなたは新潟明訓中学受験対策の作文コーチです。子ども（11歳・小6・帰国子女・オランダ在住）の作文を深めるためにやさしく質問してください。\nお手本の作文タイプ：${e.type}（${e.imitation}）\n子どもが書いた作文メモ：${draft||'（まだ書いていません）'}\n会話を通じて、より具体的なエピソードや気持ち・オランダ体験を引き出してください。\n毎回1〜2文の質問で終わらせること。励ます口調で。マークダウン不使用。`;
-    const hist=sk_chatHistory.map(m=>(m.role==='user'?'子ども：':'コーチ：')+m.content).join('\n');
-    const reply=await callAPI(sysPrompt+'\n\n会話履歴：\n'+hist+'\n\n子ども：'+txt+'\nコーチ：',400);
-    addChatMsg('ai',reply);sk_chatHistory.push({role:'assistant',content:reply});
-  }catch(err){addChatMsg('ai','エラーが起きました：'+err.message);}
-}
-
-function renderStep6(){const e=sk_essay;document.getElementById('step6hint').innerHTML=(e.prompts800[0]||'')+'<br>💡 Step 5で出てきたエピソードや気持ちを加えよう！';}
 function copyS4toS6(){document.getElementById('s6in').value=document.getElementById('s4in').value;s6cc();}
-function copyS6toS7(){document.getElementById('s7in').value=document.getElementById('s6in').value;s7cc();}
 
 async function getS6FB(){
   const txt=document.getElementById('s6in').value.trim();if(txt.length<100){alert('もう少し書いてから！');return;}
   const e=sk_essay;const btn=document.getElementById('s6fbtn');
   btn.disabled=true;btn.textContent='添削中…';document.getElementById('s6farea').style.display='none';
   try{
-    const reply=await callAPI(`新潟明訓中学A方式作文添削（800字版）。11歳・小6・帰国子女（オランダ在住）。モデル：${e.type}\n作文：${txt}\n【総合評価】A/B/C\n【良かった点】\n【改善のヒント】\n【1200字に向けたアドバイス】（どこを膨らませるといいか）\n励ます口調で。マークダウン不使用。`,1000);
+    const reply=await callAPI(`新潟明訓中学A方式作文添削（800字版）。11歳・小6・帰国子女（オランダ在住）。モデル：${e?e.type:'体験変化型'}\n作文：${txt}\n【総合評価】A/B/C\n【良かった点】\n【改善のヒント】最大3つ\n【帰国子女らしさ】\n励ます口調で。マークダウン不使用。`,1000);
     document.getElementById('s6pills').innerHTML=`<span class="pill pila">800字版</span><span class="pill pilb">${txt.length}字</span>`;
     document.getElementById('s6ftxt').innerHTML=md2html(reply);document.getElementById('s6farea').style.display='block';
     document.getElementById('s6farea').scrollIntoView({behavior:'smooth'});
+    saveStudyRecord('sakubun','800字AI添削',txt.slice(0,400));renderRecords(_currentRecordFilter||'all');
   }catch(err){alert('エラー：'+err.message);}
   btn.disabled=false;btn.textContent='AI先生に添削してもらう';
 }
 
-async function getS7FB(){
-  const txt=document.getElementById('s7in').value.trim();if(txt.length<200){alert('もう少し書いてから！');return;}
-  const e=sk_essay;const btn=document.getElementById('s7fbtn');
-  btn.disabled=true;btn.textContent='添削中…';document.getElementById('s7farea').style.display='none';
-  try{
-    const reply=await callAPI(`新潟明訓中学A方式作文最終添削。11歳・小6・帰国子女（オランダ在住）。モデル：${e.type}\n作文：${txt}\n【総合評価】A/B/C（合否に関わるレベルで評価）\n【受験官に刺さるポイント】\n【改善が必要なポイント】\n【帰国子女らしさ】（オランダ体験が活かされているか）\n【清書前の最終アドバイス】\n本番に向けて最大限励ます口調で！マークダウン不使用。`,1200);
-    const sm=reply.match(/【総合評価】([ABC])/);
-    const sp=document.getElementById('s7pills');sp.innerHTML='';
-    if(sm){const p=document.createElement('span');p.className='pill pila';p.textContent='評価：'+sm[1];sp.appendChild(p);}
-    sp.innerHTML+=`<span class="pill pilb">${txt.length}字</span><span class="pill pilc">完成版</span>`;
-    document.getElementById('s7ftxt').innerHTML=md2html(reply);document.getElementById('s7farea').style.display='block';
-    const c=parseInt(localStorage.getItem('mk_essays')||'0')+1;localStorage.setItem('mk_essays',c);upStats();renderEarnBanner();
-    saveStudyRecord('sakubun','作文AI添削 '+new Date().toLocaleDateString('ja'),(txt||'').slice(0,400));renderRecords(_currentRecordFilter||'all');
-    document.getElementById('s7farea').scrollIntoView({behavior:'smooth'});
-  }catch(err){alert('エラー：'+err.message);}
-  btn.disabled=false;btn.textContent='🎓 最終添削してもらう';
+function saveAndAddPt(){
+  const txt=document.getElementById('s6in').value.trim()||document.getElementById('s4in').value.trim();
+  if(!txt){alert('作文を書いてから保存してね！');return;}
+  saveStudyRecord('sakubun_final','完成作文',txt.slice(0,800));
+  addPtFromTab('sakubun',3,'完成作文保存');
+  showPtToast('完成作文を保存しました！+3pt🏆');
 }
 
+
+
+// ============================================================
+// 動画セクション
+// ============================================================
+const MATH_VIDEOS = [
+  {title:'分数のたし算・ひき算',id:'xvkRRE_AAAA'},
+  {title:'分数のかけ算',id:'OZ9MbNFHFxI'},
+  {title:'分数のわり算',id:'tPOB3JKdPxI'},
+  {title:'小数のかけ算',id:'ILiEJNpJoPs'},
+  {title:'小数のわり算',id:'a6WCW5x04a4'},
+  {title:'四則混合計算（整数）',id:'9Yo2TtHB1aE'},
+  {title:'四則混合計算（分数・小数）',id:'bLUAjVeJbZA'},
+  {title:'速さの基本',id:'T5PtInXVJOA'},
+  {title:'速さ・時間・距離の応用',id:'g3bCn3ckEpY'},
+  {title:'つるかめ算',id:'VLwvQ8DYDMQ'},
+  {title:'植木算',id:'nNKpxm0e6QQ'},
+  {title:'面積（三角形・四角形）',id:'cVHqA5_JRQY'},
+  {title:'円の面積と周の長さ',id:'uJAtlJYe1DU'},
+  {title:'体積（直方体・立方体）',id:'2qGx_XdnOzY'},
+  {title:'割合の基本',id:'bVfB_cH8fUc'},
+  {title:'百分率と歩合',id:'hH3yNhw0mEI'},
+  {title:'比と比の値',id:'XO9k3Qr9H6A'},
+  {title:'比例と反比例',id:'MnY-qhZ0bYk'},
+  {title:'場合の数（順列・組み合わせ）',id:'Yd4kLkQblAk'},
+  {title:'平均',id:'BElBsB4AAAA'},
+  {title:'単位量あたりの大きさ',id:'C3jKfX0yY6A'},
+  {title:'文字と式',id:'DmPz7HiQuak'},
+  {title:'図形の拡大と縮小',id:'E4Qn9LrHxaQ'},
+  {title:'対称な図形',id:'FsYmKj9Wqew'}
+];
+
+function initVideoSection() {
+  const list = document.getElementById('math-video-list');
+  if (!list) return;
+  list.innerHTML = '';
+  MATH_VIDEOS.forEach((v, i) => {
+    const item = document.createElement('div');
+    item.className = 'video-item';
+    item.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#EBF5FF;border-radius:10px;margin-bottom:6px;cursor:pointer" onclick="toggleMathVideo(${i},'${v.id}')">
+        <span style="font-size:14px;font-weight:600;color:#1A5B8A">▶ ${v.title}</span>
+        <span id="mv-icon-${i}" style="font-size:18px">＋</span>
+      </div>
+      <div id="mv-${i}" style="display:none;margin-bottom:10px">
+        <div class="video-wrap"><iframe src="https://www.youtube.com/embed/${v.id}" frameborder="0" allowfullscreen loading="lazy"></iframe></div>
+      </div>`;
+    list.appendChild(item);
+  });
+}
+
+function toggleMathVideo(idx, id) {
+  const el = document.getElementById('mv-' + idx);
+  const icon = document.getElementById('mv-icon-' + idx);
+  if (!el) return;
+  const isOpen = el.style.display === 'block';
+  el.style.display = isOpen ? 'none' : 'block';
+  if (icon) icon.textContent = isOpen ? '＋' : '－';
+}
 
 function exportData() {
   const data = {
