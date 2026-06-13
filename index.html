@@ -1585,6 +1585,7 @@ async function getIFB(){
   try{
     const reply=await callAPI(`明訓中学受験面接練習（11歳・小6・帰国子女・オランダ在住）。\n質問：「${window._curQ}」\n生徒の答え：「${txt}」\n【良かった点】【改善のヒント】【答えの例（50字程度）】を、やさしく短く教えてください。`);
     document.getElementById('ift').innerHTML=md2html(reply);document.getElementById('ifarea').style.display='block';
+    try{ addLearningLog({type:'面接', topic:(window._curQ||''), input:txt, feedback:reply}); }catch(e){}
   }catch(e){alert('エラー：'+e.message)}
   btn.disabled=false;btn.textContent='アドバイスをもらう';
 }
@@ -1693,6 +1694,7 @@ async function getS4FB(){
     const lp=document.createElement('span');lp.className='pill pilb';lp.textContent=txt.length+'字';sp.appendChild(lp);
     document.getElementById('s4ftxt').innerHTML=md2html(reply);
     document.getElementById('s4farea').style.display='block';
+    try{ addLearningLog({type:'作文(400字)', topic:(e?e.title:'')+(e&&e.type?' / '+e.type:''), input:txt, feedback:reply}); }catch(_e){}
     const c=parseInt(localStorage.getItem('mk_essays')||'0')+1;localStorage.setItem('mk_essays',c);upStats();renderEarnBanner();
     document.getElementById('s4farea').scrollIntoView({behavior:'smooth'});
   }catch(err){alert('エラー：'+err.message);}
@@ -1739,6 +1741,7 @@ async function getS6FB(){
     const reply=await callAPI(`新潟明訓中学A方式作文添削（800字版）。11歳・小6・帰国子女（オランダ在住）。モデル：${e.type}\n作文：${txt}\n【総合評価】A/B/C\n【良かった点】\n【改善のヒント】\n【1200字に向けたアドバイス】（どこを膨らませるといいか）\n励ます口調で。マークダウン不使用。`,1000);
     document.getElementById('s6pills').innerHTML=`<span class="pill pila">800字版</span><span class="pill pilb">${txt.length}字</span>`;
     document.getElementById('s6ftxt').innerHTML=md2html(reply);document.getElementById('s6farea').style.display='block';
+    try{ addLearningLog({type:'作文(800字)', topic:(e?e.title:'')+(e&&e.type?' / '+e.type:''), input:txt, feedback:reply}); }catch(_e){}
     document.getElementById('s6farea').scrollIntoView({behavior:'smooth'});
   }catch(err){alert('エラー：'+err.message);}
   btn.disabled=false;btn.textContent='AI先生に添削してもらう';
@@ -1755,6 +1758,7 @@ async function getS7FB(){
     if(sm){const p=document.createElement('span');p.className='pill pila';p.textContent='評価：'+sm[1];sp.appendChild(p);}
     sp.innerHTML+=`<span class="pill pilb">${txt.length}字</span><span class="pill pilc">完成版</span>`;
     document.getElementById('s7ftxt').innerHTML=md2html(reply);document.getElementById('s7farea').style.display='block';
+    try{ addLearningLog({type:'作文(1200字)', topic:(e?e.title:'')+(e&&e.type?' / '+e.type:''), input:txt, feedback:reply}); }catch(_e){}
     const c=parseInt(localStorage.getItem('mk_essays')||'0')+1;localStorage.setItem('mk_essays',c);upStats();renderEarnBanner();
     document.getElementById('s7farea').scrollIntoView({behavior:'smooth'});
   }catch(err){alert('エラー：'+err.message);}
@@ -1802,6 +1806,7 @@ function importData() {
     if (data.milestones) saveAchievedMilestones(data.milestones);
     if (data.mk_essays) localStorage.setItem('mk_essays', data.mk_essays);
     if (data.mk_qs) localStorage.setItem('mk_qs', data.mk_qs);
+    if (data.mk_logs) localStorage.setItem('mk_logs', data.mk_logs);
     sv();
     renderCal(); upStats(); renderEarnBanner(); renderBonusChips(); initTodayButtons();
     try { syncToSheet(true); } catch(e) {}
@@ -2000,6 +2005,23 @@ function saveSheetConfig(){
 }
 
 // localStorageの学習記録を、シートに書き出すための形に整える
+function getLearningLogs(){
+  try { return JSON.parse(localStorage.getItem('mk_logs') || '[]'); } catch(e) { return []; }
+}
+
+// 作文・面接などの「本人の入力＋AIの評価」を1件記録する
+function addLearningLog(entry){
+  var logs = getLearningLogs();
+  entry.id = Date.now() + '_' + Math.floor(Math.random() * 100000);
+  entry.ts = new Date().toISOString();
+  logs.push(entry);
+  // 端末の容量節約のため直近400件だけ保持（古いものはシート側に残る）
+  if (logs.length > 400) logs = logs.slice(logs.length - 400);
+  try { localStorage.setItem('mk_logs', JSON.stringify(logs)); } catch(e) {}
+  // すぐシートへ送信（シート側は追記式なので消えない）
+  try { syncToSheet(true); } catch(e) {}
+}
+
 function buildSheetPayload(){
   const rows = Object.keys(cal)
     .filter(k => cal[k] && cal[k].pts !== undefined)
@@ -2031,13 +2053,15 @@ function buildSheetPayload(){
     essays:     localStorage.getItem('mk_essays') || '0',
     questions:  localStorage.getItem('mk_qs')     || '0',
     milestones: getAchievedMilestones(),
+    logs:       getLearningLogs(),
     // 端末データ全体のバックアップ（万一に備えて生JSONも保存）
     backup: {
       cal: cal,
       kanjiState: kanjiState,
       milestones: getAchievedMilestones(),
       mk_essays: localStorage.getItem('mk_essays') || '0',
-      mk_qs: localStorage.getItem('mk_qs') || '0'
+      mk_qs: localStorage.getItem('mk_qs') || '0',
+      mk_logs: localStorage.getItem('mk_logs') || '[]'
     },
     syncedAt: new Date().toISOString()
   };
