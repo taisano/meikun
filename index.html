@@ -546,6 +546,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <input id="gsUrl" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px" placeholder="Apps Script のURL（https://script.google.com/macros/s/.../exec）" value="" oninput="saveSheetConfig()">
     <button id="gsSyncBtn" class="bp" onclick="manualSyncSheet()" style="width:100%;margin-top:8px">📤 今すぐシートに書き出す</button>
     <p id="gsMsg" style="font-size:12px;color:#1A5B8A;text-align:center;margin-top:6px;display:none"></p>
+    <div id="gsStatus"></div>
   </div>
 </div>
 
@@ -614,6 +615,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       <div class="ctitle">📝 型をまねて書こう <span class="badge bc">Step 3</span></div>
       <p style="font-size:13px;color:#666;margin-bottom:10px">テンプレートに自分の体験を当てはめてみよう。まずはメモでOK！</p>
       <div id="tmplArea"></div>
+      <button class="bp" onclick="saveTemplateMemo()" style="width:100%;margin-top:6px">📝 この型まねメモを記録する</button>
+      <p id="tmplSaveMsg" style="font-size:12px;color:#1A5B8A;text-align:center;margin-top:6px;display:none"></p>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(2)">← 戻る</button>
         <button class="step-next" onclick="goStep(4)">次へ：400字で書く →</button>
@@ -1681,6 +1684,34 @@ function s4cc(){const l=document.getElementById('s4in').value.length;const el=do
 function s6cc(){const l=document.getElementById('s6in').value.length;const el=document.getElementById('s6cnt');el.textContent=l+'字 / 目標800字';el.className='cc'+(l>=720?' ok':l>400?' mid':'');}
 function s7cc(){const l=document.getElementById('s7in').value.length;const el=document.getElementById('s7cnt');el.textContent=l+'字 / 目標1200字';el.className='cc'+(l>=1080?' ok':l>600?' mid':'');}
 
+function saveTemplateMemo(){
+  const blocks = document.querySelectorAll('#tmplArea .tmpl-block');
+  const parts = [];
+  blocks.forEach(b => {
+    const label = (b.querySelector('.tmpl-label') ? b.querySelector('.tmpl-label').textContent : '').trim();
+    const ta = b.querySelector('textarea');
+    const val = ta ? ta.value.trim() : '';
+    if (val) parts.push((label ? '【' + label + '】\n' : '') + val);
+  });
+  if (parts.length === 0) { alert('まず体験をメモしてから「記録する」を押してね！'); return; }
+  const e = sk_essay;
+  try {
+    addLearningLog({
+      type: '作文(型まね)',
+      topic: (e ? e.title : '') + (e && e.type ? ' / ' + e.type : ''),
+      input: parts.join('\n\n'),
+      feedback: '（型まねメモ・AI評価なし）'
+    });
+  } catch(_e) {}
+  const msg = document.getElementById('tmplSaveMsg');
+  if (msg) {
+    msg.textContent = '✅ 型まねメモを記録しました！シートにも保存されます';
+    msg.style.display = 'block';
+    setTimeout(() => { msg.style.display = 'none'; }, 3500);
+  }
+  showPtToast('型まねメモを記録したよ！📝');
+}
+
 async function getS4FB(){
   const txt=document.getElementById('s4in').value.trim();
   if(txt.length<50){alert('もう少し書いてから！（50字以上）');return;}
@@ -1991,6 +2022,7 @@ function loadSheetConfig(){
   const url = localStorage.getItem('mk_gs_url') || '';
   const el = document.getElementById('gsUrl');
   if (el && url) el.value = url;
+  updateSheetStatus();
 }
 function saveSheetConfig(){
   const el = document.getElementById('gsUrl');
@@ -2002,6 +2034,31 @@ function saveSheetConfig(){
     msg.style.display = 'block';
     setTimeout(() => { msg.style.display = 'none'; }, 2500);
   }
+  updateSheetStatus();
+}
+
+// 状態を画面に表示（どこで止まっているか分かるように）
+function updateSheetStatus(){
+  const box = document.getElementById('gsStatus');
+  if (!box) return;
+  const url = localStorage.getItem('mk_gs_url') || '';
+  const logCount = getLearningLogs().length;
+  const last = localStorage.getItem('mk_gs_lastsync') || '';
+  let lastTxt = 'まだ送信していません';
+  if (last) {
+    try {
+      const d = new Date(last);
+      lastTxt = d.toLocaleString('ja-JP', {month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}) + ' に送信';
+    } catch(e){ lastTxt = last; }
+  }
+  const urlOk = /\/exec\s*$/.test(url);
+  box.innerHTML =
+    '<div style="background:#F4F8FC;border:1px solid #C8E6FA;border-radius:10px;padding:10px;font-size:12px;line-height:1.8;color:#444;margin-top:8px">' +
+    '<strong style="color:#1A5B8A">🔍 状態</strong><br>' +
+    'URL設定：' + (url ? (urlOk ? '✅ 設定済み' : '⚠️ 設定済みだが /exec で終わっていない') : '❌ 未設定') + '<br>' +
+    '端末に保存された作文・面接の記録：<strong>' + logCount + ' 件</strong><br>' +
+    '最後の送信：' + lastTxt +
+    '</div>';
 }
 
 // localStorageの学習記録を、シートに書き出すための形に整える
@@ -2078,6 +2135,8 @@ async function syncToSheet(silent){
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(buildSheetPayload())
     });
+    try { localStorage.setItem('mk_gs_lastsync', new Date().toISOString()); } catch(e) {}
+    try { updateSheetStatus(); } catch(e) {}
     return true;
   } catch(e) {
     console.warn('sheet sync error:', e);
