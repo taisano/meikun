@@ -73,6 +73,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .stbtn{display:block;width:100%;padding:14px;background:#5BA4CF;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;text-align:center;margin-bottom:8px;-webkit-tap-highlight-color:transparent;transition:background .15s}
 .stbtn:active{background:#1A5B8A}
 .stbtn:disabled{background:#ccc;cursor:default}
+.mini-tab{background:#EBF5FF;color:#1A5B8A;border:2px solid #C8E6FA;border-radius:10px;padding:10px 6px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.mini-tab.on{background:#5BA4CF;color:#fff;border-color:#5BA4CF}
+.step-bar{display:flex}
 .monnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .monnav span{font-size:16px;font-weight:700;color:#1a1a1a}
 .bp{padding:12px 18px;background:#5BA4CF;color:#fff;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-weight:600;-webkit-tap-highlight-color:transparent;transition:background .15s}
@@ -242,6 +245,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 .stbtn{display:block;width:100%;padding:14px;background:#5BA4CF;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;text-align:center;margin-bottom:8px;-webkit-tap-highlight-color:transparent;transition:background .15s}
 .stbtn:active{background:#1A5B8A}
 .stbtn:disabled{background:#ccc;cursor:default}
+.mini-tab{background:#EBF5FF;color:#1A5B8A;border:2px solid #C8E6FA;border-radius:10px;padding:10px 6px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.mini-tab.on{background:#5BA4CF;color:#fff;border-color:#5BA4CF}
+.step-bar{display:flex}
 .monnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .monnav span{font-size:16px;font-weight:700;color:#1a1a1a}
 .bp{padding:12px 18px;background:#5BA4CF;color:#fff;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-weight:600;-webkit-tap-highlight-color:transparent;transition:background .15s}
@@ -480,6 +486,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div id="comboAlert" style="display:none;background:#FFF3CD;border-radius:10px;padding:8px 12px;font-size:13px;color:#856404;margin-bottom:8px;text-align:center"></div>
     <button class="stbtn" id="stbtn" onclick="stamp()">⭐ 今日の記録を保存！</button>
     <p style="font-size:12px;color:#999;text-align:center;margin-top:4px" id="stampHint">科目を選んで保存してね</p>
+    <button id="resetSelBtn" onclick="resetSubjSelection()" style="display:none;width:100%;margin-top:6px;padding:8px;background:#fff;color:#E24B4A;border:1.5px solid #E24B4A;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer">🔄 選択をリセット</button>
   </div>
 
   <!-- 月間ボーナス進捗 -->
@@ -502,6 +509,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       <span style="color:#3A7BD5">🟢コンボ日</span><span style="color:#F0A030">🟡バランスボーナス日</span>
     </div>
   </div>
+  <!-- 学習記録 -->
+  <div class="card" id="study-records-card">
+    <div class="ctitle">📒 学習記録 <span class="badge ba" id="rec-count-badge">0件</span></div>
+    <p style="font-size:13px;color:#666;margin-bottom:10px">作文・面接で書いた内容が自動保存されます</p>
+    <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+      <button class="bp" style="font-size:13px;padding:8px 14px" onclick="filterRecords('all')">すべて</button>
+      <button class="bs" style="font-size:13px;padding:8px 14px" onclick="filterRecords('sakubun')">✏️作文</button>
+      <button class="bs" style="font-size:13px;padding:8px 14px" onclick="filterRecords('mensetsu')">🎤面接</button>
+      <button class="bs" style="font-size:13px;padding:8px 14px" onclick="filterRecords('sansu')">🔢算数</button>
+      <button class="bs" style="font-size:13px;padding:8px 14px" onclick="filterRecords('kokugo')">📖国語</button>
+    </div>
+    <div id="study-records-list" style="max-height:400px;overflow-y:auto"></div>
+  </div>
+
   <!-- データバックアップ -->
   <div class="card">
     <div class="ctitle">💾 スタディログ バックアップ</div>
@@ -534,42 +555,41 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <button id="manualReportBtn" class="bp" onclick="manualSendReport()" style="margin-bottom:6px">📧 今日のレポートをメール送信</button>
     <p style="font-size:11px;color:#999;text-align:center">送信先：taisuke.sano@gmail.com・i.yayaco@gmail.com</p>
   </div>
-
-  <!-- Google Sheet 連携 -->
-  <div class="card" id="sheetCard">
-    <div class="ctitle">📊 Google Sheet に記録する</div>
-    <p style="font-size:13px;color:#666;margin-bottom:10px">勉強の記録（作文・面接など、どの日に何をやったか）を、お父さん・お母さんが見られる Google スプレッドシートに自動で書き出します。記録をつけるたびに自動で更新されます。</p>
-    <div style="background:#EBF5FF;border-radius:10px;padding:12px;margin-bottom:10px;font-size:13px;line-height:1.7;border-left:4px solid #5BA4CF">
-      <strong style="color:#1A5B8A">⚙️ 初回設定が必要です（大人向け）</strong><br>
-      Google スプレッドシートの「拡張機能 → Apps Script」にスクリプトを貼り付けて<strong>デプロイ</strong>し、表示された <strong>ウェブアプリのURL</strong> を下の欄に貼り付けてください。
-    </div>
-    <input id="gsUrl" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px" placeholder="Apps Script のURL（https://script.google.com/macros/s/.../exec）" value="" oninput="saveSheetConfig()">
-    <button id="gsSyncBtn" class="bp" onclick="manualSyncSheet()" style="width:100%;margin-top:8px">📤 今すぐシートに書き出す</button>
-    <p id="gsMsg" style="font-size:12px;color:#1A5B8A;text-align:center;margin-top:6px;display:none"></p>
-    <div id="gsStatus"></div>
-  </div>
 </div>
 
 <!-- 作文 7ステップメソッド -->
 <div id="s-sakubun" class="sec">
 
-  <!-- ステップバー -->
-  <div class="step-bar" id="stepBar">
-    <button class="step-btn on" onclick="goStep(1)"><span class="snum">📖</span>読む</button>
-    <button class="step-btn" onclick="goStep(2)"><span class="snum">🔍</span>分解</button>
-    <button class="step-btn" onclick="goStep(3)"><span class="snum">📝</span>型まね</button>
-    <button class="step-btn" onclick="goStep(4)"><span class="snum">✏️</span>400字</button>
-    <button class="step-btn" onclick="goStep(5)"><span class="snum">🤖</span>AIコーチ</button>
-    <button class="step-btn" onclick="goStep(6)"><span class="snum">📄</span>800字</button>
-    <button class="step-btn" onclick="goStep(7)"><span class="snum">🏆</span>完成</button>
+  <!-- 入口選択 -->
+  <div id="sk-entry" class="card" style="text-align:center;padding:20px 16px">
+    <div class="ctitle" style="margin-bottom:6px">✏️ 作文練習</div>
+    <p style="font-size:13px;color:#666;margin-bottom:16px">今日はどちらの練習をしますか？</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button onclick="startEntry('daily')" style="background:linear-gradient(135deg,#5BA4CF,#3A7BD5);color:#fff;border:none;border-radius:14px;padding:18px 10px;font-size:14px;font-weight:700;cursor:pointer;line-height:1.5">
+        🌱 毎日の<br>作文トレーニング<br><span style="font-size:11px;font-weight:400;opacity:.9">5〜10分・短い練習</span>
+      </button>
+      <button onclick="startEntry('honban')" style="background:linear-gradient(135deg,#F0A030,#E08020);color:#fff;border:none;border-radius:14px;padding:18px 10px;font-size:14px;font-weight:700;cursor:pointer;line-height:1.5">
+        🏆 本番作文<br>チャレンジ<br><span style="font-size:11px;font-weight:400;opacity:.9">400字・800字を書く</span>
+      </button>
+    </div>
   </div>
 
-  <!-- Step 1: 良い作文を読む -->
-  <div id="sk-step1">
+  <!-- ステップバー -->
+  <div class="step-bar" id="stepBar" style="display:none">
+    <button class="step-btn on" onclick="goStep(1)"><span class="snum">📖</span>読む</button>
+    <button class="step-btn" onclick="goStep(2)"><span class="snum">🔍</span>しくみ</button>
+    <button class="step-btn" onclick="goStep(3)"><span class="snum">🌱</span>タネ</button>
+    <button class="step-btn" onclick="goStep(4)"><span class="snum">🧱</span>骨組み</button>
+    <button class="step-btn" onclick="goStep(5)"><span class="snum">✨</span>ミニ練習</button>
+    <button class="step-btn" onclick="goStep(6)"><span class="snum">✏️</span>400字</button>
+    <button class="step-btn" onclick="goStep(7)"><span class="snum">🏆</span>本番</button>
+  </div>
+
+  <!-- Step 1: 読む -->
+  <div id="sk-step1" style="display:none">
     <div class="card">
       <div class="ctitle">📖 良い作文を読もう <span class="badge ba">Step 1</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:10px">まずは受賞作品を読んで「良い作文」のイメージをつかもう！レベル順に並んでいるよ。</p>
-      <!-- フィルター -->
+      <p style="font-size:13px;color:#666;margin-bottom:10px">まずは良い作文を読んで、「いい文章ってどんな感じか」をつかもう。<br>すぐに書かなくて大丈夫。心に残ったところを見つけよう。</p>
       <div class="filter-row" id="essayFilters">
         <button class="fchip on" onclick="filterEssays('all',this)">すべて</button>
         <button class="fchip" onclick="filterEssays('lv1',this)">Level 1⭐</button>
@@ -580,66 +600,183 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       </div>
       <div class="essay-grid" id="essayGrid"></div>
     </div>
-    <!-- 作文表示エリア -->
     <div class="card" id="essayViewer" style="display:none">
       <div class="ctitle" id="evTitle"></div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px" id="evMeta"></div>
       <div class="essay-body" id="evBody"></div>
+      <!-- 読んだあとのミニ質問 -->
+      <div style="background:#EBF5FF;border-radius:12px;padding:14px;margin-top:14px">
+        <div style="font-size:14px;font-weight:700;color:#1A5B8A;margin-bottom:10px">💬 読んで気づいたこと（任意・書かなくてもOK）</div>
+        <div style="display:grid;gap:8px">
+          <div><label style="font-size:12px;color:#666">一番心に残ったところは？</label><input class="ta" id="read_q1" style="min-height:0;padding:8px;margin-top:3px" placeholder="例：最後の一文がかっこいいと思った"></div>
+          <div><label style="font-size:12px;color:#666">作者はどんな体験をしている？</label><input class="ta" id="read_q2" style="min-height:0;padding:8px;margin-top:3px" placeholder="例：サッカーの試合に負けた体験"></div>
+          <div><label style="font-size:12px;color:#666">いいなと思った言い方を1つ選ぼう</label><input class="ta" id="read_q3" style="min-height:0;padding:8px;margin-top:3px" placeholder="例：「前の自分は〜と思っていた」という書き方"></div>
+        </div>
+      </div>
       <div class="step-nav">
-        <button class="step-next" onclick="goStep(2)">次へ：構成を分解する →</button>
+        <button class="step-next" onclick="goStep(2)">次へ：しくみを見る →</button>
       </div>
     </div>
   </div>
 
-  <!-- Step 2: 構成を分解して見る -->
+  <!-- Step 2: しくみ -->
   <div id="sk-step2" style="display:none">
     <div class="card">
-      <div class="ctitle">🔍 構成を分解しよう <span class="badge bb">Step 2</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:10px">この作文はどんな「型」で書かれているか、段落ごとに色分けして見てみよう！</p>
+      <div class="ctitle">🔍 作文のしくみを見よう <span class="badge bb">Step 2</span></div>
+      <p style="font-size:13px;color:#666;margin-bottom:10px">この作文はどんな順番で書かれているかな？段落ごとに色分けして確認しよう！</p>
       <div id="structureView"></div>
       <div style="margin-top:12px;padding:12px;background:#F4F8FC;border-radius:10px">
-        <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:8px">📌 この作文の「型」</div>
+        <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:8px">📌 この作文のしくみ</div>
         <div id="essayTypeLabel" style="font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:6px"></div>
-        <div id="structureSteps" style="font-size:14px;color:#555;line-height:1.9"></div>
+        <div id="structureSteps" style="font-size:14px;color:#555;line-height:2"></div>
+      </div>
+      <div style="margin-top:12px;padding:12px;background:#FFF3CD;border-radius:10px;font-size:13px;line-height:1.9">
+        <strong style="color:#7C4A00">この作文は、</strong><br>
+        <span id="structureSummary" style="color:#555"></span>
+        <br>の順番で書かれています。
       </div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(1)">← 戻る</button>
-        <button class="step-next" onclick="goStep(3)">次へ：型をまねる →</button>
+        <button class="step-next" onclick="goStep(3)">次へ：作文のタネ →</button>
       </div>
     </div>
   </div>
 
-  <!-- Step 3: 型をまねる -->
+  <!-- Step 3: タネ -->
   <div id="sk-step3" style="display:none">
     <div class="card">
-      <div class="ctitle">📝 型をまねて書こう <span class="badge bc">Step 3</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:10px">テンプレートに自分の体験を当てはめてみよう。まずはメモでOK！</p>
-      <div id="tmplArea"></div>
-      <button class="bp" onclick="saveTemplateMemo()" style="width:100%;margin-top:6px">📝 この型まねメモを記録する</button>
-      <p id="tmplSaveMsg" style="font-size:12px;color:#1A5B8A;text-align:center;margin-top:6px;display:none"></p>
+      <div class="ctitle">🌱 作文のタネを見つけよう <span class="badge bc">Step 3</span></div>
+      <p style="font-size:13px;color:#666;margin-bottom:12px">まだ作文を書かなくて大丈夫。<br>自分の体験、気持ち、気づいたことをメモして、材料を集めよう。</p>
+      <div style="display:grid;gap:10px">
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">📌 書きたいテーマ</label><input class="ta" id="seed_theme" style="min-height:0;padding:10px;margin-top:4px" placeholder="例：努力・命・思いやり・家族・挑戦・オランダでの体験"></div>
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">📅 最近あった出来事</label><input class="ta" id="seed_event" style="min-height:0;padding:10px;margin-top:4px" placeholder="例：学校・家・習い事・友達とのことなど"></div>
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">💭 その時の気持ち</label><input class="ta" id="seed_feel" style="min-height:0;padding:10px;margin-top:4px" placeholder="例：うれしかった・くやしかった・びっくりした・申し訳なかった"></div>
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">👥 だれが関わっていたか</label><input class="ta" id="seed_who" style="min-height:0;padding:10px;margin-top:4px" placeholder="例：友達・先生・家族・チームメイト"></div>
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">💡 その経験から気づいたこと</label><textarea class="ta" id="seed_notice" style="min-height:70px;margin-top:4px" placeholder="例：失敗しても諦めないことが大切だとわかった"></textarea></div>
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">🚀 これからどうしたいか</label><input class="ta" id="seed_future" style="min-height:0;padding:10px;margin-top:4px" placeholder="例：次は〜をしてみたい、〜を大切にしたい"></div>
+      </div>
+      <div style="margin-top:12px">
+        <button class="bp" onclick="askSeedAI()">🤖 AIに質問してもらう</button>
+      </div>
+      <div id="seed_ai_area" style="display:none;margin-top:10px">
+        <div class="fbox" style="background:#F0FFF4"><p id="seed_ai_txt"></p></div>
+      </div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(2)">← 戻る</button>
-        <button class="step-next" onclick="goStep(4)">次へ：400字で書く →</button>
+        <button class="step-next" onclick="goStep(4)">次へ：骨組みを作る →</button>
       </div>
     </div>
   </div>
 
-  <!-- Step 4: 400字で書く -->
+  <!-- Step 4: 骨組み -->
   <div id="sk-step4" style="display:none">
     <div class="card">
-      <div class="ctitle">✏️ 400字で書こう <span class="badge ba">Step 4</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:8px">まずは400字（原稿用紙1枚分）でまとめてみよう。</p>
+      <div class="ctitle">🧱 作文の骨組みを作ろう <span class="badge ba">Step 4</span></div>
+      <p style="font-size:13px;color:#666;margin-bottom:12px">集めたタネを、作文の順番に並べよう。<br>骨組みを作っておくと、400字を書くときに迷いにくくなります。</p>
+      <div style="display:grid;gap:10px" id="outline_area">
+        <div><label style="font-size:13px;font-weight:700;color:#1A5B8A">① はじめに思ったこと</label><textarea class="ta" id="ol_intro" style="min-height:60px;margin-top:4px" placeholder="最初に伝えたい考えや気持ち"></textarea></div>
+        <div><label style="font-size:13px;font-weight:700;color:#5BA4CF">② 実際にあったこと</label><textarea class="ta" id="ol_event" style="min-height:70px;margin-top:4px" placeholder="具体的な出来事・場面"></textarea></div>
+        <div><label style="font-size:13px;font-weight:700;color:#F0A030">③ そこで気づいたこと</label><textarea class="ta" id="ol_notice" style="min-height:60px;margin-top:4px" placeholder="体験からわかったこと・変わったこと"></textarea></div>
+        <div><label style="font-size:13px;font-weight:700;color:#9B8FD4">④ 自分が変わったこと</label><textarea class="ta" id="ol_change" style="min-height:60px;margin-top:4px" placeholder="前の自分と今の自分の違い"></textarea></div>
+        <div><label style="font-size:13px;font-weight:700;color:#E24B4A">⑤ これからどうしたいか</label><textarea class="ta" id="ol_future" style="min-height:60px;margin-top:4px" placeholder="これからの行動・決意"></textarea></div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="bp" onclick="buildOutlineAI()">🤖 AIで骨組みを作る</button>
+        <button class="bs" onclick="clearOutline()">🔄 クリア</button>
+      </div>
+      <div id="outline_ai_area" style="display:none;margin-top:10px">
+        <div class="fbox" style="background:#EBF5FF"><p id="outline_ai_txt"></p></div>
+      </div>
+      <div class="step-nav">
+        <button class="step-back" onclick="goStep(3)">← 戻る</button>
+        <button class="step-next" onclick="goStep(5)">次へ：ミニ練習 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5: ミニ練習 -->
+  <div id="sk-step5" style="display:none">
+    <div class="card">
+      <div class="ctitle">✨ ミニ練習：いい文を体に入れよう <span class="badge bc">Step 5</span></div>
+      <p style="font-size:13px;color:#666;margin-bottom:12px">いきなり長い作文を書かずに、まずは短い文を練習しよう。<br>一文、書き出し、気づき、まとめを練習すると、作文がぐっと良くなります。</p>
+      <!-- 練習タイプ選択 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <button class="mini-tab on" onclick="selectMiniMode('ichi',this)">📝 一文練習</button>
+        <button class="mini-tab" onclick="selectMiniMode('kaki',this)">🌅 書き出し</button>
+        <button class="mini-tab" onclick="selectMiniMode('kizuki',this)">💡 気づき</button>
+        <button class="mini-tab" onclick="selectMiniMode('matome',this)">🎯 まとめ</button>
+      </div>
+      <!-- 各練習モード -->
+      <div id="mini-ichi">
+        <div style="background:#EBF5FF;border-radius:10px;padding:12px;margin-bottom:10px">
+          <div style="font-size:12px;color:#888;margin-bottom:4px">📖 お手本</div>
+          <div style="font-size:13px;color:#555;margin-bottom:6px">普通：「試合に負けてくやしかったです。」</div>
+          <div style="font-size:13px;color:#1A5B8A;font-weight:600">良い文：「試合に負けたことよりも、最後まで本気を出しきれなかった自分がくやしかったです。」</div>
+        </div>
+        <label style="font-size:13px;font-weight:700;color:#1A5B8A">自分の体験を一文で書いてみよう</label>
+        <textarea class="ta" id="mini_ichi_in" style="min-height:80px;margin-top:6px" placeholder="自分の体験・気持ちを一文で書いてみよう"></textarea>
+        <button class="bp" style="margin-top:8px" onclick="getMiniAI('ichi')">🤖 フィードバックをもらう</button>
+        <div id="mini_ichi_fb" style="display:none;margin-top:8px"><div class="fbox"><p id="mini_ichi_txt"></p></div></div>
+      </div>
+      <div id="mini-kaki" style="display:none">
+        <div style="background:#EBF5FF;border-radius:10px;padding:12px;margin-bottom:10px">
+          <div style="font-size:12px;color:#888;margin-bottom:4px">📖 お手本</div>
+          <div style="font-size:13px;color:#555;margin-bottom:6px">普通：「私は努力が大切だと思います。」</div>
+          <div style="font-size:13px;color:#1A5B8A;font-weight:600">良い文：「前の私は、努力はがんばった分だけすぐ結果が出るものだと思っていました。」</div>
+        </div>
+        <label style="font-size:13px;font-weight:700;color:#1A5B8A">作文の最初の一文を書いてみよう</label>
+        <textarea class="ta" id="mini_kaki_in" style="min-height:80px;margin-top:6px" placeholder="作文の書き出しを書いてみよう"></textarea>
+        <button class="bp" style="margin-top:8px" onclick="getMiniAI('kaki')">🤖 フィードバックをもらう</button>
+        <div id="mini_kaki_fb" style="display:none;margin-top:8px"><div class="fbox"><p id="mini_kaki_txt"></p></div></div>
+      </div>
+      <div id="mini-kizuki" style="display:none">
+        <div style="background:#EBF5FF;border-radius:10px;padding:12px;margin-bottom:10px">
+          <div style="font-size:12px;color:#888;margin-bottom:4px">📖 お手本</div>
+          <div style="font-size:13px;color:#555;margin-bottom:6px">浅い気づき：「親切にすることは大事だと思った。」</div>
+          <div style="font-size:13px;color:#1A5B8A;font-weight:600">深い気づき：「相手が困っていることに気づくには、自分のことだけでなく、周りを見ることが大切だと思った。」</div>
+        </div>
+        <label style="font-size:13px;font-weight:700;color:#1A5B8A">自分の体験から気づいたことを書いてみよう</label>
+        <textarea class="ta" id="mini_kizuki_in" style="min-height:80px;margin-top:6px" placeholder="体験から気づいたことを書いてみよう"></textarea>
+        <button class="bp" style="margin-top:8px" onclick="getMiniAI('kizuki')">🤖 フィードバックをもらう</button>
+        <div id="mini_kizuki_fb" style="display:none;margin-top:8px"><div class="fbox"><p id="mini_kizuki_txt"></p></div></div>
+      </div>
+      <div id="mini-matome" style="display:none">
+        <div style="background:#EBF5FF;border-radius:10px;padding:12px;margin-bottom:10px">
+          <div style="font-size:12px;color:#888;margin-bottom:4px">📖 お手本</div>
+          <div style="font-size:13px;color:#555;margin-bottom:6px">弱いまとめ：「これからもがんばりたいです。」</div>
+          <div style="font-size:13px;color:#1A5B8A;font-weight:600">良いまとめ：「これからは、結果だけでなく、そこまでの努力や人との関わりも大切にしたいです。」</div>
+        </div>
+        <label style="font-size:13px;font-weight:700;color:#1A5B8A">作文の最後の一文を書いてみよう</label>
+        <textarea class="ta" id="mini_matome_in" style="min-height:80px;margin-top:6px" placeholder="作文の最後の一文を書いてみよう"></textarea>
+        <button class="bp" style="margin-top:8px" onclick="getMiniAI('matome')">🤖 フィードバックをもらう</button>
+        <div id="mini_matome_fb" style="display:none;margin-top:8px"><div class="fbox"><p id="mini_matome_txt"></p></div></div>
+      </div>
+      <!-- ポイントボタン -->
+      <div style="padding:10px;background:#EBF5FF;border-radius:10px;border-left:3px solid #5BA4CF;margin-top:14px">
+        <div style="font-size:12px;color:#666;margin-bottom:6px">✨ ミニ練習をしたらポイントを追加しよう！</div>
+        <button id="tabpt-sakubun-mini" class="stbtn" onclick="addPtFromTab('sakubun',1,'作文ミニ練習')">⭐ ミニ練習 +1pt 追加</button>
+      </div>
+      <div class="step-nav">
+        <button class="step-back" onclick="goStep(4)">← 戻る</button>
+        <button class="step-next" onclick="goStep(6)">次へ：400字チャレンジ →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 6: 400字 -->
+  <div id="sk-step6" style="display:none">
+    <div class="card">
+      <div class="ctitle">✏️ 400字チャレンジ <span class="badge ba">Step 6</span></div>
+      <p style="font-size:13px;color:#666;margin-bottom:8px">骨組みとミニ練習で作った文を使って、400字にまとめよう。今日は400字だけでOKです。</p>
+      <!-- 骨組み参照 -->
+      <details style="margin-bottom:10px">
+        <summary style="font-size:13px;color:#1A5B8A;font-weight:700;cursor:pointer;padding:8px;background:#EBF5FF;border-radius:8px">🧱 骨組みを見る（タップで開く）</summary>
+        <div style="margin-top:8px;font-size:13px;line-height:1.9;padding:10px;background:#F8FBFF;border-radius:8px" id="outline_ref"></div>
+      </details>
       <div style="font-size:13px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
-        <strong style="color:#1A5B8A">書くヒント：</strong><br>
-        <span id="step4hint"></span>
+        <strong style="color:#1A5B8A">書くヒント：</strong><br><span id="step4hint"></span>
       </div>
-      <div class="char-target">
-        <span style="font-size:13px;color:#666;font-weight:600;align-self:center">目標：</span>
-        <button class="ctbtn on" onclick="setCT(400,this)">400字</button>
-        <button class="ctbtn" onclick="setCT(800,this)">800字</button>
-        <button class="ctbtn" onclick="setCT(1200,this)">1200字</button>
-      </div>
-      <textarea class="ta" id="s4in" style="min-height:240px" placeholder="ここに作文を書こう！" oninput="s4cc()"></textarea>
+      <textarea class="ta" id="s4in" style="min-height:240px" placeholder="ここに作文を書こう！（400字目標）" oninput="s4cc()"></textarea>
       <div class="cc" id="s4cnt">0字</div>
       <div class="brow">
         <button class="bp" id="s4fbtn" onclick="getS4FB()">AI先生に添削してもらう</button>
@@ -648,75 +785,42 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       <div id="s4farea" style="display:none">
         <div class="fbox"><div class="pills" id="s4pills"></div><p id="s4ftxt"></p></div>
       </div>
+      <div style="padding:10px;background:#EBF5FF;border-radius:10px;border-left:3px solid #5BA4CF;margin-top:10px">
+        <div style="font-size:12px;color:#666;margin-bottom:6px">✏️ 400字を書いたらポイントを追加しよう！</div>
+        <button id="tabpt-sakubun" class="stbtn" onclick="addPtFromTab('sakubun',2,'400字作文')">⭐ 400字作文 +2pt 追加</button>
+      </div>
       <div class="step-nav">
-        <button class="step-back" onclick="goStep(3)">← 戻る</button>
-        <button class="step-next" onclick="goStep(5)">次へ：AIコーチと深める →</button>
+        <button class="step-back" onclick="goStep(5)">← 戻る</button>
+        <button class="bp" style="font-size:14px;padding:12px 20px" onclick="finish400()">✅ 400字で完成にする！</button>
+        <button class="step-next" onclick="goStep(7)">800字に広げる →</button>
       </div>
     </div>
   </div>
 
-  <!-- Step 5: AIコーチが質問しながら深める -->
-  <div id="sk-step5" style="display:none">
+  <!-- Step 7: 本番 -->
+  <div id="sk-step7" style="display:none">
     <div class="card">
-      <div class="ctitle">🤖 AIコーチと深めよう <span class="badge bb">Step 5</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:10px">AIコーチが質問するから、答えながら作文のネタを深めよう！</p>
-      <div class="chat-area" id="chatArea"></div>
-      <div style="display:flex;gap:6px">
-        <textarea class="ta" id="chatIn" style="min-height:60px;flex:1" placeholder="答えを書いてね…"></textarea>
-        <button class="bp" style="align-self:flex-end;padding:14px 16px" onclick="sendChat()">送る</button>
+      <div class="ctitle">🏆 本番作文チャレンジ <span class="badge bc">Step 7</span></div>
+      <p style="font-size:13px;color:#666;margin-bottom:8px">もっと長く書ける日は、800字に広げてみよう。<br>400字で終わっても大丈夫！</p>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <button class="bs" onclick="copyS4toS6()" style="font-size:13px">400字をコピーして始める</button>
       </div>
-      <div class="step-nav">
-        <button class="step-back" onclick="goStep(4)">← 戻る</button>
-        <button class="step-next" onclick="goStep(6)">次へ：800字に広げる →</button>
+      <div style="font-size:13px;background:#FFF3CD;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
+        <strong style="color:#7C4A00">ヒント：</strong><br><span id="step6hint"></span>
       </div>
-    </div>
-  </div>
-
-  <!-- Step 6: 800字に広げる -->
-  <div id="sk-step6" style="display:none">
-    <div class="card">
-      <div class="ctitle">📄 800字に広げよう <span class="badge ba">Step 6</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:8px">Step 5で出てきたネタも使って、800字に広げよう！</p>
-      <div style="font-size:13px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
-        <strong style="color:#1A5B8A">広げるポイント：</strong><br>
-        <span id="step6hint"></span>
-      </div>
-      <textarea class="ta" id="s6in" style="min-height:300px" placeholder="Step 4の作文をコピーして、ここに広げた版を書こう！" oninput="s6cc()"></textarea>
+      <textarea class="ta" id="s6in" style="min-height:280px" placeholder="400字の作文をもとに、800字に広げよう！" oninput="s6cc()"></textarea>
       <div class="cc" id="s6cnt">0字</div>
       <div class="brow">
         <button class="bp" id="s6fbtn" onclick="getS6FB()">AI先生に添削してもらう</button>
-        <button class="bs" onclick="copyS4toS6()">400字版をここにコピー</button>
+        <button class="bs" onclick="document.getElementById('s6in').value='';s6cc()">クリア</button>
       </div>
       <div id="s6farea" style="display:none">
         <div class="fbox"><div class="pills" id="s6pills"></div><p id="s6ftxt"></p></div>
       </div>
-      <div class="step-nav">
-        <button class="step-back" onclick="goStep(5)">← 戻る</button>
-        <button class="step-next" onclick="goStep(7)">次へ：1200字に完成 →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Step 7: 1200字に完成 -->
-  <div id="sk-step7" style="display:none">
-    <div class="card">
-      <div class="ctitle">🏆 1200字の完成版！ <span class="badge ba">Step 7</span></div>
-      <p style="font-size:13px;color:#666;margin-bottom:8px">明訓中学A方式の本番は1200字（400字×3枚）。仕上げの一本を書こう！</p>
-      <div style="font-size:13px;background:#EBF5FF;padding:10px 12px;border-radius:10px;margin-bottom:10px;line-height:1.7">
-        <strong style="color:#1A5B8A">仕上げのチェック：</strong><br>
-        ① 意見がはっきり書けているか　② 体験（オランダ生活！）が入っているか　③ 気づきや学びが書けているか　④ 締めくくりが決まっているか　⑤ 誤字脱字はないか
-      </div>
-      <textarea class="ta" id="s7in" style="min-height:380px" placeholder="完成版を書こう！（目標1200字）" oninput="s7cc()"></textarea>
-      <div class="cc" id="s7cnt">0字</div>
-      <div class="brow">
-        <button class="bp" id="s7fbtn" onclick="getS7FB()">🎓 最終添削してもらう</button>
-        <button class="bs" onclick="copyS6toS7()">800字版をここにコピー</button>
-      </div>
-      <div id="s7farea" style="display:none">
-        <div class="fbox"><div class="pills" id="s7pills"></div><p id="s7ftxt"></p></div>
-      </div>
-      <div style="margin-top:12px;padding:12px;background:#EBF5FF;border-radius:10px;text-align:center">
-        <p style="font-size:14px;color:#1A5B8A;font-weight:600">🌸 ここまで来たら、あとは手書きで清書するだけ！<br>縦書き・400字詰め原稿用紙3枚 でがんばれ！</p>
+      <!-- 完成保存ボタン -->
+      <div style="padding:10px;background:#FFF3CD;border-radius:10px;border-left:3px solid #F0A030;margin-top:10px">
+        <div style="font-size:12px;color:#856404;margin-bottom:6px">🏆 完成版を保存してポイントを追加しよう！</div>
+        <button class="bamb" onclick="saveAndAddPt()">🏆 完成版を保存 +3pt</button>
       </div>
       <div class="step-nav">
         <button class="step-back" onclick="goStep(6)">← 戻る</button>
@@ -725,6 +829,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   </div>
 
 </div>
+
 
 <!-- 国語 -->
 <div id="s-kokugo" class="sec">
@@ -736,16 +841,43 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div id="k-read">
     <div class="card">
       <div class="ctitle">📚 読解問題 <span class="badge bb">B方式</span></div>
+      <!-- 3問セット進捗バー -->
+      <div id="koku-set-bar" style="background:#EBF5FF;border-radius:10px;padding:10px 14px;margin-bottom:10px;display:none">
+        <div style="font-size:13px;color:#1A5B8A;font-weight:700;margin-bottom:6px">📊 セット進捗：<span id="koku-set-count">0</span>/3問</div>
+        <div style="background:#C8E6FA;border-radius:10px;height:8px;overflow:hidden">
+          <div id="koku-set-prog" style="background:#9B8FD4;height:100%;border-radius:10px;transition:width .4s;width:0%"></div>
+        </div>
+      </div>
       <div class="type-sel">
-        <button class="tsbtn" onclick="genQ('ronsetsu')">論説文・説明文</button>
-        <button class="tsbtn" onclick="genQ('shosetsu')">物語・小説</button>
+        <button class="tsbtn" onclick="startQSet('ronsetsu')">論説文・説明文</button>
+        <button class="tsbtn" onclick="startQSet('shosetsu')">物語・小説</button>
       </div>
       <div id="qloading" style="display:none" class="loading">問題を作っています</div>
       <div id="qarea" style="display:none">
+        <div style="font-size:12px;color:#888;margin-bottom:4px" id="koku-qnum">問題 1/3</div>
         <div class="qbox" id="qbox"></div>
         <div class="qopts" id="qopts"></div>
         <div id="qresult" style="display:none"></div>
-        <div style="margin-top:10px"><button class="bpurp" id="nxtq" style="display:none" onclick="genQ(window._lastQT)">次の問題</button></div>
+      </div>
+      <!-- 3問完了後のポイントエリア -->
+      <div id="koku-complete-area" style="display:none;margin-top:10px;background:#F0FFF4;border-radius:12px;padding:14px;border:2px solid #9B8FD4">
+        <div style="font-size:16px;font-weight:700;color:#6B4FBA;margin-bottom:8px">🎉 3問セット完了！</div>
+        <button id="tabpt-kokugo" class="stbtn" style="background:#9B8FD4" onclick="addPtFromTab('kokugo',1,'国語')">⭐ +1pt 追加する（自己申告）</button>
+        <div style="margin-top:8px">
+          <button class="bs" style="width:100%;font-size:13px;color:#9B8FD4;border-color:#9B8FD4" onclick="showKokuPhotoReview()">📸 AIに採点してもらう（写真アップロード）</button>
+        </div>
+        <div id="koku-photo-area" style="display:none;margin-top:10px">
+          <p style="font-size:13px;color:#6B4FBA;font-weight:600;margin-bottom:6px">📷 解いた問題の写真をアップロード（複数枚OK）</p>
+          <div class="photo-upload-area" onclick="document.getElementById('koku-photo-input').click()">
+            <div class="pu-icon">📷</div>
+            <div class="pu-label">写真を選ぶ</div>
+            <div class="pu-sub">複数枚まとめて選択できます</div>
+          </div>
+          <input type="file" id="koku-photo-input" accept="image/*" multiple style="display:none" onchange="previewKokuPhotos(this)">
+          <div id="koku-photo-preview" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"></div>
+          <button class="photo-fb-btn" id="koku-ai-review-btn" onclick="submitKokuPhotoReview()" style="display:none">🤖 AIに採点してもらう</button>
+          <div id="koku-ai-result" style="display:none;margin-top:8px"><div class="fbox purp"><p id="koku-ai-txt"></p></div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -782,50 +914,155 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 
 <!-- 漢字 -->
 <div id="s-kanji" class="sec">
-  <div class="card">
-    <div class="ctitle">漢字フラッシュカード <span class="badge bc">5・6年生</span></div>
-    <p style="font-size:14px;color:#666;margin-bottom:12px">タップ→読み方表示 → もう1回タップ→✅覚えた → もう1回→❌苦手</p>
+  <!-- セクション選択 -->
+  <div class="card" id="kanji-select-card">
+    <div class="ctitle">🖊️ 漢字セクション学習 <span class="badge bc">5年生・10文字ずつ</span></div>
+    <p style="font-size:13px;color:#666;margin-bottom:10px">セクションを選んでフラッシュカード → クイズ → ポイント獲得！</p>
     <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-      <button class="bamb" style="font-size:14px" onclick="loadKanji(5)">5年生漢字</button>
-      <button class="bamb" style="font-size:14px" onclick="loadKanji(6)">6年生漢字</button>
-      <button class="bs" style="font-size:14px" onclick="loadKanji('miss')">苦手だけ</button>
-      <button class="bp" style="font-size:14px" onclick="genKanjiQ()">書き取りクイズ</button>
+      <button class="bamb" style="font-size:13px" onclick="showKanjiSections(5)">5年生セクション選択</button>
+      <button class="bamb" style="font-size:13px" onclick="showKanjiSections(6)">6年生セクション選択</button>
+      <button class="bs" style="font-size:13px" onclick="loadKanjiMiss()">苦手だけ練習</button>
     </div>
-    <div style="display:flex;gap:12px;font-size:14px;margin-bottom:10px;background:#EBF5FF;padding:10px;border-radius:10px">
+    <!-- セクション一覧 -->
+    <div id="kanji-section-list" style="display:none">
+      <div id="kanji-section-btns" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-height:240px;overflow-y:auto"></div>
+    </div>
+    <!-- 全体進捗 -->
+    <div style="display:flex;gap:12px;font-size:14px;margin-top:10px;background:#EBF5FF;padding:10px;border-radius:10px">
       <span>✅ <strong id="kdone">0</strong>字</span>
       <span>❌ <strong id="kmiss">0</strong>字苦手</span>
       <span style="color:#666">残り <strong id="kleft">—</strong>字</span>
     </div>
-    <div class="kgrid" id="kgrid"></div>
   </div>
-  <div class="card" id="kquizcard" style="display:none">
-    <div class="ctitle">✍️ 書き取りクイズ</div>
-    <div id="kqbox" class="qbox" style="font-size:16px;line-height:1.8"></div>
-    <textarea class="ta" id="kqin" style="min-height:80px" placeholder="漢字で書いてみよう"></textarea>
-    <div class="brow"><button class="bamb" onclick="checkKanjiQ()">答え合わせ</button></div>
-    <div id="kqresult" style="display:none;margin-top:8px"></div>
+
+  <!-- フラッシュカード学習エリア -->
+  <div class="card" id="kanji-flash-card" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div class="ctitle" style="margin:0">🎴 <span id="kanji-sec-title">セクション1</span></div>
+      <button class="bs" style="padding:6px 12px;font-size:12px" onclick="backToKanjiSelect()">← 戻る</button>
+    </div>
+    <p style="font-size:13px;color:#666;margin-bottom:8px">タップ→読み方 → もう1回→✅覚えた → もう1回→❌苦手</p>
+    <div style="display:flex;gap:12px;font-size:14px;margin-bottom:10px;background:#EBF5FF;padding:8px 12px;border-radius:10px">
+      <span>✅ <strong id="ksecdone">0</strong>字</span>
+      <span>❌ <strong id="ksecmiss">0</strong>字</span>
+      <span style="color:#666">全 <strong id="ksectotal">10</strong>字</span>
+    </div>
+    <div class="kgrid" id="kgrid"></div>
+    <button class="bp" style="width:100%;margin-top:12px" onclick="goToKanjiQuiz()">📝 クイズに進む →</button>
+  </div>
+
+  <!-- クイズエリア -->
+  <div class="card" id="kanji-quiz-card" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div class="ctitle" style="margin:0">✍️ 漢字クイズ</div>
+      <button class="bs" style="padding:6px 12px;font-size:12px" onclick="backToKanjiFlash()">← フラッシュに戻る</button>
+    </div>
+    <p style="font-size:13px;color:#888;margin-bottom:10px">紙に書いて練習してから「答えを見る」を押してね</p>
+    <!-- 読みクイズ -->
+    <div id="kanji-yomi-quiz">
+      <div style="font-size:14px;font-weight:700;color:#5BA4CF;margin-bottom:8px">📖 読みクイズ（書き方を見て読み方を答えよう）</div>
+      <div id="kanji-yomi-q" class="qbox" style="font-size:16px;line-height:2"></div>
+      <div id="kanji-yomi-ans" style="display:none;background:#EBF5FF;border-radius:10px;padding:10px;margin-top:8px;font-size:15px"></div>
+      <div class="brow">
+        <button class="bp" id="kanji-show-yomi" onclick="toggleKanjiYomiAns()">📖 答えを見る</button>
+      </div>
+    </div>
+    <hr style="border:none;border-top:1px solid #e0e0e0;margin:14px 0">
+    <!-- 書き取りクイズ -->
+    <div id="kanji-kaki-quiz">
+      <div style="font-size:14px;font-weight:700;color:#F0A030;margin-bottom:8px">✍️ 書き取りクイズ（読み方を見て漢字を書こう）</div>
+      <div id="kanji-kaki-q" class="qbox" style="font-size:16px;line-height:2"></div>
+      <div id="kanji-kaki-ans" style="display:none;background:#FFF3CD;border-radius:10px;padding:10px;margin-top:8px;font-size:15px"></div>
+      <div class="brow">
+        <button class="bamb" id="kanji-show-kaki" onclick="toggleKanjiKakiAns()">✍️ 答えを見る</button>
+      </div>
+    </div>
+    <!-- ポイントエリア（答えを見た後に表示） -->
+    <div id="kanji-pt-area" style="display:none;margin-top:14px;background:#F0FFF4;border-radius:12px;padding:14px;border:2px solid #5BA4CF">
+      <div style="font-size:15px;font-weight:700;color:#1A5B8A;margin-bottom:8px">🎉 クイズ完了！</div>
+      <p style="font-size:13px;color:#555;margin-bottom:10px">どのくらい正解できた？自分で判断してポイントを追加しよう</p>
+      <button id="tabpt-kanji" class="stbtn" onclick="addPtFromTab('kanji',1,'漢字')">⭐ +1pt 追加する（自己申告）</button>
+      <div style="margin-top:8px">
+        <button class="bs" style="width:100%;font-size:13px" onclick="showKanjiPhotoReview()">📸 AIに採点してもらう（写真アップロード）</button>
+      </div>
+      <div id="kanji-photo-area" style="display:none;margin-top:10px">
+        <p style="font-size:13px;color:#1A5B8A;font-weight:600;margin-bottom:6px">📷 書いた答えの写真をアップロード（複数枚OK）</p>
+        <div class="photo-upload-area" onclick="document.getElementById('kanji-photo-input').click()">
+          <div class="pu-icon">📷</div>
+          <div class="pu-label">写真を選ぶ</div>
+          <div class="pu-sub">複数枚まとめて選択できます</div>
+        </div>
+        <input type="file" id="kanji-photo-input" accept="image/*" multiple style="display:none" onchange="previewKanjiPhotos(this)">
+        <div id="kanji-photo-preview" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"></div>
+        <button class="photo-fb-btn" id="kanji-ai-btn" onclick="submitKanjiPhotoReview()" style="display:none">🤖 AIに採点してもらう</button>
+        <div id="kanji-ai-result" style="display:none;margin-top:8px"><div class="fbox"><p id="kanji-ai-txt"></p></div></div>
+      </div>
+      <div style="margin-top:10px">
+        <button class="bs" style="width:100%;font-size:13px" onclick="backToKanjiSelect()">← セクション選択に戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 苦手練習モード（既存互換） -->
+  <div class="card" id="kanji-miss-card" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div class="ctitle" style="margin:0">❌ 苦手漢字練習</div>
+      <button class="bs" style="padding:6px 12px;font-size:12px" onclick="backToKanjiSelect()">← 戻る</button>
+    </div>
+    <div class="kgrid" id="kgrid-miss"></div>
   </div>
 </div>
 
 <!-- 算数 -->
 <div id="s-sansu" class="sec">
   <div class="card">
-    <div class="ctitle">🔢 算数練習 <span class="badge bb">B方式 50分・22〜26問</span></div>
+    <div class="ctitle">🔢 算数練習 <span class="badge bb">B方式</span></div>
+    <!-- 3問セット進捗バー -->
+    <div id="math-set-bar" style="background:#EBF5FF;border-radius:10px;padding:10px 14px;margin-bottom:12px;display:none">
+      <div style="font-size:13px;color:#1A5B8A;font-weight:700;margin-bottom:6px">📊 セット進捗：<span id="math-set-count">0</span>/3問</div>
+      <div style="background:#C8E6FA;border-radius:10px;height:8px;overflow:hidden">
+        <div id="math-set-prog" style="background:#5BA4CF;height:100%;border-radius:10px;transition:width .4s;width:0%"></div>
+      </div>
+    </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-      <button class="tsbtn" onclick="genMath('keisan')">計算・分数・小数</button>
-      <button class="tsbtn" onclick="genMath('bunshoudai')">文章題・速さ</button>
-      <button class="tsbtn" onclick="genMath('zukei')">図形・面積・体積</button>
-      <button class="tsbtn" onclick="genMath('wariai')">割合・比・百分率</button>
+      <button class="tsbtn" onclick="startMathSet('keisan')">計算・分数・小数</button>
+      <button class="tsbtn" onclick="startMathSet('bunshoudai')">文章題・速さ</button>
+      <button class="tsbtn" onclick="startMathSet('zukei')">図形・面積・体積</button>
+      <button class="tsbtn" onclick="startMathSet('wariai')">割合・比・百分率</button>
     </div>
     <div id="mloading" style="display:none" class="loading">問題を作っています</div>
     <div id="marea" style="display:none">
+      <div style="font-size:12px;color:#888;margin-bottom:4px" id="math-qnum">問題 1/3</div>
       <div class="qbox" id="mbox" style="font-size:15px;line-height:1.9"></div>
-      <textarea class="ta" id="mansin" style="min-height:100px" placeholder="式と答えを書こう"></textarea>
+      <p style="font-size:13px;color:#666;margin:6px 0">📝 紙に解いてから、答えを記入しよう</p>
+      <textarea class="ta" id="mansin" style="min-height:80px" placeholder="式と答えをここに書こう"></textarea>
       <div class="brow">
-        <button class="bamb" onclick="getMathFB()">解説してもらう</button>
-        <button class="bs" onclick="genMath(window._lastMT)">別の問題</button>
+        <button class="bamb" id="math-next-btn" onclick="mathNextQ()">次の問題 →</button>
+        <button class="bs" onclick="document.getElementById('mfb').style.display=document.getElementById('mfb').style.display==='block'?'none':'block'">解答を見る</button>
       </div>
       <div id="mfb" style="display:none"><div class="fbox amb"><p id="mft"></p></div></div>
+    </div>
+    <!-- 3問完了後のポイントエリア -->
+    <div id="math-complete-area" style="display:none;margin-top:10px;background:#F0FFF4;border-radius:12px;padding:14px;border:2px solid #5BA4CF">
+      <div style="font-size:16px;font-weight:700;color:#1A5B8A;margin-bottom:8px">🎉 3問セット完了！</div>
+      <p style="font-size:14px;color:#555;margin-bottom:10px">自分で解けた？チェックして記録しよう！</p>
+      <button id="tabpt-sansu" class="stbtn" onclick="addPtFromTab('sansu',1,'算数')">⭐ +1pt 追加する（自己申告）</button>
+      <div style="margin-top:8px">
+        <button class="bs" style="width:100%;font-size:13px" onclick="showMathPhotoReview()">📸 AIに採点してもらう（写真アップロード）</button>
+      </div>
+      <!-- 写真レビューエリア -->
+      <div id="math-photo-area" style="display:none;margin-top:10px">
+        <p style="font-size:13px;color:#1A5B8A;font-weight:600;margin-bottom:6px">📷 解いた問題の写真をアップロード（複数枚OK）</p>
+        <div class="photo-upload-area" onclick="document.getElementById('math-photo-input').click()">
+          <div class="pu-icon">📷</div>
+          <div class="pu-label">写真を選ぶ</div>
+          <div class="pu-sub">複数枚まとめて選択できます</div>
+        </div>
+        <input type="file" id="math-photo-input" accept="image/*" multiple style="display:none" onchange="previewMathPhotos(this)">
+        <div id="math-photo-preview" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"></div>
+        <button class="photo-fb-btn" id="math-ai-review-btn" onclick="submitMathPhotoReview()" style="display:none">🤖 AIに採点してもらう</button>
+        <div id="math-ai-result" style="display:none;margin-top:8px"><div class="fbox"><p id="math-ai-txt"></p></div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -840,6 +1077,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
   <div class="card" id="ipcard" style="display:none">
     <div class="ctitle">🎤 <span id="iqdisplay"></span></div>
     <textarea class="ta" id="ians" style="min-height:120px" placeholder="答えを書いてみよう。声に出して練習するのが一番！"></textarea>
+    <div style="padding:10px;background:#EBF5FF;border-radius:10px;border-left:3px solid #5BA4CF;margin:10px 0 0">
+      <div style="font-size:12px;color:#666;margin-bottom:6px">🎤 面接練習をしたらポイントを追加しよう！</div>
+      <button id="tabpt-mensetsu" class="stbtn" onclick="addPtFromTab('mensetsu',2,'面接')">⭐ 面接 +2pt 追加</button>
+    </div>
     <div class="brow">
       <button class="bp" onclick="getIFB()">アドバイスをもらう</button>
       <button class="bs" onclick="document.getElementById('ipcard').style.display='none'">閉じる</button>
@@ -899,6 +1140,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
 </div>
 </div>
 
+<!-- 動画 -->
+<div id="s-video" class="sec">
+  <div class="card">
+    <div class="ctitle">▶️ 国語・小論文の動画</div>
+    <div class="video-list" id="kokugo-videos">
+      <div class="video-item">
+        <div class="video-title">小論文の書き方①</div>
+        <div class="video-wrap"><iframe src="https://www.youtube.com/embed/l_FM-7W1w2Q" frameborder="0" allowfullscreen loading="lazy"></iframe></div>
+      </div>
+      <div class="video-item">
+        <div class="video-title">小論文の書き方②</div>
+        <div class="video-wrap"><iframe src="https://www.youtube.com/embed/fwbfbwkz5Lg" frameborder="0" allowfullscreen loading="lazy"></iframe></div>
+      </div>
+      <div class="video-item">
+        <div class="video-title">小論文の書き方③</div>
+        <div class="video-wrap"><iframe src="https://www.youtube.com/embed/N_o3psXDhDo" frameborder="0" allowfullscreen loading="lazy"></iframe></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:10px">
+    <div class="ctitle">▶️ 算数動画 <span class="badge ba">計算達人シリーズ</span></div>
+    <p style="font-size:13px;color:#666;margin-bottom:10px">タップすると動画が開きます</p>
+    <div id="math-video-list"></div>
+  </div>
+</div>
+
 <script>
 
 const IQS=[
@@ -919,6 +1186,20 @@ const KR5={因:'いん・よる',快:'かい・こころよい',賀:'が',解:'�
 const KR6={異:'い・ことなる',遺:'い',域:'いき',宇:'う',映:'えい・うつる',延:'えん・のびる',沿:'えん・そう',恩:'おん',我:'が・われ',灰:'かい・はい',拡:'かく',革:'かく・かわ',閣:'かく',割:'かつ・わる',株:'かぶ',干:'かん・ほす',巻:'かん・まく',看:'かん',簡:'かん',危:'き・あぶない',机:'き・つくえ',揮:'き',貴:'き・たっとい',疑:'ぎ・うたがう',吸:'きゅう・すう',供:'きょう',胸:'きょう・むね',郷:'きょう',勤:'きん・つとめる',筋:'きん・すじ',系:'けい',敬:'けい・うやまう',警:'けい',劇:'げき',激:'げき・はげしい',穴:'けつ・あな',券:'けん',絹:'けん・きぬ',権:'けん',憲:'けん',源:'げん・みなもと',厳:'げん・きびしい',己:'こ・おのれ',呼:'こ・よぶ',誤:'ご・あやまる',孝:'こう',皇:'こう',紅:'こう・べに',降:'こう・おりる',鋼:'こう・はがね',刻:'こく・きざむ',穀:'こく',骨:'こつ・ほね',困:'こん・こまる',砂:'さ・すな',済:'さい・すむ',裁:'さい・さばく',策:'さく',蚕:'さん・かいこ',至:'し・いたる',私:'し・わたし',姿:'し・すがた',視:'し',詞:'し',誌:'し',磁:'じ',射:'しゃ・いる',捨:'しゃ・すてる',尺:'しゃく',若:'じゃく・わかい',樹:'じゅ',収:'しゅう・おさめる',宗:'しゅう',就:'しゅう・つく',衆:'しゅう',従:'じゅう・したがう',縦:'じゅう・たて',縮:'しゅく・ちぢむ',熟:'じゅく',純:'じゅん',処:'しょ',署:'しょ',諸:'しょ',除:'じょ・のぞく',承:'しょう',将:'しょう',傷:'しょう・きず',障:'しょう',蒸:'じょう・むす',針:'しん・はり',仁:'じん',垂:'すい・たれる',推:'すい・おす',寸:'すん',盛:'せい・もる',聖:'せい',誠:'せい・まこと',舌:'ぜつ・した',宣:'せん',専:'せん',泉:'せん・いずみ',洗:'せん・あらう',染:'せん・そめる',善:'ぜん・よい',奏:'そう・かなでる',窓:'そう・まど',創:'そう・つくる',装:'そう',層:'そう',操:'そう・あやつる',蔵:'ぞう・くら',臓:'ぞう',存:'そん',尊:'そん・たっとい',退:'たい・しりぞく',宅:'たく',担:'たん・になう',探:'たん・さがす',誕:'たん',段:'だん',暖:'だん・あたかい',値:'ち・ね',宙:'ちゅう',忠:'ちゅう',著:'ちょ・あらわす',庁:'ちょう',頂:'ちょう・いただく',腸:'ちょう',潮:'ちょう・しお',賃:'ちん',痛:'つう・いたい',敵:'てき',展:'てん',討:'とう・うつ',党:'とう',糖:'とう',乳:'にゅう・ちち',認:'にん・みとめる',納:'のう・おさめる',脳:'のう',派:'は',拝:'はい・おがむ',背:'はい・せ',肺:'はい',俳:'はい',班:'はん',晩:'ばん',否:'ひ・いな',批:'ひ',秘:'ひ・ひめる',俵:'ひょう・たわら',腹:'ふく・はら',奮:'ふん・ふるう',並:'へい・ならぶ',陛:'へい',閉:'へい・とじる',片:'へん・かた',補:'ほ・おぎなう',暮:'ぼ・くれる',宝:'ほう・たから',訪:'ほう・たずねる',亡:'ぼう・ない',忘:'ぼう・わすれる',棒:'ぼう',枚:'まい',幕:'まく・ばく',密:'みつ',盟:'めい',模:'も',訳:'やく・わけ',郵:'ゆう',優:'ゆう・やさしい',預:'よ・あずける',幼:'よう・おさない',欲:'よく・ほしい',翌:'よく',乱:'らん・みだれる',卵:'らん・たまご',覧:'らん',裏:'り・うら',律:'りつ',臨:'りん',朗:'ろう・ほがらか',論:'ろん'};
 
 let cal={},cY=2025,cM=new Date().getMonth()+1,kanjiData=[],kanjiState={};
+let studyRecords=[]; // 学習記録 {date, type, title, content, saved}
+
+function loadStudyRecords(){
+  try{ studyRecords=JSON.parse(localStorage.getItem('mk_studyrec')||'[]'); }catch(e){studyRecords=[];}
+}
+function saveStudyRecord(type, title, content){
+  loadStudyRecords();
+  const d=new Date();
+  const dateStr=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+  const timeStr=d.getHours()+':'+(String(d.getMinutes()).padStart(2,'0'));
+  studyRecords.unshift({id:Date.now(),date:dateStr,time:timeStr,type,title,content});
+  if(studyRecords.length>200) studyRecords=studyRecords.slice(0,200);
+  localStorage.setItem('mk_studyrec',JSON.stringify(studyRecords));
+}
 let API_KEY='';
 
 function saveKey(){
@@ -935,12 +1216,7 @@ function init(){
   try{cal=JSON.parse(localStorage.getItem('mk_cal')||'{}');kanjiState=JSON.parse(localStorage.getItem('mk_kstate')||'{}')}catch(e){cal={};kanjiState={}}
   const t=new Date();cY=t.getFullYear();cM=t.getMonth()+1;
   migrateCal();countdown();renderCal();initSakubun();renderIQ();upStats();renderEarnBanner();renderBonusChips();initTodayButtons();
-  // 設定の読み込み＆自動処理の開始
-  try { loadEmailConfig(); } catch(e) {}
-  try { loadSheetConfig(); } catch(e) {}
-  try { startDailyMailCheck(); } catch(e) {}
-  // 起動時に一度シートへ同期（URL設定済みなら過去の記録もまとめて反映される）
-  try { syncToSheet(true); } catch(e) {}
+  loadStudyRecords();renderRecords('all');initVideoSection();
 }
 
 async function callAPI(prompt,maxTokens=800){
@@ -952,6 +1228,32 @@ async function callAPI(prompt,maxTokens=800){
   if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'APIエラー')}
   const data=await res.json();
   return data.content.map(b=>b.text||'').join('');
+}
+
+// 複数画像 + テキスト API
+async function callAPIWithImages(prompt, images, maxTokens=1200){
+  // images = [{base64, mediaType}]
+  const contentArr = images.map(img => ({
+    type:'image', source:{type:'base64', media_type:img.mediaType, data:img.base64}
+  }));
+  contentArr.push({type:'text', text:prompt});
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:maxTokens,messages:[{role:'user',content:contentArr}]})
+  });
+  if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'APIエラー')}
+  const data=await res.json();
+  return data.content.map(b=>b.text||'').join('');
+}
+
+// 複数ファイルをbase64に変換
+function filesToBase64(files){
+  return Promise.all([...files].map(file=>new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=e=>res({base64:e.target.result.split(',')[1],mediaType:file.type||'image/jpeg'});
+    r.onerror=rej; r.readAsDataURL(file);
+  })));
 }
 
 function countdown(){
@@ -999,6 +1301,11 @@ const SUBJ_PT = {
 const SUBJ_NAMES = {
   sakubun:'作文', mensetsu:'面接', kokugo:'国語', kanji:'漢字', sansu:'算数', review:'復習'
 };
+
+// 月別ptキャップ（早めに定義してどこからでも参照可能に）
+const MONTH_CAPS_PT = {6:1000,7:1400,8:1700,9:1600,10:2100,11:2200};
+function getMonthCapPt(mo){ return (MONTH_CAPS_PT[mo]||130); }
+const MILESTONES = [10, 25, 50, 75, 100, 150, 200, 300];
 
 // 今日選択中の科目
 let todaySubjects = {};
@@ -1076,15 +1383,42 @@ function getCurrentStreak() {
 }
 
 function toggleSubj(s) {
-  const btn = document.getElementById('sb-'+s);
   const savedToday = getTodayData();
-  if (savedToday) return; // 保存済みは変更不可
-  todaySubjects[s] = !todaySubjects[s];
-  if (todaySubjects[s]) btn.classList.add('on');
-  else btn.classList.remove('on');
+  const limit = getDailyLimit();
+  const currentTotal = getTodayTotalPt();
+  // 既存の保存分 + 今回選択中のプレビュー合計が上限に達していたら追加不可
+  const previewPts = calcDayPtsFromCounts(todaySubjects);
+  if (currentTotal + previewPts >= limit) {
+    showPtToast('今日の上限 ' + limit + 'pt に達したよ！');
+    return;
+  }
+  // タップするたびに+1カウント
+  todaySubjects[s] = (todaySubjects[s] || 0) + 1;
+  updateSubjBtnDisplay(s, todaySubjects[s]);
   updateTodayPreview();
 }
 
+function updateSubjBtnDisplay(s, count) {
+  const btn = document.getElementById('sb-' + s);
+  if (!btn) return;
+  const basePt = SUBJ_PT[s] || 1;
+  const icons = {sakubun:'✏️ 作文練習', mensetsu:'🎤 面接練習', kokugo:'📖 国語', kanji:'🖊️ 漢字', sansu:'🔢 算数', review:'🔄 復習'};
+  if (count > 0) {
+    btn.classList.add('on');
+    btn.innerHTML = (icons[s]||s) + '<br><span class="subj-pt">+' + (basePt * count) + 'pt（×' + count + '）</span>';
+  } else {
+    btn.classList.remove('on');
+    btn.innerHTML = (icons[s]||s) + '<br><span class="subj-pt">+' + basePt + 'pt</span>';
+  }
+}
+
+function calcDayPtsFromCounts(counts) {
+  let base = 0;
+  Object.keys(counts).forEach(s => {
+    if (counts[s] > 0) base += (SUBJ_PT[s] || 1) * counts[s];
+  });
+  return base;
+}
 function getTodayKey() {
   const t = new Date();
   return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
@@ -1095,67 +1429,111 @@ function getTodayData() {
 }
 
 function updateTodayPreview() {
-  const base = calcDayPts(todaySubjects);
+  // todaySubjects は {sakubun:2, sansu:1} のようなカウント形式
+  const previewPts = calcDayPtsFromCounts(todaySubjects);
+  const savedPts = getTodayTotalPt();
+  const total = savedPts + previewPts;
+  const limit = getDailyLimit();
+  const remain = Math.max(0, limit - total);
   const streak = getCurrentStreak();
-  const bonus = calcDayBonus(todaySubjects, streak + 1); // +1で今日追加後
-  const total = base + bonus;
+
+  // ボーナス計算用にsubjs（科目セット）を作る
+  const allSubjs = {};
+  const saved = cal[getTodayKey()];
+  if (saved && saved.subjs) Object.assign(allSubjs, saved.subjs);
+  Object.keys(todaySubjects).forEach(s => { if (todaySubjects[s] > 0) allSubjs[s] = true; });
+  const bonus = calcDayBonus(allSubjs, streak + (saved ? 0 : 1));
+
   const label = document.getElementById('todayPtLabel');
-  label.textContent = '+' + total + 'pt';
-  label.className = 'badge ' + (bonus > 0 ? 'bc' : 'ba');
-
-  // コンボ/ボーナスメッセージ
-  const ca = document.getElementById('comboAlert');
-  let msgs = [];
-  if (bonus > 0) {
-    const hasSakubun = todaySubjects.sakubun;
-    const otherCount = ['kokugo','kanji','sansu','mensetsu','review'].filter(s=>todaySubjects[s]).length;
-    if (hasSakubun && otherCount >= 3) msgs.push('🎯 バランスボーナス +3pt');
-    if (streak + 1 >= 10) msgs.push('🔥 10日コンボ！ +5pt');
-    else if (streak + 1 >= 5) msgs.push('🔥 5日コンボ！ +2pt');
-    else if (streak + 1 >= 3) msgs.push('🔥 3日コンボ！ +1pt');
+  if (label) {
+    label.textContent = previewPts > 0 ? '+' + previewPts + 'pt（合計' + total + 'pt / 上限' + limit + 'pt）' : '今日の上限: ' + limit + 'pt';
+    label.className = 'badge ' + (bonus > 0 ? 'bc' : 'ba');
   }
-  if (msgs.length > 0) { ca.style.display='block'; ca.textContent = msgs.join('　'); }
-  else ca.style.display='none';
 
-  const btn = document.getElementById('stbtn');
-  btn.textContent = '⭐ 今日の記録を保存！ +' + total + 'pt';
+  const ca = document.getElementById('comboAlert');
+  if (ca) {
+    const msgs = [];
+    if (bonus > 0) {
+      if (allSubjs.sakubun && ['kokugo','kanji','sansu','mensetsu','review'].filter(s=>allSubjs[s]).length >= 3)
+        msgs.push('🎯 バランスボーナス +3pt');
+      if (streak + 1 >= 10) msgs.push('🔥 10日コンボ！ +5pt');
+      else if (streak + 1 >= 5) msgs.push('🔥 5日コンボ！ +2pt');
+      else if (streak + 1 >= 3) msgs.push('🔥 3日コンボ！ +1pt');
+    }
+    msgs.push('📊 上限: ' + limit + 'pt（残り' + remain + 'pt）');
+    ca.style.display = 'block';
+    ca.textContent = msgs.join('　');
+  }
+
+  const stbtn = document.getElementById('stbtn');
+  if (stbtn) {
+    if (remain <= 0 && previewPts === 0) {
+      stbtn.textContent = '🌟 今日の上限達成！ +' + savedPts + 'pt';
+      stbtn.disabled = true;
+    } else if (previewPts > 0) {
+      stbtn.textContent = '⭐ +' + previewPts + 'pt を記録に追加！';
+      stbtn.disabled = false;
+    } else {
+      stbtn.textContent = '⭐ 今日の記録を保存！';
+      stbtn.disabled = false;
+    }
+  }
+  // リセットボタン表示制御
+  const rb = document.getElementById('resetSelBtn');
+  if (rb) rb.style.display = previewPts > 0 ? 'block' : 'none';
+}
+
+function resetSubjSelection() {
+  todaySubjects = {};
+  Object.keys(SUBJ_PT).forEach(s => updateSubjBtnDisplay(s, 0));
+  document.getElementById('resetSelBtn').style.display = 'none';
+  const ca = document.getElementById('comboAlert');
+  if (ca) ca.style.display = 'none';
+  const stbtn = document.getElementById('stbtn');
+  if (stbtn) { stbtn.textContent = '⭐ 今日の記録を保存！'; stbtn.disabled = false; }
+  const label = document.getElementById('todayPtLabel');
+  if (label) { label.textContent = '今日の上限: ' + getDailyLimit() + 'pt'; label.className = 'badge ba'; }
+  const hint = document.getElementById('stampHint');
+  if (hint) hint.textContent = '科目を選んで保存してね';
 }
 
 function stamp() {
   const k = getTodayKey();
-  if (getTodayData()) return; // 既保存
+  const previewPts = calcDayPtsFromCounts(todaySubjects);
+  if (previewPts === 0) { alert('科目をタップして選んでね！（タップするたびに+1回分追加）'); return; }
 
-  const subjs = {...todaySubjects};
-  if (Object.keys(subjs).filter(s=>subjs[s]).length === 0) {
-    alert('最低1つ科目を選んでね！');
-    return;
+  const remaining = getTodayRemainingPt();
+  if (remaining <= 0) { showPtToast('今日の上限に達したよ！🌟'); return; }
+
+  const addPts = Math.min(previewPts, remaining);
+  const streak = getCurrentStreak();
+
+  // 科目セット（サブジェクト）
+  const subjs = {};
+  Object.keys(todaySubjects).forEach(s => { if (todaySubjects[s] > 0) subjs[s] = true; });
+
+  if (!cal[k] || cal[k].pts === undefined) {
+    const bonus = calcDayBonus(subjs, streak + 1);
+    cal[k] = {subjs, pts: addPts, bonus, combo: streak + 1};
+  } else {
+    Object.keys(subjs).forEach(s => { cal[k].subjs[s] = true; });
+    const bonus = calcDayBonus(cal[k].subjs, cal[k].combo || streak + 1);
+    cal[k].pts = (cal[k].pts || 0) + addPts;
+    cal[k].bonus = bonus;
   }
 
-  const streak = getCurrentStreak();
-  const base = calcDayPts(subjs);
-  const bonus = calcDayBonus(subjs, streak + 1);
-  const total = base + bonus;
+  // 選択リセット
+  todaySubjects = {};
+  Object.keys(SUBJ_PT).forEach(s => updateSubjBtnDisplay(s, 0));
 
-  cal[k] = {subjs, pts: base, bonus, combo: streak + 1};
   sv(); renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
+  refreshStampUI();
+  updateAllTabPtButtons();
 
-  // ボタン更新
-  document.getElementById('stbtn').textContent = '⭐ 今日は記録済み！ +' + total + 'pt';
-  document.getElementById('stbtn').disabled = true;
-  document.getElementById('stampHint').textContent = '今日 +' + total + 'pt 記録したよ！';
-
-  // 全科目ボタン無効化
-  Object.keys(SUBJ_PT).forEach(s => {
-    const btn = document.getElementById('sb-'+s);
-    if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; }
-  });
-
-  // トースト
-  showPtToast('+' + total + 'pt 獲得！🌟');
-  showCancelBtn(k, total);
-
-  // Google Sheet に自動書き出し（URL未設定なら何もしない）
-  try { syncToSheet(true); } catch(e) {}
+  const newTotal = getTodayTotalPt();
+  const newRemain = getTodayRemainingPt();
+  showPtToast('+' + addPts + 'pt 追加！合計' + newTotal + 'pt🌟' + (newRemain > 0 ? '（あと' + newRemain + 'pt）' : ''));
+  showCancelBtn(k, newTotal);
 }
 
 function showPtToast(msg) {
@@ -1272,21 +1650,13 @@ function renderBonusChips() {
 }
 
 function initTodayButtons() {
+  refreshStampUI();
+  // 保存済みの科目ボタンを無効化（変更不可）
   const saved = getTodayData();
   if (saved) {
-    Object.keys(SUBJ_PT).forEach(s => {
-      const btn = document.getElementById('sb-'+s);
-      if (!btn) return;
-      if (saved.subjs && saved.subjs[s]) btn.classList.add('on');
-      btn.disabled = true; btn.style.opacity = '0.7';
-    });
-    const total = (saved.pts||0) + (saved.bonus||0);
-    document.getElementById('stbtn').textContent = '⭐ 今日は記録済み！ +' + total + 'pt';
-    document.getElementById('stbtn').disabled = true;
-    document.getElementById('todayPtLabel').textContent = '+' + total + 'pt';
-    document.getElementById('stampHint').textContent = '今日 +' + total + 'pt 記録済み';
-    showCancelBtn(getTodayKey(), total);
+    showCancelBtn(getTodayKey(), (saved.pts||0) + (saved.bonus||0));
   }
+  updateAllTabPtButtons();
 }
 
 function showCancelBtn(dateKey, total) {
@@ -1314,19 +1684,14 @@ function cancelRecord(dateKey) {
   delete cal[dateKey];
   sv(); renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
   if (isToday) {
-    Object.keys(SUBJ_PT).forEach(s => {
-      const btn = document.getElementById('sb-'+s);
-      if (!btn) return;
-      btn.classList.remove('on'); btn.disabled = false; btn.style.opacity = '1';
-    });
     todaySubjects = {};
-    document.getElementById('stbtn').textContent = '⭐ 今日の記録を保存！';
-    document.getElementById('stbtn').disabled = false;
-    document.getElementById('stampHint').textContent = '科目を選んで保存してね';
-    document.getElementById('todayPtLabel').textContent = '+0pt';
-    document.getElementById('comboAlert').style.display = 'none';
+    Object.keys(SUBJ_PT).forEach(s => updateSubjBtnDisplay(s, 0));
+    const ca = document.getElementById('comboAlert');
+    if (ca) ca.style.display = 'none';
     const cb = document.getElementById('cancelStampBtn');
     if (cb) cb.style.display = 'none';
+    refreshStampUI();
+    updateAllTabPtButtons();
   }
   showPtToast('記録を取り消しました 🗑️');
 }
@@ -1389,74 +1754,164 @@ function renderCal(){
 
 
 window._lastQT='ronsetsu';
+// 国語3問セット管理
+let kokuSet={type:'',count:0,total:3};
+
+function startQSet(type){
+  kokuSet={type,count:0,total:3};
+  window._lastQT=type;
+  document.getElementById('koku-set-bar').style.display='block';
+  document.getElementById('koku-complete-area').style.display='none';
+  document.getElementById('kokugo-photo-area') && (document.getElementById('kokugo-photo-area').style.display='none');
+  const pv=document.getElementById('koku-photo-preview');if(pv)pv.innerHTML='';
+  updateKokuSetBar();
+  genQ(type);
+}
+
+function updateKokuSetBar(){
+  document.getElementById('koku-set-count').textContent=kokuSet.count;
+  document.getElementById('koku-set-prog').style.width=(kokuSet.count/kokuSet.total*100)+'%';
+  document.getElementById('koku-qnum').textContent='問題 '+(kokuSet.count+1)+'/'+kokuSet.total;
+}
+
 async function genQ(type){
   window._lastQT=type;
-  document.getElementById('qarea').style.display='none';document.getElementById('qloading').style.display='block';document.getElementById('nxtq').style.display='none';
+  document.getElementById('qarea').style.display='none';
+  document.getElementById('qloading').style.display='block';
+  document.getElementById('nxtq') && (document.getElementById('nxtq').style.display='none');
   const tp={ronsetsu:'論説文・説明文（科学・自然・社会テーマ）',shosetsu:'物語・小説（人物の心情読み取り）'};
   try{
-    const reply=await callAPI(`中学入試国語（小6〜中1レベル・${tp[type]}）の選択問題を1問作成。必ず以下の形式を守ってください。マークダウン・LaTeX不使用。\n\n【文章】\n（ここに5〜8行の文章）\n【問題】\n（ここに問い）\n【選択肢】\nア （選択肢1）\nイ （選択肢2）\nウ （選択肢3）\nエ （選択肢4）\n【正解】ア\n【解説】\n（ここに2〜3文の解説）\n\n正解はア・イ・ウ・エのいずれか1文字だけ書いてください。`);
-    renderQUI(reply,'qbox','qopts','qresult','nxtq');
+    const reply=await callAPI(`中学入試国語（小6〜中1レベル・${tp[type]||type}）の選択問題を1問作成。必ず以下の形式を守ってください。マークダウン・LaTeX不使用。\n\n【文章】\n（ここに5〜8行の文章）\n【問題】\n（ここに問い）\n【選択肢】\nア （選択肢1）\nイ （選択肢2）\nウ （選択肢3）\nエ （選択肢4）\n【正解】ア\n【解説】\n（ここに2〜3文の解説）\n\n正解はア・イ・ウ・エのいずれか1文字だけ書いてください。`);
+    renderQUI(reply,'qbox','qopts','qresult','_nxtq_hidden');
     document.getElementById('qarea').style.display='block';
+    updateKokuSetBar();
   }catch(e){alert('エラー：'+e.message)}
   document.getElementById('qloading').style.display='none';
 }
 
-window._lastVQT='kanyou';
-async function genVQ(type){
-  window._lastVQT=type;
-  document.getElementById('vqarea').style.display='none';document.getElementById('vqloading').style.display='block';document.getElementById('nvq').style.display='none';
-  const tp={kanyou:'慣用句（体の一部を使ったもの）',kotowaza:'ことわざ・四字熟語',jukugo:'熟語の意味・対義語・類義語'};
-  try{
-    const reply=await callAPI(`小学6年生向け${tp[type]}の選択問題を1問作成。必ず以下の形式を守ってください。マークダウン不使用。\n\n【問題】\n（ここに問い文）\n【選択肢】\nア （選択肢1）\nイ （選択肢2）\nウ （選択肢3）\nエ （選択肢4）\n【正解】ア\n【解説】\n（ここに短い解説）\n\n正解はア・イ・ウ・エのいずれか1文字だけ書いてください。`);
-    renderQUI(reply,'vqbox','vqopts','vqresult','nvq');
-    document.getElementById('vqarea').style.display='block';
-  }catch(e){alert('エラー：'+e.message)}
-  document.getElementById('vqloading').style.display='none';
+// renderQUI のコールバック経由で「次の問題」処理
+function onQAnswered(){
+  kokuSet.count++;
+  document.getElementById('koku-set-count').textContent=kokuSet.count;
+  document.getElementById('koku-set-prog').style.width=(kokuSet.count/kokuSet.total*100)+'%';
+  if(kokuSet.count>=kokuSet.total){
+    // 3問完了
+    document.getElementById('qarea').style.display='none';
+    document.getElementById('koku-complete-area').style.display='block';
+    document.getElementById('koku-complete-area').scrollIntoView({behavior:'smooth'});
+  } else {
+    // qarea の中に「次の問題」ボタンを追加（既存あれば削除して再作成）
+    const old=document.getElementById('koku-next-btn-wrap');
+    if(old) old.remove();
+    const wrap=document.createElement('div');
+    wrap.id='koku-next-btn-wrap';
+    wrap.style.marginTop='12px';
+    const btn=document.createElement('button');
+    btn.className='bpurp';
+    btn.style.width='100%';
+    btn.textContent='次の問題 → ('+(kokuSet.count+1)+'/'+kokuSet.total+')';
+    btn.onclick=()=>{ wrap.remove(); genQ(kokuSet.type); };
+    wrap.appendChild(btn);
+    const qa=document.getElementById('qarea');
+    if(qa){ qa.style.display='block'; qa.appendChild(wrap); }
+    wrap.scrollIntoView({behavior:'smooth'});
+  }
 }
 
+// 国語写真レビュー
+function showKokuPhotoReview(){
+  const ar=document.getElementById('koku-photo-area');if(ar)ar.style.display='block';
+}
+function previewKokuPhotos(input){
+  const pv=document.getElementById('koku-photo-preview');pv.innerHTML='';
+  document.getElementById('koku-ai-review-btn').style.display=input.files.length>0?'block':'none';
+  [...input.files].forEach(f=>{
+    const img=document.createElement('img');
+    img.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px solid #A8C8E8';
+    const r=new FileReader();r.onload=e=>img.src=e.target.result;r.readAsDataURL(f);pv.appendChild(img);
+  });
+}
+async function submitKokuPhotoReview(){
+  const input=document.getElementById('koku-photo-input');
+  if(!input.files.length){alert('写真を選んでね！');return}
+  const btn=document.getElementById('koku-ai-review-btn');btn.disabled=true;btn.textContent='採点中…';
+  try{
+    const images=await filesToBase64(input.files);
+    const reply=await callAPIWithImages('小学6年生の国語問題の解答写真を採点してください。正誤判定と解説をやさしく。',images);
+    document.getElementById('koku-ai-txt').innerHTML=md2html(reply);
+    document.getElementById('koku-ai-result').style.display='block';
+    saveStudyRecord('kokugo','国語AIレビュー',reply.slice(0,300));
+  }catch(e){alert('エラー：'+e.message)}
+  btn.disabled=false;btn.textContent='🤖 AIに採点してもらう';
+}
+
+
 function renderQUI(reply,boxId,optsId,resId,nxtId){
-  // 各セクションを柔軟に抽出
-  const tm=reply.match(/【文章】([\s\S]*?)(?:【問題】|【設問】|$)/);
-  const qm=reply.match(/【問題】([\s\S]*?)(?:【選択肢】|ア[　 、．.]|$)/)||reply.match(/【設問】([\s\S]*?)(?:【選択肢】|ア[　 、．.]|$)/);
-  const am=reply.match(/【正解】[\s]*([アイウエ])/)||reply.match(/正解[：:][\s]*([アイウエ])/);
-  const bm=reply.match(/【解説】([\s\S]*?)$/)||reply.match(/解説[：:]([\s\S]*?)$/);
+  // 【文章】【問題】【選択肢】【正解】【解説】を抽出
+  const sec = (tag) => {
+    const m = reply.match(new RegExp('【' + tag + '】([\\s\\S]*?)(?=【|$)'));
+    return m ? m[1].trim() : '';
+  };
+  const textPart = sec('文章');
+  const qPart    = sec('問題') || sec('設問');
+  const optsPart = sec('選択肢');
+  const ansPart  = sec('正解');
+  const expPart  = sec('解説');
 
-  // 選択肢：【選択肢】ブロックまたは本文中のア〜エを探す
-  let optLines=[];
-  const omBlock=reply.match(/【選択肢】([\s\S]*?)(?:【正解】|正解|$)/);
-  if(omBlock){
-    optLines=omBlock[1].trim().split('\n').filter(l=>/^[アイウエ]/.test(l.trim()));
+  // 正解の記号
+  const ansMatch = ansPart.match(/[アイウエ]/) ||
+                   reply.match(/【正解】\s*([アイウエ])/) && reply.match(/【正解】\s*([アイウエ])/);
+  const correct = ansPart.match(/[アイウエ]/) ? ansPart.match(/[アイウエ]/)[0] : '';
+
+  // 選択肢を行分割
+  let optLines = [];
+  if (optsPart) {
+    optLines = optsPart.split('\n').map(l=>l.trim()).filter(l=>/^[アイウエ]/.test(l));
   }
-  // ブロックがなければ全文からア〜エ行を拾う
-  if(optLines.length===0){
-    optLines=reply.split('\n').filter(l=>/^[アイウエ][　 、．．:]/.test(l.trim())||/^[アイウエ]\s/.test(l.trim()));
+  if (optLines.length === 0) {
+    // フォールバック: 全文からア〜エ行を拾う
+    optLines = reply.split('\n').map(l=>l.trim()).filter(l=>/^[アイウエ][　 、．）\):]/.test(l)||/^[アイウエ]\s/.test(l));
   }
 
-  const qb=document.getElementById(boxId);let html='';
-  if(tm)html+='<p style="font-size:14px;color:#555;margin-bottom:10px;border-bottom:1px solid #e0e0e0;padding-bottom:10px">'+tm[1].trim().replace(/\n/g,'<br>')+'</p>';
-  if(qm)html+='<p style="font-weight:700;font-size:16px;margin-top:4px">'+qm[1].trim().replace(/\n/g,'<br>')+'</p>';
-  qb.innerHTML=html||(md2html(reply));
+  // 文章表示
+  const qb = document.getElementById(boxId);
+  let html = '';
+  if (textPart) html += '<div style="font-size:14px;color:#444;line-height:1.9;padding:12px;background:#F8FBFF;border-radius:10px;margin-bottom:12px;border-left:3px solid #9B8FD4">' + textPart.replace(/\n/g,'<br>') + '</div>';
+  if (qPart)   html += '<p style="font-weight:700;font-size:15px;margin:8px 0 12px">' + qPart.replace(/\n/g,'<br>') + '</p>';
+  if (!textPart && !qPart) html = '<div style="white-space:pre-wrap;font-size:14px">' + reply + '</div>';
+  qb.innerHTML = html;
 
-  const opts=document.getElementById(optsId);opts.innerHTML='';
-  document.getElementById(resId).style.display='none';
+  // 選択肢ボタン
+  const opts = document.getElementById(optsId);
+  opts.innerHTML = '';
+  const resEl = document.getElementById(resId);
+  if (resEl) resEl.style.display = 'none';
 
-  if(optLines.length>0&&am){
-    optLines.forEach(line=>{
-      const lt=line.trim().match(/^([アイウエ])/);if(!lt)return;
-      const btn=document.createElement('button');btn.className='qopt';btn.textContent=line.trim();
-      btn.onclick=()=>{
-        document.querySelectorAll('#'+optsId+' .qopt').forEach(b=>b.disabled=true);
-        const ok=lt[1]===am[1];btn.classList.add(ok?'ok':'ng');
-        const r=document.getElementById(resId);r.className='qans '+(ok?'ok':'ng');
-        r.innerHTML=(ok?'✅ 正解！':'❌ 不正解。正解は '+am[1])+(bm?'<br><br>'+bm[1].trim():'');
-        r.style.display='block';document.getElementById(nxtId).style.display='block';
-        const qc=parseInt(localStorage.getItem('mk_qs')||'0')+1;localStorage.setItem('mk_qs',qc);upStats();
+  if (optLines.length > 0 && correct) {
+    optLines.forEach(line => {
+      const m = line.match(/^([アイウエ])/);
+      if (!m) return;
+      const btn = document.createElement('button');
+      btn.className = 'qopt';
+      btn.textContent = line;
+      btn.onclick = () => {
+        document.querySelectorAll('#' + optsId + ' .qopt').forEach(b => b.disabled = true);
+        const ok = m[1] === correct;
+        btn.classList.add(ok ? 'ok' : 'ng');
+        if (resEl) {
+          resEl.className = 'qans ' + (ok ? 'ok' : 'ng');
+          resEl.innerHTML = (ok ? '✅ 正解！' : '❌ 不正解。正解は ' + correct) + (expPart ? '<br><br>' + expPart : '');
+          resEl.style.display = 'block';
+        }
+        const qc = parseInt(localStorage.getItem('mk_qs')||'0') + 1;
+        localStorage.setItem('mk_qs', qc); upStats();
+        if (typeof onQAnswered === 'function') setTimeout(onQAnswered, 800);
       };
       opts.appendChild(btn);
     });
   } else {
     // 選択肢が取れなかった場合は全文表示
-    qb.innerHTML=md2html(reply);
+    qb.innerHTML = '<div style="white-space:pre-wrap;font-size:14px;line-height:1.8">' + reply + '</div>';
   }
 }
 
@@ -1480,6 +1935,11 @@ async function getBunFB(){
   btn.disabled=false;btn.textContent='添削してもらう';
 }
 
+// 漢字セクション管理
+let currentKanjiGrade=5;
+let currentKanjiSection=0; // 0-indexed section
+let currentKanjiSectionData=[]; // 今のセクションの10文字
+
 function loadKanji(grade){
   let arr=[];
   if(grade===5)arr=K5.map(k=>({k,r:KR5[k]||''}));
@@ -1487,6 +1947,200 @@ function loadKanji(grade){
   else arr=[...K5.map(k=>({k,r:KR5[k]||''})),...K6.map(k=>({k,r:KR6[k]||''}))].filter(x=>kanjiState[x.k]==='miss');
   kanjiData=arr;renderKanji();
 }
+
+function showKanjiSections(grade){
+  currentKanjiGrade=grade;
+  const arr=grade===5?K5:K6;
+  const kr=grade===5?KR5:KR6;
+  const secSize=10;
+  const numSec=Math.ceil(arr.length/secSize);
+  const container=document.getElementById('kanji-section-btns');
+  container.innerHTML='';
+  const progress=JSON.parse(localStorage.getItem('mk_kanjisec_'+grade)||'{}');
+  for(let i=0;i<numSec;i++){
+    const start=i*secSize;
+    const chars=arr.slice(start,start+secSize);
+    const done=chars.filter(k=>kanjiState[k]==='done').length;
+    const pct=Math.round(done/chars.length*100);
+    const btn=document.createElement('button');
+    const secLabel='セクション'+(i+1);
+    const completed=progress[i];
+    btn.className='tsbtn';
+    btn.style.cssText='font-size:12px;padding:8px 6px;text-align:center;'+(completed?'background:#C8F7C5;border-color:#5BA4CF':'');
+    btn.innerHTML=secLabel+'<br><span style="font-size:10px;color:#888">'+(completed?'✅完了':'📚未')+' '+done+'/'+chars.length+'</span>';
+    btn.onclick=(()=>{const si=i;return()=>startKanjiSection(grade,si,arr,kr)})();
+    container.appendChild(btn);
+  }
+  document.getElementById('kanji-section-list').style.display='block';
+  updateGlobalKStats();
+}
+
+function startKanjiSection(grade,secIdx,arr,kr){
+  currentKanjiGrade=grade;
+  currentKanjiSection=secIdx;
+  const secSize=10;
+  const chars=arr.slice(secIdx*secSize,(secIdx+1)*secSize);
+  currentKanjiSectionData=chars.map(k=>({k,r:kr[k]||''}));
+  kanjiData=currentKanjiSectionData;
+  document.getElementById('kanji-select-card').style.display='none';
+  document.getElementById('kanji-flash-card').style.display='block';
+  document.getElementById('kanji-quiz-card').style.display='none';
+  document.getElementById('kanji-miss-card').style.display='none';
+  document.getElementById('kanji-sec-title').textContent='セクション'+(secIdx+1)+' （'+(secIdx*secSize+1)+'〜'+(secIdx*secSize+chars.length)+'文字目）';
+  renderKanjiSection();
+}
+
+function renderKanjiSection(){
+  const g=document.getElementById('kgrid');g.innerHTML='';
+  let done=0,miss=0;
+  currentKanjiSectionData.forEach(item=>{
+    const el=document.createElement('div');el.className='kcard';
+    if(kanjiState[item.k]==='done'){el.classList.add('done')}
+    else if(kanjiState[item.k]==='miss'){el.classList.add('miss')}
+    el.innerHTML='<div class="kj">'+item.k+'</div><div class="kr">'+item.r+'</div>';
+    let phase=kanjiState[item.k]==='done'?2:kanjiState[item.k]==='miss'?0:0;
+    el.onclick=()=>{
+      if(phase===0){el.classList.add('show');phase=1}
+      else if(phase===1){kanjiState[item.k]='done';el.classList.remove('miss');el.classList.add('done');sv();phase=2;updateSectionStats();}
+      else{kanjiState[item.k]='miss';el.classList.remove('done');el.classList.remove('show');el.classList.add('miss');sv();phase=0;updateSectionStats();}
+    };
+    if(kanjiState[item.k]==='done')done++;
+    if(kanjiState[item.k]==='miss')miss++;
+    g.appendChild(el);
+  });
+  document.getElementById('ksecdone').textContent=done;
+  document.getElementById('ksecmiss').textContent=miss;
+  document.getElementById('ksectotal').textContent=currentKanjiSectionData.length;
+  updateGlobalKStats();
+}
+
+function updateSectionStats(){
+  let done=0,miss=0;
+  currentKanjiSectionData.forEach(x=>{if(kanjiState[x.k]==='done')done++;if(kanjiState[x.k]==='miss')miss++;});
+  document.getElementById('ksecdone').textContent=done;
+  document.getElementById('ksecmiss').textContent=miss;
+  updateGlobalKStats();
+}
+
+function updateGlobalKStats(){
+  const allK=[...K5,...K6];
+  let done=0,miss=0;
+  allK.forEach(k=>{if(kanjiState[k]==='done')done++;if(kanjiState[k]==='miss')miss++;});
+  document.getElementById('kdone').textContent=done;
+  document.getElementById('kmiss').textContent=miss;
+  document.getElementById('kleft').textContent=allK.length-done;
+}
+
+function goToKanjiQuiz(){
+  document.getElementById('kanji-flash-card').style.display='none';
+  document.getElementById('kanji-quiz-card').style.display='block';
+  buildKanjiQuiz();
+  document.getElementById('kanji-pt-area').style.display='none';
+  document.getElementById('kanji-yomi-ans').style.display='none';
+  document.getElementById('kanji-kaki-ans').style.display='none';
+  document.getElementById('kanji-show-yomi').textContent='📖 答えを見る';
+  document.getElementById('kanji-show-kaki').textContent='✍️ 答えを見る';
+  window._kanjiYomiShown=false;
+  window._kanjiKakiShown=false;
+  document.getElementById('kanji-quiz-card').scrollIntoView({behavior:'smooth'});
+}
+
+function buildKanjiQuiz(){
+  // 読みクイズ：漢字を見て読み方を答える
+  const yomiLines=currentKanjiSectionData.map((x,i)=>(i+1)+'．'+x.k+' → （　　）');
+  document.getElementById('kanji-yomi-q').innerHTML=yomiLines.join('<br>');
+  const yomiAns=currentKanjiSectionData.map((x,i)=>(i+1)+'．'+x.k+' → '+x.r);
+  document.getElementById('kanji-yomi-ans').innerHTML='<strong>【答え】</strong><br>'+yomiAns.join('<br>');
+  // 書き取りクイズ：読み方を見て漢字を書く
+  const kakiLines=currentKanjiSectionData.map((x,i)=>(i+1)+'．（'+x.r+'） → □');
+  document.getElementById('kanji-kaki-q').innerHTML=kakiLines.join('<br>');
+  const kakiAns=currentKanjiSectionData.map((x,i)=>(i+1)+'．（'+x.r+'） → '+x.k);
+  document.getElementById('kanji-kaki-ans').innerHTML='<strong>【答え】</strong><br>'+kakiAns.join('<br>');
+}
+
+let _yomiAnsShown=false,_kakiAnsShown=false;
+function toggleKanjiYomiAns(){
+  _yomiAnsShown=!_yomiAnsShown;
+  document.getElementById('kanji-yomi-ans').style.display=_yomiAnsShown?'block':'none';
+  document.getElementById('kanji-show-yomi').textContent=_yomiAnsShown?'📖 答えを隠す':'📖 答えを見る';
+  checkBothAnswersShown();
+}
+function toggleKanjiKakiAns(){
+  _kakiAnsShown=!_kakiAnsShown;
+  document.getElementById('kanji-kaki-ans').style.display=_kakiAnsShown?'block':'none';
+  document.getElementById('kanji-show-kaki').textContent=_kakiAnsShown?'✍️ 答えを隠す':'✍️ 答えを見る';
+  checkBothAnswersShown();
+}
+function checkBothAnswersShown(){
+  if(_yomiAnsShown||_kakiAnsShown){
+    document.getElementById('kanji-pt-area').style.display='block';
+    // セクション完了フラグ保存
+    const progress=JSON.parse(localStorage.getItem('mk_kanjisec_'+currentKanjiGrade)||'{}');
+    progress[currentKanjiSection]=true;
+    localStorage.setItem('mk_kanjisec_'+currentKanjiGrade,JSON.stringify(progress));
+  }
+}
+
+function loadKanjiMiss(){
+  const arr=[...K5.map(k=>({k,r:KR5[k]||''})),...K6.map(k=>({k,r:KR6[k]||''}))].filter(x=>kanjiState[x.k]==='miss');
+  if(arr.length===0){alert('苦手な漢字はまだ登録されていないよ！');return}
+  kanjiData=arr;
+  currentKanjiSectionData=arr;
+  document.getElementById('kanji-select-card').style.display='none';
+  document.getElementById('kanji-miss-card').style.display='block';
+  const g=document.getElementById('kgrid-miss');g.innerHTML='';
+  arr.forEach(item=>{
+    const el=document.createElement('div');el.className='kcard miss';
+    el.innerHTML='<div class="kj">'+item.k+'</div><div class="kr">'+item.r+'</div>';
+    let phase=0;
+    el.onclick=()=>{
+      if(phase===0){el.classList.add('show');phase=1}
+      else if(phase===1){kanjiState[item.k]='done';el.classList.remove('miss');el.classList.add('done');sv();phase=2;updateGlobalKStats();}
+      else{kanjiState[item.k]='miss';el.classList.add('miss');el.classList.remove('done');el.classList.remove('show');sv();phase=0;updateGlobalKStats();}
+    };
+    g.appendChild(el);
+  });
+}
+
+function backToKanjiSelect(){
+  document.getElementById('kanji-select-card').style.display='block';
+  document.getElementById('kanji-flash-card').style.display='none';
+  document.getElementById('kanji-quiz-card').style.display='none';
+  document.getElementById('kanji-miss-card').style.display='none';
+  if(currentKanjiGrade) showKanjiSections(currentKanjiGrade);
+}
+function backToKanjiFlash(){
+  document.getElementById('kanji-flash-card').style.display='block';
+  document.getElementById('kanji-quiz-card').style.display='none';
+}
+
+// 漢字写真レビュー
+function showKanjiPhotoReview(){document.getElementById('kanji-photo-area').style.display='block';}
+function previewKanjiPhotos(input){
+  const pv=document.getElementById('kanji-photo-preview');pv.innerHTML='';
+  document.getElementById('kanji-ai-btn').style.display=input.files.length>0?'block':'none';
+  [...input.files].forEach(f=>{
+    const img=document.createElement('img');
+    img.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px solid #A8C8E8';
+    const r=new FileReader();r.onload=e=>img.src=e.target.result;r.readAsDataURL(f);pv.appendChild(img);
+  });
+}
+async function submitKanjiPhotoReview(){
+  const input=document.getElementById('kanji-photo-input');
+  if(!input.files.length){alert('写真を選んでね！');return}
+  const btn=document.getElementById('kanji-ai-btn');btn.disabled=true;btn.textContent='採点中…';
+  const secChars=currentKanjiSectionData.map(x=>x.k).join('・');
+  try{
+    const images=await filesToBase64(input.files);
+    const reply=await callAPIWithImages(`漢字書き取り採点。対象漢字：${secChars}\n写真に書かれた答えを採点してください。正誤と間違えた漢字の正しい書き方を教えてください。`,images);
+    document.getElementById('kanji-ai-txt').innerHTML=md2html(reply);
+    document.getElementById('kanji-ai-result').style.display='block';
+    saveStudyRecord('kanji','漢字AIレビュー',reply.slice(0,300));
+  }catch(e){alert('エラー：'+e.message)}
+  btn.disabled=false;btn.textContent='🤖 AIに採点してもらう';
+}
+
+
 function renderKanji(){
   const g=document.getElementById('kgrid');g.innerHTML='';
   let done=0,miss=0;
@@ -1538,33 +2192,98 @@ async function checkKanjiQ(){
 
 window._lastMT='keisan';
 const MPROMPTS={
-  keisan:'小学6年生向け計算問題（分数・小数・四則混合計算）を1問。式と答えを書かせる問題形式で。解答と丁寧な解説付き。\n\n【重要】マークダウン（**や##）やLaTeX（$記号）は使わず、普通の日本語テキストで書いてください。分数は「3/4」、掛け算は「×」のように書いてください。',
-  bunshoudai:'小学6年生向け文章題（速さ・時間・距離またはつるかめ算）を1問。解答と丁寧な解説付き。\n\n【重要】マークダウン（**や##）は使わず、普通の日本語テキストで書いてください。',
-  zukei:'小学6年生向け図形問題（面積・体積・円の計算）を1問。解答と丁寧な解説付き。\n\n【重要】マークダウン（**や##）は使わず、普通の日本語テキストで書いてください。',
-  wariai:'小学6年生向け割合・比・百分率の問題を1問。解答と丁寧な解説付き。\n\n【重要】マークダウン（**や##）は使わず、普通の日本語テキストで書いてください。'
+  keisan:'小学6年生向け計算問題（分数・小数・四則混合計算）を1問。紙に解く形式。問題文のみ先に出し、最後に【解答】として答えと解説。\n\n【重要】マークダウン（**や##）やLaTeX（$記号）は使わず普通のテキストで。分数は「3/4」、掛け算は「×」。',
+  bunshoudai:'小学6年生向け文章題（速さ・時間・距離またはつるかめ算）を1問。問題文の後に【解答】として答えと解説。\n\n【重要】マークダウン不使用。',
+  zukei:'小学6年生向け図形問題（面積・体積・円の計算）を1問。問題文の後に【解答】として答えと解説。\n\n【重要】マークダウン不使用。',
+  wariai:'小学6年生向け割合・比・百分率の問題を1問。問題文の後に【解答】として答えと解説。\n\n【重要】マークダウン不使用。'
 };
-async function genMath(type){
+
+// 算数3問セット管理
+let mathSet={type:'',count:0,total:3};
+
+function startMathSet(type){
+  mathSet={type,count:0,total:3};
   window._lastMT=type;
-  document.getElementById('marea').style.display='none';document.getElementById('mloading').style.display='block';
-  document.getElementById('mfb').style.display='none';document.getElementById('mansin').value='';
+  document.getElementById('math-set-bar').style.display='block';
+  document.getElementById('math-complete-area').style.display='none';
+  document.getElementById('math-photo-area').style.display='none';
+  const ar=document.getElementById('math-ai-result');if(ar)ar.style.display='none';
+  const pv=document.getElementById('math-photo-preview');if(pv)pv.innerHTML='';
+  updateMathSetBar();
+  genMathQ();
+}
+
+function updateMathSetBar(){
+  document.getElementById('math-set-count').textContent=mathSet.count;
+  document.getElementById('math-set-prog').style.width=(mathSet.count/mathSet.total*100)+'%';
+  document.getElementById('math-qnum').textContent='問題 '+(mathSet.count+1)+'/'+mathSet.total;
+  const btn=document.getElementById('math-next-btn');
+  if(mathSet.count>=mathSet.total-1){btn.textContent='完了！ ✓';btn.onclick=finishMathSet;}
+  else{btn.textContent='次の問題 →';btn.onclick=mathNextQ;}
+}
+
+async function genMathQ(){
+  document.getElementById('marea').style.display='none';
+  document.getElementById('mloading').style.display='block';
+  document.getElementById('mfb').style.display='none';
+  document.getElementById('mansin').value='';
   try{
-    const reply=await callAPI(MPROMPTS[type]);
-    document.getElementById('mbox').innerHTML=md2html(reply);
+    const reply=await callAPI(MPROMPTS[mathSet.type]);
+    const ansIdx=reply.indexOf('【解答】');
+    const qPart=ansIdx>0?reply.slice(0,ansIdx).trim():reply;
+    const ansPart=ansIdx>0?reply.slice(ansIdx).trim():reply;
+    document.getElementById('mbox').innerHTML=md2html(qPart);
+    document.getElementById('mft').innerHTML=md2html(ansPart);
     document.getElementById('marea').style.display='block';
+    updateMathSetBar();
   }catch(e){alert('エラー：'+e.message)}
   document.getElementById('mloading').style.display='none';
 }
-async function getMathFB(){
-  const txt=document.getElementById('mansin').value.trim();if(!txt){alert('式と答えを書こう！');return}
-  const q=document.getElementById('mbox').innerText,btn=event.currentTarget;
-  btn.disabled=true;btn.textContent='確認中…';
-  try{
-    const reply=await callAPI(`小学6年生の算数採点。\n問題：${q}\n生徒の答え：${txt}\n正誤判定と解き方の解説を丁寧にやさしくお願いします。`);
-    document.getElementById('mft').innerHTML=md2html(reply);document.getElementById('mfb').style.display='block';
-    document.getElementById('mfb').scrollIntoView({behavior:'smooth'});
-  }catch(e){alert('エラー：'+e.message)}
-  btn.disabled=false;btn.textContent='解説してもらう';
+
+function mathNextQ(){
+  mathSet.count++;
+  if(mathSet.count>=mathSet.total){finishMathSet();return;}
+  genMathQ();
 }
+
+function finishMathSet(){
+  mathSet.count=mathSet.total;
+  document.getElementById('math-set-count').textContent=mathSet.total;
+  document.getElementById('math-set-prog').style.width='100%';
+  document.getElementById('marea').style.display='none';
+  document.getElementById('math-complete-area').style.display='block';
+  document.getElementById('math-complete-area').scrollIntoView({behavior:'smooth'});
+}
+
+function showMathPhotoReview(){document.getElementById('math-photo-area').style.display='block';}
+function previewMathPhotos(input){
+  const pv=document.getElementById('math-photo-preview');pv.innerHTML='';
+  document.getElementById('math-ai-review-btn').style.display=input.files.length>0?'block':'none';
+  [...input.files].forEach(f=>{
+    const img=document.createElement('img');
+    img.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px solid #A8C8E8';
+    const r=new FileReader();r.onload=e=>img.src=e.target.result;r.readAsDataURL(f);pv.appendChild(img);
+  });
+}
+async function submitMathPhotoReview(){
+  const input=document.getElementById('math-photo-input');
+  if(!input.files.length){alert('写真を選んでね！');return}
+  const btn=document.getElementById('math-ai-review-btn');btn.disabled=true;btn.textContent='採点中…';
+  try{
+    const images=await filesToBase64(input.files);
+    const reply=await callAPIWithImages('小学6年生の算数の解答写真を採点してください。正誤判定と解説をやさしく。間違いは正しい解き方も教えて。',images);
+    document.getElementById('math-ai-txt').innerHTML=md2html(reply);
+    document.getElementById('math-ai-result').style.display='block';
+    saveStudyRecord('sansu','算数AIレビュー',reply.slice(0,300));
+  }catch(e){alert('エラー：'+e.message)}
+  btn.disabled=false;btn.textContent='🤖 AIに採点してもらう';
+}
+
+async function genMath(type){startMathSet(type);}
+async function getMathFB(){
+  document.getElementById('mfb').style.display=document.getElementById('mfb').style.display==='block'?'none':'block';
+}
+
 
 function renderIQ(){
   const c=document.getElementById('iqlist');
@@ -1588,7 +2307,7 @@ async function getIFB(){
   try{
     const reply=await callAPI(`明訓中学受験面接練習（11歳・小6・帰国子女・オランダ在住）。\n質問：「${window._curQ}」\n生徒の答え：「${txt}」\n【良かった点】【改善のヒント】【答えの例（50字程度）】を、やさしく短く教えてください。`);
     document.getElementById('ift').innerHTML=md2html(reply);document.getElementById('ifarea').style.display='block';
-    try{ addLearningLog({type:'面接', topic:(window._curQ||''), input:txt, feedback:reply}); }catch(e){}
+    saveStudyRecord('mensetsu','面接練習: '+(window._curQ||'').slice(0,30),(txt||'').slice(0,300));renderRecords(_currentRecordFilter||'all');
   }catch(e){alert('エラー：'+e.message)}
   btn.disabled=false;btn.textContent='アドバイスをもらう';
 }
@@ -1617,7 +2336,23 @@ const LEVEL_MAP={1:'lv1',2:'lv2',3:'lv3',4:'lv4'};
 const LEVEL_LABEL={1:'Level 1',2:'Level 2',3:'Level 3',4:'上級'};
 let sk_step=1,sk_essay=null,sk_chatHistory=[],sk_charTarget=400,_lastFilter='all';
 
-function initSakubun(){renderEssayGrid('all');}
+let sk_entryMode='daily'; // 'daily' or 'honban'
+
+function startEntry(mode){
+  sk_entryMode=mode;
+  document.getElementById('sk-entry').style.display='none';
+  document.getElementById('stepBar').style.display='flex';
+  goStep(1);
+}
+
+function initSakubun(){
+  renderEssayGrid('all');
+  // 初期状態: 入口画面を表示、ステップバーと各ステップを非表示
+  const entry=document.getElementById('sk-entry');
+  if(entry) entry.style.display='block';
+  document.getElementById('stepBar').style.display='none';
+  for(let i=1;i<=7;i++){const el=document.getElementById('sk-step'+i);if(el)el.style.display='none';}
+}
 
 function renderEssayGrid(filter){
   _lastFilter=filter;
@@ -1649,7 +2384,7 @@ function selectEssay(e){
   const v=document.getElementById('essayViewer');v.style.display='block';
   document.getElementById('evTitle').innerHTML=`📖 ${e.title} <span class="badge ba">${e.grade}・${e.type}</span>`;
   document.getElementById('evMeta').innerHTML=`<span class="pill pila">受験${e.fit}</span><span class="pill pilb">${e.tags.join('・')}</span>`;
-  document.getElementById('evBody').textContent=e.body.replace(/\\n/g,'\n');
+  document.getElementById('evBody').textContent=e.body.replace(/\n/g,'\n');
   v.scrollIntoView({behavior:'smooth'});
 }
 
@@ -1658,58 +2393,151 @@ function goStep(n){
   sk_step=n;
   for(let i=1;i<=7;i++){const el=document.getElementById('sk-step'+i);if(el)el.style.display=(i===n)?'block':'none';}
   document.querySelectorAll('.step-btn').forEach((btn,idx)=>{btn.classList.remove('on','done');if(idx+1===n)btn.classList.add('on');else if(idx+1<n)btn.classList.add('done');});
-  if(n===2)renderStructure();if(n===3)renderTemplate();if(n===4)renderStep4();if(n===5)initChat();if(n===6)renderStep6();
+  if(n===2)renderStructure();
+  if(n===4)prefillOutlineFromSeed();
+  if(n===6){renderStep4hint();renderOutlineRef();}
+  if(n===7)renderStep6();
   document.getElementById('s-sakubun').scrollIntoView({behavior:'smooth'});
 }
 
 function renderStructure(){
   const e=sk_essay;const sv=document.getElementById('structureView');
   const rc={intro:'para-intro',event:'para-event',change:'para-change',spread:'para-spread',end:'para-end'};
-  sv.innerHTML=e.structure.map(p=>`<div class="para-block ${rc[p.role]||''}"><div class="para-label">${p.label}</div>${p.text}</div>`).join('');
+  const labelMap={intro:'はじめに思ったこと',event:'実際にあったこと',change:'そこで気づいたこと',spread:'自分が変わったこと',end:'これからどうしたいか'};
+  sv.innerHTML=e.structure.map(p=>`<div class="para-block ${rc[p.role]||''}"><div class="para-label">${labelMap[p.role]||p.label}</div>${p.text}</div>`).join('');
   document.getElementById('essayTypeLabel').textContent='【'+e.type+'】';
-  const ts={'体験変化型':'①ある出来事　②最初の考え　③実際に体験する　④考えが変わる　⑤これからどうしたいか','失敗反省型':'①軽い気持ちの行動　②予想外の結果　③後悔　④大切なことに気づく　⑤次はどうするか','夢目標型':'①自分の夢・目標　②きっかけ　③努力してきたこと　④支えてくれた人　⑤これからの決意','社会課題型':'①身近な出来事　②社会の問題に気づく　③自分の体験や調査　④自分の意見　⑤自分にできること','具体物記憶型':'①印象的な物・音・植物　②それにまつわる思い出　③気持ちの変化　④感謝　⑤これからの自分','物語導入型':'①インパクトのある書き出し　②問題・困難　③転換点　④気づきの広がり　⑤感謝と決意','家族感謝型':'①家族との日常　②変化・出来事　③気づき　④感謝の深まり　⑤未来への言葉','意見文型':'①具体的な体験から始める　②問いを立てる　③社会的な視野に広げる　④自分の意見　⑤結論・決意'};
-  document.getElementById('structureSteps').innerHTML=(ts[e.type]||'').split('　').map(s=>s?`<span style="display:inline-block;margin-right:8px;margin-bottom:4px">${s}</span>`:'').join('');
+  const ts={'体験変化型':'① はじめの考え　② 実際の体験　③ 体験からの気づき　④ 自分の変化　⑤ これからの行動','失敗反省型':'① 軽い気持ちの行動　② 予想外の結果　③ 後悔と気づき　④ 大切なことを学ぶ　⑤ 次はどうするか','夢目標型':'① 自分の夢・目標　② きっかけ　③ 努力してきたこと　④ 支えてくれた人　⑤ これからの決意','社会課題型':'① 身近な出来事　② 社会の問題に気づく　③ 自分の体験や考え　④ 自分の意見　⑤ 自分にできること','具体物記憶型':'① 印象的な物・音・植物　② それにまつわる思い出　③ 気持ちの変化　④ 感謝　⑤ これからの自分','物語導入型':'① インパクトのある書き出し　② 問題・困難　③ 転換点　④ 気づきの広がり　⑤ 感謝と決意','家族感謝型':'① 家族との日常　② 変化・出来事　③ 気づき　④ 感謝の深まり　⑤ 未来への言葉','意見文型':'① 具体的な体験から始める　② 問いを立てる　③ 社会的な視野に広げる　④ 自分の意見　⑤ 結論・決意'};
+  const steps=ts[e.type]||'';
+  document.getElementById('structureSteps').innerHTML=steps.split('　').map(s=>s?`<span style="display:inline-block;margin-right:8px;margin-bottom:4px">${s}</span>`:'').join('');
+  document.getElementById('structureSummary').innerHTML=steps.replace(/　/g,'<br>');
 }
 
-function renderTemplate(){
-  const e=sk_essay;const rl={intro:'導入',event:'出来事',change:'気づき（転換点）',spread:'考えの広がり',end:'結末・決意'};
-  document.getElementById('tmplArea').innerHTML=`<div style="font-size:14px;background:#FFF3CD;padding:10px 12px;border-radius:10px;margin-bottom:12px;border-left:4px solid #F59E0B"><strong style="color:#7C4A00">💡 まねるポイント：</strong><br><span style="color:#1a1a1a">${e.imitation}</span></div>${e.structure.map(p=>`<div class="tmpl-block"><div class="tmpl-label">${p.label}（${rl[p.role]||p.role}）</div><div class="tmpl-hint">→ あなたの「${p.text.split('。')[0]}」はどんなこと？</div><textarea class="ta" style="min-height:70px;margin-top:6px" placeholder="自分の体験をここにメモしよう…"></textarea></div>`).join('')}`;
+// Step 3: タネ - AIに質問してもらう
+async function askSeedAI(){
+  const theme=document.getElementById('seed_theme').value;
+  const event=document.getElementById('seed_event').value;
+  const feel=document.getElementById('seed_feel').value;
+  const notice=document.getElementById('seed_notice').value;
+  if(!theme&&!event){alert('テーマか出来事を少し書いてからボタンを押してね！');return;}
+  const area=document.getElementById('seed_ai_area');
+  const txt=document.getElementById('seed_ai_txt');
+  area.style.display='block';txt.textContent='考え中…';
+  try{
+    const reply=await callAPI(`小学6年生（11歳・帰国子女・オランダ在住）の作文のタネ出しをサポートしてください。\nテーマ：${theme||'未記入'}\n出来事：${event||'未記入'}\n気持ち：${feel||'未記入'}\n気づき：${notice||'未記入'}\n\n子どもの体験を深めるための追加質問を3つだけ、やさしい日本語で出してください。答えは教えない。質問だけ。否定しない。具体的に思い出せる質問にしてください。マークダウン不使用。`,500);
+    txt.innerHTML=md2html(reply);
+    saveStudyRecord('sakubun_seed','作文タネメモ',(theme+' '+event+' '+notice).slice(0,200));
+  }catch(e){txt.textContent='エラー：'+e.message;}
 }
 
-function renderStep4(){const e=sk_essay;document.getElementById('step4hint').innerHTML=(e.prompts400[0]||'')+'<br>💡 '+e.imitation;}
+// Step 4: 骨組み - AIで作る
+function prefillOutlineFromSeed(){
+  // タネのnoticeをol_noticeにプレフィル（未入力時のみ）
+  const notice=document.getElementById('seed_notice').value;
+  const future=document.getElementById('seed_future').value;
+  if(notice&&!document.getElementById('ol_notice').value) document.getElementById('ol_notice').value=notice;
+  if(future&&!document.getElementById('ol_future').value) document.getElementById('ol_future').value=future;
+}
+
+async function buildOutlineAI(){
+  const theme=document.getElementById('seed_theme').value;
+  const event=document.getElementById('seed_event').value;
+  const feel=document.getElementById('seed_feel').value;
+  const notice=document.getElementById('seed_notice').value;
+  const future=document.getElementById('seed_future').value;
+  if(!event&&!theme){alert('先にStep 3でタネを入力してね！');return;}
+  const area=document.getElementById('outline_ai_area');
+  const txt=document.getElementById('outline_ai_txt');
+  area.style.display='block';txt.textContent='骨組みを作っています…';
+  try{
+    const e=sk_essay;
+    const reply=await callAPI(`小学6年生（11歳・帰国子女・オランダ在住）の作文の骨組みを作ってください。\nテーマ：${theme}\n出来事：${event}\n気持ち：${feel}\n気づき：${notice}\n将来：${future}\nお手本の作文タイプ：${e?e.type:'体験変化型'}\n\n完成作文ではなく、箇条書きの骨組みだけ作る。以下の5項目を各1〜2文で。子どもの言葉を残す。大人っぽくしすぎない。\n①はじめに思ったこと\n②実際にあったこと\n③そこで気づいたこと\n④自分が変わったこと\n⑤これからどうしたいか\nマークダウン不使用。`,600);
+    txt.innerHTML=md2html(reply);
+    // 骨組みを各フィールドに展開（シンプルにAI結果を参考表示）
+    saveStudyRecord('sakubun_outline','作文骨組み',reply.slice(0,300));
+  }catch(e){txt.textContent='エラー：'+e.message;}
+}
+
+function clearOutline(){
+  ['ol_intro','ol_event','ol_notice','ol_change','ol_future'].forEach(id=>{
+    document.getElementById(id).value='';
+  });
+  document.getElementById('outline_ai_area').style.display='none';
+}
+
+// Step 5: ミニ練習
+function selectMiniMode(mode,btn){
+  ['ichi','kaki','kizuki','matome'].forEach(m=>{
+    document.getElementById('mini-'+m).style.display=(m===mode)?'block':'none';
+  });
+  document.querySelectorAll('.mini-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+const MINI_PROMPTS={
+  ichi:{
+    label:'一文練習',
+    prompt:(txt)=>`小学6年生の「一文練習」のフィードバックをしてください。\n書いた文：「${txt}」\n\n以下の3点をやさしい言葉で短く教えてください。マークダウン不使用。\n【良いところ】1つ\n【もっと良くするヒント】1つ\n【改善例】1文だけ示す`
+  },
+  kaki:{
+    label:'書き出し練習',
+    prompt:(txt)=>`小学6年生の「書き出し練習」のフィードバックをしてください。\n書き出し：「${txt}」\n\n以下をやさしく短く。マークダウン不使用。\n【テーマが伝わるか】\n【読みたくなる始まりか】\n【もう少し自然な例】1文`
+  },
+  kizuki:{
+    label:'気づき練習',
+    prompt:(txt)=>`小学6年生の「気づき練習」のフィードバックをしてください。\n書いた気づき：「${txt}」\n\n以下をやさしく短く。マークダウン不使用。\n【出来事だけで終わっていないか】\n【自分の考えが入っているか】\n【もう少し深くする質問】1つ`
+  },
+  matome:{
+    label:'まとめ練習',
+    prompt:(txt)=>`小学6年生の「まとめ練習」のフィードバックをしてください。\nまとめの文：「${txt}」\n\n以下をやさしく短く。マークダウン不使用。\n【これからの行動があるか】\n【体験とつながっているか】\n【もう少し良いまとめ例】1文`
+  }
+};
+
+async function getMiniAI(mode){
+  const inEl=document.getElementById('mini_'+mode+'_in');
+  const txt=inEl.value.trim();
+  if(!txt){alert('文を書いてからボタンを押してね！');return;}
+  const fbEl=document.getElementById('mini_'+mode+'_fb');
+  const txtEl=document.getElementById('mini_'+mode+'_txt');
+  fbEl.style.display='block';txtEl.textContent='フィードバック中…';
+  try{
+    const reply=await callAPI(MINI_PROMPTS[mode].prompt(txt),400);
+    txtEl.innerHTML=md2html(reply);
+    fbEl.scrollIntoView({behavior:'smooth'});
+    saveStudyRecord('sakubun_mini','ミニ練習('+MINI_PROMPTS[mode].label+')',txt.slice(0,200));
+  }catch(e){txtEl.textContent='エラー：'+e.message;}
+}
+
+// Step 6: 400字
+function renderStep4hint(){
+  const e=sk_essay;
+  if(e) document.getElementById('step4hint').innerHTML=(e.prompts400[0]||'')+'<br>💡 '+e.imitation;
+}
+
+function renderOutlineRef(){
+  const fields=[
+    {id:'ol_intro',label:'① はじめに思ったこと'},
+    {id:'ol_event',label:'② 実際にあったこと'},
+    {id:'ol_notice',label:'③ そこで気づいたこと'},
+    {id:'ol_change',label:'④ 自分が変わったこと'},
+    {id:'ol_future',label:'⑤ これからどうしたいか'},
+  ];
+  const el=document.getElementById('outline_ref');
+  el.innerHTML=fields.map(f=>{
+    const val=document.getElementById(f.id)?document.getElementById(f.id).value:'';
+    return val?`<div style="margin-bottom:8px"><strong style="color:#1A5B8A">${f.label}</strong><br>${val}</div>`:'';
+  }).join('');
+}
 
 function setCT(n,btn){sk_charTarget=n;document.querySelectorAll('.ctbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');s4cc();}
-
-function s4cc(){const l=document.getElementById('s4in').value.length;const el=document.getElementById('s4cnt');el.textContent=l+'字 / 目標'+sk_charTarget+'字';el.className='cc'+(l>=sk_charTarget*0.9?' ok':l>sk_charTarget*0.5?' mid':'');}
+function s4cc(){const l=document.getElementById('s4in').value.length;const el=document.getElementById('s4cnt');el.textContent=l+'字 / 目標400字';el.className='cc'+(l>=360?' ok':l>200?' mid':'');}
 function s6cc(){const l=document.getElementById('s6in').value.length;const el=document.getElementById('s6cnt');el.textContent=l+'字 / 目標800字';el.className='cc'+(l>=720?' ok':l>400?' mid':'');}
-function s7cc(){const l=document.getElementById('s7in').value.length;const el=document.getElementById('s7cnt');el.textContent=l+'字 / 目標1200字';el.className='cc'+(l>=1080?' ok':l>600?' mid':'');}
 
-function saveTemplateMemo(){
-  const blocks = document.querySelectorAll('#tmplArea .tmpl-block');
-  const parts = [];
-  blocks.forEach(b => {
-    const label = (b.querySelector('.tmpl-label') ? b.querySelector('.tmpl-label').textContent : '').trim();
-    const ta = b.querySelector('textarea');
-    const val = ta ? ta.value.trim() : '';
-    if (val) parts.push((label ? '【' + label + '】\n' : '') + val);
-  });
-  if (parts.length === 0) { alert('まず体験をメモしてから「記録する」を押してね！'); return; }
-  const e = sk_essay;
-  try {
-    addLearningLog({
-      type: '作文(型まね)',
-      topic: (e ? e.title : '') + (e && e.type ? ' / ' + e.type : ''),
-      input: parts.join('\n\n'),
-      feedback: '（型まねメモ・AI評価なし）'
-    });
-  } catch(_e) {}
-  const msg = document.getElementById('tmplSaveMsg');
-  if (msg) {
-    msg.textContent = '✅ 型まねメモを記録しました！シートにも保存されます';
-    msg.style.display = 'block';
-    setTimeout(() => { msg.style.display = 'none'; }, 3500);
-  }
-  showPtToast('型まねメモを記録したよ！📝');
+function finish400(){
+  const txt=document.getElementById('s4in').value.trim();
+  if(txt.length<50){alert('もう少し書いてみよう！');return;}
+  saveStudyRecord('sakubun_400','400字作文完成',txt.slice(0,400));
+  showPtToast('400字完成！すごい！🎉');
+  alert('400字作文を完成にしました！すごい！\n学習記録に保存しました。');
 }
 
 async function getS4FB(){
@@ -1718,84 +2546,108 @@ async function getS4FB(){
   const e=sk_essay;const btn=document.getElementById('s4fbtn');
   btn.disabled=true;btn.textContent='添削中…';document.getElementById('s4farea').style.display='none';
   try{
-    const reply=await callAPI(`新潟明訓中学A方式入試作文添削。11歳・小6・帰国子女（オランダ在住）。\nモデル作文タイプ：${e.type}\nまねるポイント：${e.imitation}\n作文：${txt}\n\n【総合評価】A/B/Cのどれか1字＋一言コメント\n【良かった点】2〜3つ（箇条書き）\n【改善のヒント】2〜3つ（具体的・小6向けの言葉で）\n【書き直しのヒント】1〜2文だけ改善例を示す\n\n帰国子女ならではの体験を活かしているかも評価してください。励ます口調で！\n【重要】マークダウン記法（**や##）は使わず、普通の日本語テキストで書いてください。`,1000);
+    const reply=await callAPI(`新潟明訓中学A方式入試作文添削。11歳・小6・帰国子女（オランダ在住）。\nモデル：${e?e.type:'体験変化型'}\n作文：${txt}\n\n【総合評価】A/B/Cのどれか1字＋一言コメント\n【良かった点】2〜3つ（箇条書き）\n【改善のヒント】最大3つ（具体的・小6向け）\n【次に直すならここ】優先順位1位だけ\n\n子どもの言葉を大人っぽくしすぎない。完成文を丸ごと作らない。帰国子女らしさも評価。励ます口調で！マークダウン不使用。`,1000);
     const sm=reply.match(/【総合評価】([ABC])/);
     const sp=document.getElementById('s4pills');sp.innerHTML='';
     if(sm){const p=document.createElement('span');p.className='pill pila';p.textContent='評価：'+sm[1];sp.appendChild(p);}
     const lp=document.createElement('span');lp.className='pill pilb';lp.textContent=txt.length+'字';sp.appendChild(lp);
     document.getElementById('s4ftxt').innerHTML=md2html(reply);
     document.getElementById('s4farea').style.display='block';
-    try{ addLearningLog({type:'作文(400字)', topic:(e?e.title:'')+(e&&e.type?' / '+e.type:''), input:txt, feedback:reply}); }catch(_e){}
     const c=parseInt(localStorage.getItem('mk_essays')||'0')+1;localStorage.setItem('mk_essays',c);upStats();renderEarnBanner();
+    saveStudyRecord('sakubun','400字AI添削',txt.slice(0,400));renderRecords(_currentRecordFilter||'all');
     document.getElementById('s4farea').scrollIntoView({behavior:'smooth'});
   }catch(err){alert('エラー：'+err.message);}
   btn.disabled=false;btn.textContent='AI先生に添削してもらう';
 }
 
-function initChat(){
-  const e=sk_essay;sk_chatHistory=[];
-  const area=document.getElementById('chatArea');area.innerHTML='';
-  const draft=document.getElementById('s4in').value.trim();
-  const msg0=draft.length>50?`こんにちは！今まで書いた作文を読んだよ。「${e.title}」をお手本に、もっと深めていこう！AIコーチとして質問しながら一緒に考えるね。`:`こんにちは！「${e.title}」をお手本に作文を書いていくよ。AIコーチとして一緒に考えていくね！`;
-  addChatMsg('ai',msg0);
-  setTimeout(()=>{addChatMsg('ai',e.coach_start);sk_chatHistory=[{role:'assistant',content:msg0+'\n'+e.coach_start}];},400);
+// Step 7: 本番
+function renderStep6(){
+  const e=sk_essay;
+  if(e) document.getElementById('step6hint').innerHTML=(e.prompts800[0]||'')+'<br>💡 Step 5で出てきたエピソードや気持ちを加えよう！';
 }
-
-function addChatMsg(role,text){
-  const area=document.getElementById('chatArea');
-  const div=document.createElement('div');div.className='msg msg-'+role;div.textContent=text;
-  area.appendChild(div);area.scrollTop=area.scrollHeight;
-}
-
-async function sendChat(){
-  const txt=document.getElementById('chatIn').value.trim();if(!txt)return;
-  addChatMsg('user',txt);document.getElementById('chatIn').value='';
-  sk_chatHistory.push({role:'user',content:txt});
-  try{
-    const e=sk_essay;const draft=document.getElementById('s4in').value.trim();
-    const sysPrompt=`あなたは新潟明訓中学受験対策の作文コーチです。子ども（11歳・小6・帰国子女・オランダ在住）の作文を深めるためにやさしく質問してください。\nお手本の作文タイプ：${e.type}（${e.imitation}）\n子どもが書いた作文メモ：${draft||'（まだ書いていません）'}\n会話を通じて、より具体的なエピソードや気持ち・オランダ体験を引き出してください。\n毎回1〜2文の質問で終わらせること。励ます口調で。マークダウン不使用。`;
-    const hist=sk_chatHistory.map(m=>(m.role==='user'?'子ども：':'コーチ：')+m.content).join('\n');
-    const reply=await callAPI(sysPrompt+'\n\n会話履歴：\n'+hist+'\n\n子ども：'+txt+'\nコーチ：',400);
-    addChatMsg('ai',reply);sk_chatHistory.push({role:'assistant',content:reply});
-  }catch(err){addChatMsg('ai','エラーが起きました：'+err.message);}
-}
-
-function renderStep6(){const e=sk_essay;document.getElementById('step6hint').innerHTML=(e.prompts800[0]||'')+'<br>💡 Step 5で出てきたエピソードや気持ちを加えよう！';}
 function copyS4toS6(){document.getElementById('s6in').value=document.getElementById('s4in').value;s6cc();}
-function copyS6toS7(){document.getElementById('s7in').value=document.getElementById('s6in').value;s7cc();}
 
 async function getS6FB(){
   const txt=document.getElementById('s6in').value.trim();if(txt.length<100){alert('もう少し書いてから！');return;}
   const e=sk_essay;const btn=document.getElementById('s6fbtn');
   btn.disabled=true;btn.textContent='添削中…';document.getElementById('s6farea').style.display='none';
   try{
-    const reply=await callAPI(`新潟明訓中学A方式作文添削（800字版）。11歳・小6・帰国子女（オランダ在住）。モデル：${e.type}\n作文：${txt}\n【総合評価】A/B/C\n【良かった点】\n【改善のヒント】\n【1200字に向けたアドバイス】（どこを膨らませるといいか）\n励ます口調で。マークダウン不使用。`,1000);
+    const reply=await callAPI(`新潟明訓中学A方式作文添削（800字版）。11歳・小6・帰国子女（オランダ在住）。モデル：${e?e.type:'体験変化型'}\n作文：${txt}\n【総合評価】A/B/C\n【良かった点】\n【改善のヒント】最大3つ\n【帰国子女らしさ】\n励ます口調で。マークダウン不使用。`,1000);
     document.getElementById('s6pills').innerHTML=`<span class="pill pila">800字版</span><span class="pill pilb">${txt.length}字</span>`;
     document.getElementById('s6ftxt').innerHTML=md2html(reply);document.getElementById('s6farea').style.display='block';
-    try{ addLearningLog({type:'作文(800字)', topic:(e?e.title:'')+(e&&e.type?' / '+e.type:''), input:txt, feedback:reply}); }catch(_e){}
     document.getElementById('s6farea').scrollIntoView({behavior:'smooth'});
+    saveStudyRecord('sakubun','800字AI添削',txt.slice(0,400));renderRecords(_currentRecordFilter||'all');
   }catch(err){alert('エラー：'+err.message);}
   btn.disabled=false;btn.textContent='AI先生に添削してもらう';
 }
 
-async function getS7FB(){
-  const txt=document.getElementById('s7in').value.trim();if(txt.length<200){alert('もう少し書いてから！');return;}
-  const e=sk_essay;const btn=document.getElementById('s7fbtn');
-  btn.disabled=true;btn.textContent='添削中…';document.getElementById('s7farea').style.display='none';
-  try{
-    const reply=await callAPI(`新潟明訓中学A方式作文最終添削。11歳・小6・帰国子女（オランダ在住）。モデル：${e.type}\n作文：${txt}\n【総合評価】A/B/C（合否に関わるレベルで評価）\n【受験官に刺さるポイント】\n【改善が必要なポイント】\n【帰国子女らしさ】（オランダ体験が活かされているか）\n【清書前の最終アドバイス】\n本番に向けて最大限励ます口調で！マークダウン不使用。`,1200);
-    const sm=reply.match(/【総合評価】([ABC])/);
-    const sp=document.getElementById('s7pills');sp.innerHTML='';
-    if(sm){const p=document.createElement('span');p.className='pill pila';p.textContent='評価：'+sm[1];sp.appendChild(p);}
-    sp.innerHTML+=`<span class="pill pilb">${txt.length}字</span><span class="pill pilc">完成版</span>`;
-    document.getElementById('s7ftxt').innerHTML=md2html(reply);document.getElementById('s7farea').style.display='block';
-    try{ addLearningLog({type:'作文(1200字)', topic:(e?e.title:'')+(e&&e.type?' / '+e.type:''), input:txt, feedback:reply}); }catch(_e){}
-    const c=parseInt(localStorage.getItem('mk_essays')||'0')+1;localStorage.setItem('mk_essays',c);upStats();renderEarnBanner();
-    document.getElementById('s7farea').scrollIntoView({behavior:'smooth'});
-  }catch(err){alert('エラー：'+err.message);}
-  btn.disabled=false;btn.textContent='🎓 最終添削してもらう';
+function saveAndAddPt(){
+  const txt=document.getElementById('s6in').value.trim()||document.getElementById('s4in').value.trim();
+  if(!txt){alert('作文を書いてから保存してね！');return;}
+  saveStudyRecord('sakubun_final','完成作文',txt.slice(0,800));
+  addPtFromTab('sakubun',3,'完成作文保存');
+  showPtToast('完成作文を保存しました！+3pt🏆');
 }
 
+
+
+// ============================================================
+// 動画セクション
+// ============================================================
+const MATH_VIDEOS = [
+  {title:'分数のたし算・ひき算',id:'xvkRRE_AAAA'},
+  {title:'分数のかけ算',id:'OZ9MbNFHFxI'},
+  {title:'分数のわり算',id:'tPOB3JKdPxI'},
+  {title:'小数のかけ算',id:'ILiEJNpJoPs'},
+  {title:'小数のわり算',id:'a6WCW5x04a4'},
+  {title:'四則混合計算（整数）',id:'9Yo2TtHB1aE'},
+  {title:'四則混合計算（分数・小数）',id:'bLUAjVeJbZA'},
+  {title:'速さの基本',id:'T5PtInXVJOA'},
+  {title:'速さ・時間・距離の応用',id:'g3bCn3ckEpY'},
+  {title:'つるかめ算',id:'VLwvQ8DYDMQ'},
+  {title:'植木算',id:'nNKpxm0e6QQ'},
+  {title:'面積（三角形・四角形）',id:'cVHqA5_JRQY'},
+  {title:'円の面積と周の長さ',id:'uJAtlJYe1DU'},
+  {title:'体積（直方体・立方体）',id:'2qGx_XdnOzY'},
+  {title:'割合の基本',id:'bVfB_cH8fUc'},
+  {title:'百分率と歩合',id:'hH3yNhw0mEI'},
+  {title:'比と比の値',id:'XO9k3Qr9H6A'},
+  {title:'比例と反比例',id:'MnY-qhZ0bYk'},
+  {title:'場合の数（順列・組み合わせ）',id:'Yd4kLkQblAk'},
+  {title:'平均',id:'BElBsB4AAAA'},
+  {title:'単位量あたりの大きさ',id:'C3jKfX0yY6A'},
+  {title:'文字と式',id:'DmPz7HiQuak'},
+  {title:'図形の拡大と縮小',id:'E4Qn9LrHxaQ'},
+  {title:'対称な図形',id:'FsYmKj9Wqew'}
+];
+
+function initVideoSection() {
+  const list = document.getElementById('math-video-list');
+  if (!list) return;
+  list.innerHTML = '';
+  MATH_VIDEOS.forEach((v, i) => {
+    const item = document.createElement('div');
+    item.className = 'video-item';
+    item.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#EBF5FF;border-radius:10px;margin-bottom:6px;cursor:pointer" onclick="toggleMathVideo(${i},'${v.id}')">
+        <span style="font-size:14px;font-weight:600;color:#1A5B8A">▶ ${v.title}</span>
+        <span id="mv-icon-${i}" style="font-size:18px">＋</span>
+      </div>
+      <div id="mv-${i}" style="display:none;margin-bottom:10px">
+        <div class="video-wrap"><iframe src="https://www.youtube.com/embed/${v.id}" frameborder="0" allowfullscreen loading="lazy"></iframe></div>
+      </div>`;
+    list.appendChild(item);
+  });
+}
+
+function toggleMathVideo(idx, id) {
+  const el = document.getElementById('mv-' + idx);
+  const icon = document.getElementById('mv-icon-' + idx);
+  if (!el) return;
+  const isOpen = el.style.display === 'block';
+  el.style.display = isOpen ? 'none' : 'block';
+  if (icon) icon.textContent = isOpen ? '＋' : '－';
+}
 
 function exportData() {
   const data = {
@@ -1837,10 +2689,8 @@ function importData() {
     if (data.milestones) saveAchievedMilestones(data.milestones);
     if (data.mk_essays) localStorage.setItem('mk_essays', data.mk_essays);
     if (data.mk_qs) localStorage.setItem('mk_qs', data.mk_qs);
-    if (data.mk_logs) localStorage.setItem('mk_logs', data.mk_logs);
     sv();
     renderCal(); upStats(); renderEarnBanner(); renderBonusChips(); initTodayButtons();
-    try { syncToSheet(true); } catch(e) {}
     const box = document.getElementById('importBox');
     if (box) box.style.display = 'none';
     const msg = document.getElementById('exportMsg');
@@ -1852,11 +2702,201 @@ function importData() {
 }
 
 
-const MONTH_CAPS_PT = {6:1000,7:1400,8:1700,9:1600,10:2100,11:2200}; // 1pt=10円換算
-const MILESTONES = [10, 25, 50, 75, 100, 150, 200, 300];
+// ============================================================
+// 学習記録表示システム
+// ============================================================
+let _currentRecordFilter='all';
+
+function renderRecords(filter){
+  _currentRecordFilter=filter||'all';
+  loadStudyRecords();
+  const list=document.getElementById('study-records-list');
+  if(!list)return;
+  let recs=studyRecords;
+  if(filter&&filter!=='all') recs=studyRecords.filter(r=>r.type===filter);
+  const badge=document.getElementById('rec-count-badge');
+  if(badge)badge.textContent=recs.length+'件';
+  if(recs.length===0){
+    list.innerHTML='<p style="color:#aaa;font-size:13px;text-align:center;padding:20px">まだ記録がありません</p>';
+    return;
+  }
+  list.innerHTML='';
+  recs.forEach(rec=>{
+    const icons={sakubun:'✏️',mensetsu:'🎤',sansu:'🔢',kokugo:'📖',kanji:'🖊️'};
+    const el=document.createElement('div');
+    el.style.cssText='border:1px solid #e0e0e0;border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#fafafa;cursor:pointer';
+    el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span style="font-size:13px;font-weight:700;color:#1A5B8A">${icons[rec.type]||'📝'} ${rec.title}</span>
+      <span style="font-size:11px;color:#aaa">${rec.date} ${rec.time||''}</span>
+    </div>
+    <div style="font-size:13px;color:#555;white-space:pre-wrap;max-height:80px;overflow:hidden" id="rec-preview-${rec.id}">${rec.content.slice(0,120)}${rec.content.length>120?'…':''}</div>
+    <button class="bs" style="font-size:11px;padding:4px 10px;margin-top:6px" onclick="toggleRecordFull(${rec.id})">全文を見る</button>
+    <button class="bs" style="font-size:11px;padding:4px 10px;margin-top:6px;color:#E24B4A;border-color:#E24B4A" onclick="deleteRecord(${rec.id})">削除</button>`;
+    list.appendChild(el);
+  });
+}
+
+function filterRecords(type){
+  renderRecords(type);
+  // ボタンのスタイル更新
+  document.querySelectorAll('#study-records-card button').forEach(b=>{b.className='bs';b.style.fontSize='13px';b.style.padding='8px 14px'});
+  const filters=['all','sakubun','mensetsu','sansu','kokugo'];
+  const idx=filters.indexOf(type);
+  const btns=document.querySelectorAll('#study-records-card button');
+  if(btns[idx])btns[idx].className='bp';
+}
+
+function toggleRecordFull(id){
+  const el=document.getElementById('rec-preview-'+id);
+  if(!el)return;
+  const rec=studyRecords.find(r=>r.id===id);
+  if(!rec)return;
+  if(el.style.maxHeight==='none'){el.style.maxHeight='80px';el.style.overflow='hidden';el.textContent=rec.content.slice(0,120)+(rec.content.length>120?'…':'');}
+  else{el.style.maxHeight='none';el.style.overflow='visible';el.textContent=rec.content;}
+}
+
+function deleteRecord(id){
+  if(!confirm('この記録を削除しますか？'))return;
+  studyRecords=studyRecords.filter(r=>r.id!==id);
+  localStorage.setItem('mk_studyrec',JSON.stringify(studyRecords));
+  renderRecords(_currentRecordFilter);
+}
+
+// ============================================================
+// ポイント管理システム（日割り上限・各タブ加算）
+// ============================================================
+
+// 1日の上限pt = 月の残りpt ÷ 残り日数（最低3pt保証）
+function getDailyLimit() {
+  const t = new Date();
+  const yr = t.getFullYear(), mo = t.getMonth()+1, today = t.getDate();
+  const daysInMonth = new Date(yr, mo, 0).getDate();
+  const remainDays = Math.max(1, daysInMonth - today + 1);
+  const capPt = getMonthCapPt(mo);
+  const moPts = calcMonthEarnings(yr, mo);
+  const remainMonthPt = Math.max(0, capPt - moPts);
+  return Math.max(3, Math.ceil(remainMonthPt / remainDays));
+}
+
+// 今日の総取得pt
+function getTodayTotalPt() {
+  const k = getTodayKey();
+  if (!cal[k] || cal[k].pts === undefined) return 0;
+  return (cal[k].pts||0) + (cal[k].bonus||0);
+}
+
+// 今日の残りpt
+function getTodayRemainingPt() {
+  return Math.max(0, getDailyLimit() - getTodayTotalPt());
+}
+
+// 各学習タブからポイント追加
+function addPtFromTab(subj, pts, label) {
+  const remaining = getTodayRemainingPt();
+  if (remaining <= 0) {
+    showPtToast('今日の上限に達したよ！🌟 明日またがんばろう！');
+    return false;
+  }
+  const addPts = Math.min(pts, remaining);
+  const k = getTodayKey();
+  const streak = getCurrentStreak();
+
+  if (!cal[k] || cal[k].pts === undefined) {
+    const subjs = {}; subjs[subj] = true;
+    const bonus = calcDayBonus(subjs, streak + 1);
+    cal[k] = {subjs, pts: addPts, bonus, combo: streak + 1};
+  } else {
+    if (!cal[k].subjs) cal[k].subjs = {};
+    cal[k].subjs[subj] = true;
+    const bonus = calcDayBonus(cal[k].subjs, cal[k].combo || streak + 1);
+    cal[k].pts = (cal[k].pts||0) + addPts;
+    cal[k].bonus = bonus;
+  }
+
+  sv(); renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
+  refreshStampUI();
+  updateAllTabPtButtons();
+
+  const newTotal = getTodayTotalPt();
+  const newRemain = getTodayRemainingPt();
+  showPtToast('+' + addPts + 'pt 獲得！' + (newRemain > 0 ? '（今日あと' + newRemain + 'pt）' : ' 今日の上限達成🌟'));
+  showCancelBtn(k, newTotal);
+  return true;
+}
+
+// スタンプ画面のUI全体を現在の保存データに合わせてリフレッシュ
+function refreshStampUI() {
+  const saved = cal[getTodayKey()];
+  const limit = getDailyLimit();
+  const total = saved ? (saved.pts||0) + (saved.bonus||0) : 0;
+  const remain = Math.max(0, limit - total);
+
+  // ラベル更新
+  const label = document.getElementById('todayPtLabel');
+  if (label) {
+    label.textContent = '+' + total + 'pt / 上限' + limit + 'pt';
+    label.className = 'badge ' + (total > 0 ? 'bc' : 'ba');
+  }
+
+  // スタンプボタン更新
+  const stbtn = document.getElementById('stbtn');
+  if (stbtn) {
+    if (remain <= 0) {
+      stbtn.textContent = '🌟 今日の上限達成！ +' + total + 'pt';
+      stbtn.disabled = true;
+    } else if (total > 0) {
+      stbtn.textContent = '⭐ さらに記録を追加！（あと' + remain + 'pt）';
+      stbtn.disabled = false;
+    } else {
+      stbtn.textContent = '⭐ 今日の記録を保存！';
+      stbtn.disabled = false;
+    }
+  }
+
+  // ヒント更新
+  const hint = document.getElementById('stampHint');
+  if (hint) {
+    if (remain <= 0) hint.textContent = '今日の上限達成！🎉';
+    else if (total > 0) hint.textContent = '今日 +' + total + 'pt | あと' + remain + 'pt 獲得できるよ';
+    else hint.textContent = '今日の上限: ' + limit + 'pt（科目を選んで保存してね）';
+  }
+
+  // 科目ボタン：保存済み科目をON表示
+  if (saved && saved.subjs) {
+    Object.keys(SUBJ_PT).forEach(s => {
+      const btn = document.getElementById('sb-'+s);
+      if (!btn) return;
+      if (saved.subjs[s]) btn.classList.add('on');
+    });
+  }
+}
+
+// 各タブのptボタン表示を更新
+function updateTabPtButton(subj) {
+  const btn = document.getElementById('tabpt-' + subj);
+  if (!btn) return;
+  const remain = getTodayRemainingPt();
+  const pts = SUBJ_PT[subj] || 1;
+  const names = {sakubun:'作文', mensetsu:'面接', kokugo:'国語', kanji:'漢字', sansu:'算数', review:'復習'};
+  if (remain <= 0) {
+    btn.textContent = '🌟 今日の上限達成！';
+    btn.disabled = true;
+    btn.style.background = '#bbb';
+  } else {
+    btn.textContent = '⭐ ' + (names[subj]||subj) + ' +' + pts + 'pt 追加（あと' + remain + 'pt）';
+    btn.disabled = false;
+    btn.style.background = '';
+  }
+}
+
+function updateAllTabPtButtons() {
+  ['sakubun','mensetsu','kokugo','kanji','sansu'].forEach(updateTabPtButton);
+}
+
+// MONTH_CAPS_PT と MILESTONES は上部で定義済み
 function getAchievedMilestones(){ try{return JSON.parse(localStorage.getItem('mk_milestones')||'[]');}catch(e){return[];} }
 function saveAchievedMilestones(arr){ localStorage.setItem('mk_milestones',JSON.stringify(arr)); }
-function getMonthCapPt(mo){ return (MONTH_CAPS_PT[mo]||130); }
+// getMonthCapPt -> 上部に移動済み
 function calcTotalPts(){ let p=0; Object.keys(cal).forEach(k=>{ if(cal[k]&&cal[k].pts!==undefined) p+=(cal[k].pts||0)+(cal[k].bonus||0); }); return p; }
 function calcMilestoneInfo(){ const pts=calcTotalPts(); const next=MILESTONES.find(m=>m>pts)||null; const prev=[...MILESTONES].reverse().find(m=>m<=pts)||0; const pct=next?Math.round((pts-prev)/(next-prev)*100):100; return{pts,next,prev,pct}; }
 function checkMilestoneAchievement(pts) {
@@ -1981,7 +3021,7 @@ function startDailyMailCheck() {
       const h = getOlandaHour();
       const now = new Date();
       const min = parseInt(now.toLocaleString('en-US', {timeZone:'Europe/Amsterdam', minute:'numeric'}));
-      if (h === 22 && min < 5) { await sendDailyReport(false); try { syncToSheet(true); } catch(e) {} }
+      if (h === 22 && min < 5) await sendDailyReport(false);
     } catch(e) {}
   }, 60000);
 }
@@ -2015,151 +3055,6 @@ function loadEmailConfig() {
   if (pkEl  && pk)  pkEl.value  = pk;
   if (sidEl && sid) sidEl.value = sid;
   if (tidEl && tid) tidEl.value = tid;
-}
-
-// ===== Google Sheet 連携 =====
-function loadSheetConfig(){
-  const url = localStorage.getItem('mk_gs_url') || '';
-  const el = document.getElementById('gsUrl');
-  if (el && url) el.value = url;
-  updateSheetStatus();
-}
-function saveSheetConfig(){
-  const el = document.getElementById('gsUrl');
-  const url = el ? el.value.trim() : '';
-  localStorage.setItem('mk_gs_url', url);
-  const msg = document.getElementById('gsMsg');
-  if (msg && url) {
-    msg.textContent = '✅ URLを保存しました。「今すぐ書き出す」で確認してね';
-    msg.style.display = 'block';
-    setTimeout(() => { msg.style.display = 'none'; }, 2500);
-  }
-  updateSheetStatus();
-}
-
-// 状態を画面に表示（どこで止まっているか分かるように）
-function updateSheetStatus(){
-  const box = document.getElementById('gsStatus');
-  if (!box) return;
-  const url = localStorage.getItem('mk_gs_url') || '';
-  const logCount = getLearningLogs().length;
-  const last = localStorage.getItem('mk_gs_lastsync') || '';
-  let lastTxt = 'まだ送信していません';
-  if (last) {
-    try {
-      const d = new Date(last);
-      lastTxt = d.toLocaleString('ja-JP', {month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}) + ' に送信';
-    } catch(e){ lastTxt = last; }
-  }
-  const urlOk = /\/exec\s*$/.test(url);
-  box.innerHTML =
-    '<div style="background:#F4F8FC;border:1px solid #C8E6FA;border-radius:10px;padding:10px;font-size:12px;line-height:1.8;color:#444;margin-top:8px">' +
-    '<strong style="color:#1A5B8A">🔍 状態</strong><br>' +
-    'URL設定：' + (url ? (urlOk ? '✅ 設定済み' : '⚠️ 設定済みだが /exec で終わっていない') : '❌ 未設定') + '<br>' +
-    '端末に保存された作文・面接の記録：<strong>' + logCount + ' 件</strong><br>' +
-    '最後の送信：' + lastTxt +
-    '</div>';
-}
-
-// localStorageの学習記録を、シートに書き出すための形に整える
-function getLearningLogs(){
-  try { return JSON.parse(localStorage.getItem('mk_logs') || '[]'); } catch(e) { return []; }
-}
-
-// 作文・面接などの「本人の入力＋AIの評価」を1件記録する
-function addLearningLog(entry){
-  var logs = getLearningLogs();
-  entry.id = Date.now() + '_' + Math.floor(Math.random() * 100000);
-  entry.ts = new Date().toISOString();
-  logs.push(entry);
-  // 端末の容量節約のため直近400件だけ保持（古いものはシート側に残る）
-  if (logs.length > 400) logs = logs.slice(logs.length - 400);
-  try { localStorage.setItem('mk_logs', JSON.stringify(logs)); } catch(e) {}
-  // すぐシートへ送信（シート側は追記式なので消えない）
-  try { syncToSheet(true); } catch(e) {}
-}
-
-function buildSheetPayload(){
-  const rows = Object.keys(cal)
-    .filter(k => cal[k] && cal[k].pts !== undefined)
-    .map(k => {
-      const d = cal[k];
-      const subjs = d.subjs || {};
-      const parts = k.split('-').map(Number);
-      const dateObj = new Date(parts[0], (parts[1]||1)-1, parts[2]||1);
-      return {
-        key: k,
-        ts: dateObj.getTime(),
-        sakubun: subjs.sakubun ? 1 : 0,
-        mensetsu: subjs.mensetsu ? 1 : 0,
-        kokugo:  subjs.kokugo  ? 1 : 0,
-        kanji:   subjs.kanji   ? 1 : 0,
-        sansu:   subjs.sansu   ? 1 : 0,
-        review:  subjs.review  ? 1 : 0,
-        pts:   d.pts   || 0,
-        bonus: d.bonus || 0,
-        total: (d.pts||0) + (d.bonus||0),
-        combo: d.combo || 0
-      };
-    })
-    .sort((a, b) => a.ts - b.ts);
-
-  return {
-    rows: rows,
-    totalPts:   calcTotalPts(),
-    essays:     localStorage.getItem('mk_essays') || '0',
-    questions:  localStorage.getItem('mk_qs')     || '0',
-    milestones: getAchievedMilestones(),
-    logs:       getLearningLogs(),
-    // 端末データ全体のバックアップ（万一に備えて生JSONも保存）
-    backup: {
-      cal: cal,
-      kanjiState: kanjiState,
-      milestones: getAchievedMilestones(),
-      mk_essays: localStorage.getItem('mk_essays') || '0',
-      mk_qs: localStorage.getItem('mk_qs') || '0',
-      mk_logs: localStorage.getItem('mk_logs') || '[]'
-    },
-    syncedAt: new Date().toISOString()
-  };
-}
-
-// シートへ送信（no-corsのため成否は取得できない＝送ったら成功とみなす）
-async function syncToSheet(silent){
-  const url = localStorage.getItem('mk_gs_url') || '';
-  if (!url) { if (!silent) alert('先に Google Sheet の URL を設定してください。'); return false; }
-  try {
-    await fetch(url, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(buildSheetPayload())
-    });
-    try { localStorage.setItem('mk_gs_lastsync', new Date().toISOString()); } catch(e) {}
-    try { updateSheetStatus(); } catch(e) {}
-    return true;
-  } catch(e) {
-    console.warn('sheet sync error:', e);
-    return false;
-  }
-}
-
-async function manualSyncSheet(){
-  const url = localStorage.getItem('mk_gs_url') || '';
-  const btn = document.getElementById('gsSyncBtn');
-  const msg = document.getElementById('gsMsg');
-  if (!url){
-    if (msg){ msg.textContent = '⚠️ 先に上の欄にURLを貼り付けてね'; msg.style.display = 'block'; }
-    return;
-  }
-  if (btn){ btn.disabled = true; btn.textContent = '書き出し中…'; }
-  await syncToSheet(false);
-  if (btn){ btn.disabled = false; btn.textContent = '📤 今すぐシートに書き出す'; }
-  if (msg){
-    msg.textContent = '✅ 送信しました！数秒後にスプレッドシートを開いて確認してね';
-    msg.style.display = 'block';
-    setTimeout(() => { msg.style.display = 'none'; }, 6000);
-  }
 }
 
 </script>
