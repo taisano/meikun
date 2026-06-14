@@ -486,6 +486,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <div id="comboAlert" style="display:none;background:#FFF3CD;border-radius:10px;padding:8px 12px;font-size:13px;color:#856404;margin-bottom:8px;text-align:center"></div>
     <button class="stbtn" id="stbtn" onclick="stamp()">⭐ 今日の記録を保存！</button>
     <p style="font-size:12px;color:#999;text-align:center;margin-top:4px" id="stampHint">科目を選んで保存してね</p>
+    <div id="weekend-bonus-hint" style="display:none;background:#FFF3CD;border-radius:8px;padding:8px 12px;font-size:12px;color:#856404;text-align:center;margin-top:6px">
+      🎉 週末ボーナスデー！作文か国語を各タブから3回追加するたびに <strong>+2pt</strong> プレゼント（何回でも）
+    </div>
     <button id="resetSelBtn" onclick="resetSubjSelection()" style="display:none;width:100%;margin-top:6px;padding:8px;background:#fff;color:#E24B4A;border:1.5px solid #E24B4A;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer">🔄 選択をリセット</button>
   </div>
 
@@ -1309,6 +1312,8 @@ const MILESTONES = [10, 25, 50, 75, 100, 150, 200, 300];
 
 // 今日選択中の科目
 let todaySubjects = {};
+// 週末ボーナス用カウンター（作文・国語のタブ追加回数）
+let weekendBonusCount = {sakubun: 0, kokugo: 0}; // 各タブから addPtFromTab が呼ばれた回数
 
 // 保存データ構造: cal[key] = {subjs:{sakubun:true,...}, pts:N, bonus:N, combo:N}
 // （後方互換: cal[key]=true もあり得るのでmigrate）
@@ -1320,6 +1325,37 @@ function migrateCal() {
       cal[k] = {subjs:{sakubun:true}, pts:2, bonus:0, combo:0};
     }
   });
+}
+
+// 今日が週末（土・日）かチェック
+function isWeekend() {
+  const day = new Date().getDay(); // 0=日, 6=土
+  return day === 0 || day === 6;
+}
+
+// 週末ボーナス: 作文か国語を3回以上タブから追加したら +2pt（何回でも）
+function checkWeekendBonus(subj) {
+  if (!isWeekend()) return;
+  if (subj !== 'sakubun' && subj !== 'kokugo') return;
+  weekendBonusCount[subj] = (weekendBonusCount[subj] || 0) + 1;
+  // 3の倍数回目ごとに +2pt ボーナス
+  if (weekendBonusCount[subj] % 3 === 0) {
+    const remaining = getTodayRemainingPt();
+    if (remaining <= 0) {
+      showPtToast('🎉 週末ボーナス！でも今日の上限に達しているよ');
+      return;
+    }
+    const addPts = Math.min(2, remaining);
+    const k = getTodayKey();
+    if (cal[k] && cal[k].pts !== undefined) {
+      cal[k].pts = (cal[k].pts || 0) + addPts;
+    }
+    sv(); renderCal(); upStats(); renderEarnBanner();
+    refreshStampUI(); updateAllTabPtButtons();
+    const name = subj === 'sakubun' ? '作文' : '国語';
+    showPtToast('🎉 週末ボーナス！' + name + '3回達成で +' + addPts + 'pt！');
+    showCancelBtn(k, getTodayTotalPt());
+  }
 }
 
 function calcDayPts(subjs) {
@@ -1685,6 +1721,7 @@ function cancelRecord(dateKey) {
   sv(); renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
   if (isToday) {
     todaySubjects = {};
+    weekendBonusCount = {sakubun: 0, kokugo: 0};
     Object.keys(SUBJ_PT).forEach(s => updateSubjBtnDisplay(s, 0));
     const ca = document.getElementById('comboAlert');
     if (ca) ca.style.display = 'none';
@@ -2821,6 +2858,8 @@ function addPtFromTab(subj, pts, label) {
   const newRemain = getTodayRemainingPt();
   showPtToast('+' + addPts + 'pt 獲得！' + (newRemain > 0 ? '（今日あと' + newRemain + 'pt）' : ' 今日の上限達成🌟'));
   showCancelBtn(k, newTotal);
+  // 週末ボーナスチェック
+  checkWeekendBonus(subj);
   return true;
 }
 
@@ -2869,6 +2908,9 @@ function refreshStampUI() {
       if (saved.subjs[s]) btn.classList.add('on');
     });
   }
+  // 週末ボーナスヒント表示
+  const wbh = document.getElementById('weekend-bonus-hint');
+  if (wbh) wbh.style.display = isWeekend() ? 'block' : 'none';
 }
 
 // 各タブのptボタン表示を更新
