@@ -1266,16 +1266,29 @@ async function syncStudyRecordToSheet(rec) {
   };
 
   try {
-    await fetch(url, {
+    const res = await fetch(url, {
       method: 'POST',
-      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    return true;
+    const result = await res.json().catch(() => ({}));
+    console.log('GAS studylog result:', result);
+    return result.status === 'ok';
   } catch(e) {
-    console.warn('GAS studylog sync error:', e);
-    return false;
+    // CORSエラーの場合はno-corsにフォールバック
+    console.warn('GAS studylog cors error, retrying no-cors:', e.message);
+    try {
+      await fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      return true;
+    } catch(e2) {
+      console.error('GAS studylog no-cors error:', e2);
+      return false;
+    }
   }
 }
 
@@ -3380,16 +3393,27 @@ async function syncRowToSheet(dateKey, data) {
   };
 
   try {
-    await fetch(url, {
+    const res = await fetch(url, {
       method: 'POST',
-      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    return true;
+    const result = await res.json().catch(() => ({}));
+    return result.status === 'ok' || result.status === 'skipped';
   } catch(e) {
-    console.warn('GAS sync error:', e);
-    return false;
+    // CORSエラーはno-corsにフォールバック
+    try {
+      await fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      return true;
+    } catch(e2) {
+      console.warn('GAS sync error:', e2);
+      return false;
+    }
   }
 }
 
