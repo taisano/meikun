@@ -555,6 +555,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <input type="url" id="gasUrlInput" class="ta" style="min-height:0;padding:10px;margin-bottom:8px;font-size:13px" placeholder="https://script.google.com/macros/s/...">
     <div class="brow" style="flex-wrap:wrap;gap:8px">
       <button class="bp" onclick="saveGasUrl()">💾 URLを保存</button>
+      <button class="bs" onclick="testGasConnection()">🔌 接続テスト</button>
       <button class="bs" onclick="syncAllToSheet()">📊 ポイント記録を同期</button>
       <button class="bs" onclick="syncAllStudyRecordsToSheet()">📖 作文・面接記録を同期</button>
     </div>
@@ -3282,6 +3283,42 @@ function startDailyMailCheck() {
 // Google Sheets 連携（Google Apps Script 経由）
 // ============================================================
 const SPREADSHEET_ID = '1FsQLXWwNXhlmDvlXC8-HdZbQq_u86N3wrXCTGIIpnNI';
+
+// GAS接続テスト（no-corsではなく通常モードでエラーを確認）
+async function testGasConnection() {
+  const el = document.getElementById('gasUrlInput');
+  const url = el ? el.value.trim() : localStorage.getItem('mk_gasurl') || '';
+  if (!url) { showGasMsg('❌ まずURLを入力して保存してください', false); return; }
+  showGasMsg('🔌 接続テスト中…', true);
+  try {
+    // GETリクエストで疎通確認
+    const res = await fetch(url, { method: 'GET' });
+    if (res.ok) {
+      const text = await res.text();
+      showGasMsg('✅ 接続OK！GASが応答しました: ' + text.slice(0,50), true);
+    } else {
+      showGasMsg('❌ GASエラー: HTTP ' + res.status, false);
+    }
+  } catch(e) {
+    // CORSエラーは正常（GASはCORSを許可していないことが多い）
+    if (e.message.includes('CORS') || e.message.includes('fetch')) {
+      // no-corsでテスト送信
+      try {
+        await fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sheet:'studylog', date:'test', time:'test', type:'mensetsu', title:'接続テスト', content:'test', id:'test' })
+        });
+        showGasMsg('✅ 送信完了（no-cors）。シートを確認してください。', true);
+      } catch(e2) {
+        showGasMsg('❌ 送信失敗: ' + e2.message, false);
+      }
+    } else {
+      showGasMsg('❌ エラー: ' + e.message, false);
+    }
+  }
+}
 
 function saveGasUrl() {
   const el = document.getElementById('gasUrlInput');
