@@ -555,7 +555,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <input type="url" id="gasUrlInput" class="ta" style="min-height:0;padding:10px;margin-bottom:8px;font-size:13px" placeholder="https://script.google.com/macros/s/...">
     <div class="brow" style="flex-wrap:wrap;gap:8px">
       <button class="bp" onclick="saveGasUrl()">💾 URLを保存</button>
-      <button class="bs" onclick="syncAllToSheet()">📊 今すぐ全記録を同期</button>
+      <button class="bs" onclick="syncAllToSheet()">📊 ポイント記録を同期</button>
+      <button class="bs" onclick="syncAllStudyRecordsToSheet()">📖 作文・面接記録を同期</button>
     </div>
     <div id="gasMsg" style="display:none;margin-top:8px;font-size:13px;padding:8px 12px;border-radius:8px;background:#F0FFF4;color:#276749"></div>
   </div>
@@ -1235,9 +1236,58 @@ function saveStudyRecord(type, title, content){
   const d=new Date();
   const dateStr=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
   const timeStr=d.getHours()+':'+(String(d.getMinutes()).padStart(2,'0'));
-  studyRecords.unshift({id:Date.now(),date:dateStr,time:timeStr,type,title,content});
+  const rec={id:Date.now(),date:dateStr,time:timeStr,type,title,content};
+  studyRecords.unshift(rec);
   if(studyRecords.length>200) studyRecords=studyRecords.slice(0,200);
   localStorage.setItem('mk_studyrec',JSON.stringify(studyRecords));
+  // Google Sheets にも送信
+  syncStudyRecordToSheet(rec).catch(()=>{});
+}
+
+// 学習記録（作文・面接の内容）をSheetの「学習記録」シートへ送信
+async function syncStudyRecordToSheet(rec) {
+  const url = localStorage.getItem('mk_gasurl');
+  if (!url) return false;
+  // 作文・面接・ミニ練習のみ送信（AI評価含むもの）
+  const targets = ['sakubun','sakubun_400','sakubun_800','sakubun_final','sakubun_mini','mensetsu'];
+  if (!targets.some(t => rec.type === t || rec.type.startsWith(t))) return false;
+
+  const payload = {
+    sheet: 'studylog', // GAS側でシート名を分岐
+    date: rec.date,
+    time: rec.time,
+    type: rec.type,
+    title: rec.title,
+    content: rec.content.slice(0, 800) // 最大800文字
+  };
+
+  try {
+    await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    return true;
+  } catch(e) {
+    console.warn('GAS studylog sync error:', e);
+    return false;
+  }
+}
+
+// 既存の学習記録を全件Sheetへ同期
+async function syncAllStudyRecordsToSheet() {
+  const url = localStorage.getItem('mk_gasurl');
+  if (!url) return;
+  loadStudyRecords();
+  showGasMsg('📖 学習記録を同期中…', true);
+  let ok = 0;
+  for (const rec of studyRecords) {
+    const success = await syncStudyRecordToSheet(rec);
+    if (success) ok++;
+    await new Promise(r => setTimeout(r, 200));
+  }
+  showGasMsg('✅ 学習記録 ' + ok + '件をシートに同期しました！', true);
 }
 let API_KEY='';
 
@@ -3319,6 +3369,8 @@ async function syncAllToSheet() {
     await new Promise(r => setTimeout(r, 300));
   }
   showGasMsg('✅ ' + ok + '件の記録をシートに同期しました！', true);
+  // 学習記録（作文・面接）も同期
+  setTimeout(syncAllStudyRecordsToSheet, 500);
 }
 
 // スタンプ保存時に自動同期（addPtFromTab / stamp から呼ぶ）
