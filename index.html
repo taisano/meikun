@@ -1244,21 +1244,24 @@ function saveStudyRecord(type, title, content){
   syncStudyRecordToSheet(rec).catch(()=>{});
 }
 
-// 学習記録（作文・面接の内容）をSheetの「学習記録」シートへ送信
+// 学習記録（作文・面接の内容）をSheetの「作文・面接の記録」シートへ送信
 async function syncStudyRecordToSheet(rec) {
   const url = localStorage.getItem('mk_gasurl');
   if (!url) return false;
-  // 作文・面接・ミニ練習のみ送信（AI評価含むもの）
+  // 作文・面接・ミニ練習のみ送信
   const targets = ['sakubun','sakubun_400','sakubun_800','sakubun_final','sakubun_mini','mensetsu'];
   if (!targets.some(t => rec.type === t || rec.type.startsWith(t))) return false;
 
+  // content の中から本人の回答とAI評価を分離
+  // saveStudyRecord 呼び出し時に「本人回答---AI---AI評価」形式で保存されている場合に対応
   const payload = {
-    sheet: 'studylog', // GAS側でシート名を分岐
+    sheet: 'studylog',
     date: rec.date,
     time: rec.time,
     type: rec.type,
     title: rec.title,
-    content: rec.content.slice(0, 800) // 最大800文字
+    content: rec.content.slice(0, 1500), // 本人回答＋AI評価を含むため長めに
+    id: String(rec.id || Date.now())
   };
 
   try {
@@ -2531,7 +2534,7 @@ async function submitIQAnswer() {
       btn.style.display = 'none';
 
       saveStudyRecord('mensetsu', '面接練習: '+iqSession.question.slice(0,30),
-        iqSession.answers.join(' / ').slice(0,300));
+        iqSession.answers.join(' → ').slice(0,500)+'---AI---'+finalReply.slice(0,600));
       renderRecords(_currentRecordFilter||'all');
       document.getElementById('iq-complete-area').scrollIntoView({behavior:'smooth'});
     }
@@ -2794,7 +2797,7 @@ async function getS4FB(){
     document.getElementById('s4ftxt').innerHTML=md2html(reply);
     document.getElementById('s4farea').style.display='block';
     const c=parseInt(localStorage.getItem('mk_essays')||'0')+1;localStorage.setItem('mk_essays',c);upStats();renderEarnBanner();
-    saveStudyRecord('sakubun','400字AI添削',txt.slice(0,400));renderRecords(_currentRecordFilter||'all');
+    saveStudyRecord('sakubun','400字AI添削',txt.slice(0,400)+'---AI---'+reply.slice(0,600));renderRecords(_currentRecordFilter||'all');
     document.getElementById('s4farea').scrollIntoView({behavior:'smooth'});
   }catch(err){alert('エラー：'+err.message);}
   btn.disabled=false;btn.textContent='AI先生に添削してもらう';
@@ -2816,7 +2819,7 @@ async function getS6FB(){
     document.getElementById('s6pills').innerHTML=`<span class="pill pila">800字版</span><span class="pill pilb">${txt.length}字</span>`;
     document.getElementById('s6ftxt').innerHTML=md2html(reply);document.getElementById('s6farea').style.display='block';
     document.getElementById('s6farea').scrollIntoView({behavior:'smooth'});
-    saveStudyRecord('sakubun','800字AI添削',txt.slice(0,400));renderRecords(_currentRecordFilter||'all');
+    saveStudyRecord('sakubun','800字AI添削',txt.slice(0,400)+'---AI---'+reply.slice(0,600));renderRecords(_currentRecordFilter||'all');
   }catch(err){alert('エラー：'+err.message);}
   btn.disabled=false;btn.textContent='AI先生に添削してもらう';
 }
@@ -3315,6 +3318,8 @@ async function syncRowToSheet(dateKey, data) {
   const url = localStorage.getItem('mk_gasurl');
   if (!url) return false;
   if (!data || data.pts === undefined) return false;
+  // データなし行はスキップ
+  if ((data.pts === 0 || !data.pts) && (!data.subjs || Object.keys(data.subjs).length === 0)) return false;
 
   // 日付フォーマット
   const parts = dateKey.split('-');
