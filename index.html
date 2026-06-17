@@ -541,6 +541,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <p id="exportMsg" style="font-size:12px;color:#1A5B8A;text-align:center;margin-top:6px;display:none"></p>
   </div>
 
+  <!-- Google Sheet 連携 -->
+  <div class="card">
+    <div class="ctitle">📊 Google Sheets に記録する</div>
+    <p style="font-size:13px;color:#666;margin-bottom:10px">Google Apps Script のウェブアプリURLを入力すると、スタンプを押すたびにスプレッドシートへ自動保存されます。</p>
+    <div style="background:#EBF5FF;border-radius:10px;padding:12px;margin-bottom:10px;font-size:13px;line-height:1.8;border-left:4px solid #5BA4CF">
+      <strong style="color:#1A5B8A">⚙️ 設定手順</strong><br>
+      ① <a href="https://docs.google.com/spreadsheets/d/1FsQLXWwNXhlmDvlXC8-HdZbQq_u86N3wrXCTGIIpnNI/edit" target="_blank" style="color:#2D7DB3">こちらのスプレッドシート</a>を開いてコピー（「ファイル」→「コピーを作成」）<br>
+      ② コピーしたシートで「拡張機能」→「Apps Script」を開く<br>
+      ③ 「デプロイ」→「新しいデプロイ」→種類：ウェブアプリ→「全員」でデプロイ<br>
+      ④ 表示されたURLを下に貼り付けて「URLを保存」を押す
+    </div>
+    <input type="url" id="gasUrlInput" class="ta" style="min-height:0;padding:10px;margin-bottom:8px;font-size:13px" placeholder="https://script.google.com/macros/s/...">
+    <div class="brow" style="flex-wrap:wrap;gap:8px">
+      <button class="bp" onclick="saveGasUrl()">💾 URLを保存</button>
+      <button class="bs" onclick="syncAllToSheet()">📊 今すぐ全記録を同期</button>
+    </div>
+    <div id="gasMsg" style="display:none;margin-top:8px;font-size:13px;padding:8px 12px;border-radius:8px;background:#F0FFF4;color:#276749"></div>
+  </div>
+
   <!-- メール・設定 -->
   <div class="card" id="emailCard">
     <div class="ctitle">📧 日報メール設定</div>
@@ -1236,7 +1255,7 @@ function init(){
   try{cal=JSON.parse(localStorage.getItem('mk_cal')||'{}');kanjiState=JSON.parse(localStorage.getItem('mk_kstate')||'{}')}catch(e){cal={};kanjiState={}}
   const t=new Date();cY=t.getFullYear();cM=t.getMonth()+1;
   migrateCal();countdown();renderCal();initSakubun();renderIQ();upStats();renderEarnBanner();renderBonusChips();initTodayButtons();
-  loadStudyRecords();renderRecords('all');initVideoSection();
+  loadStudyRecords();renderRecords('all');initVideoSection();loadGasUrl();
 }
 
 async function callAPI(prompt,maxTokens=800){
@@ -1587,6 +1606,7 @@ function stamp() {
   const newRemain = getTodayRemainingPt();
   showPtToast('+' + addPts + 'pt 追加！合計' + newTotal + 'pt🌟' + (newRemain > 0 ? '（あと' + newRemain + 'pt）' : ''));
   showCancelBtn(k, newTotal);
+  autoSyncToSheet(k);
 }
 
 function showPtToast(msg) {
@@ -2860,7 +2880,8 @@ function importData() {
     if (data.mk_essays) localStorage.setItem('mk_essays', data.mk_essays);
     if (data.mk_qs) localStorage.setItem('mk_qs', data.mk_qs);
     sv();
-    renderCal(); upStats(); renderEarnBanner(); renderBonusChips(); initTodayButtons();
+    renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
+    setTimeout(syncAllToSheet, 1000); // 復元後にシート同期 initTodayButtons();
     const box = document.getElementById('importBox');
     if (box) box.style.display = 'none';
     const msg = document.getElementById('exportMsg');
@@ -2999,6 +3020,7 @@ function addPtFromTab(subj, pts, label) {
   showCancelBtn(k, newTotal);
   // 週末ボーナスチェック
   checkWeekendBonus(subj);
+  autoSyncToSheet(k);
   return true;
 }
 
@@ -3201,6 +3223,110 @@ function startDailyMailCheck() {
       if (h === 22 && min < 5) await sendDailyReport(false);
     } catch(e) {}
   }, 60000);
+}
+
+// ============================================================
+// Google Sheets 連携（Google Apps Script 経由）
+// ============================================================
+const SPREADSHEET_ID = '1FsQLXWwNXhlmDvlXC8-HdZbQq_u86N3wrXCTGIIpnNI';
+
+function saveGasUrl() {
+  const el = document.getElementById('gasUrlInput');
+  const url = el ? el.value.trim() : '';
+  if (!url.startsWith('https://script.google.com/')) {
+    alert('Google Apps Script のURLを入力してください（https://script.google.com/... で始まるもの）');
+    return;
+  }
+  localStorage.setItem('mk_gasurl', url);
+  showGasMsg('✅ URLを保存しました！次回からスタンプを押すと自動で記録されます', true);
+  // 保存後すぐに全記録を同期
+  syncAllToSheet();
+}
+
+function loadGasUrl() {
+  const url = localStorage.getItem('mk_gasurl') || '';
+  const el = document.getElementById('gasUrlInput');
+  if (el && url) el.value = url;
+  return url;
+}
+
+function showGasMsg(msg, ok) {
+  const el = document.getElementById('gasMsg');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.background = ok ? '#F0FFF4' : '#FFF0F0';
+  el.style.color = ok ? '#276749' : '#C53030';
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+
+// 1件送信（dateKey: 'YYYY-M-D', data: cal[dateKey]）
+async function syncRowToSheet(dateKey, data) {
+  const url = localStorage.getItem('mk_gasurl');
+  if (!url) return false;
+  if (!data || data.pts === undefined) return false;
+
+  // 日付フォーマット
+  const parts = dateKey.split('-');
+  const dateStr = parts[0] + '/' + String(parts[1]).padStart(2,'0') + '/' + String(parts[2]).padStart(2,'0');
+
+  // 科目リスト
+  const subjNames = {sakubun:'作文',mensetsu:'面接',kokugo:'国語',kanji:'漢字',sansu:'算数',review:'復習'};
+  const subjects = data.subjs ? Object.keys(data.subjs).filter(s=>data.subjs[s]).map(s=>subjNames[s]||s).join('・') : '';
+  const pts = (data.pts||0) + (data.bonus||0);
+  const bonus = data.bonus || 0;
+  const combo = data.combo || 0;
+
+  const payload = {
+    date: dateStr,
+    subjects: subjects,
+    pts: pts,
+    bonus: bonus,
+    combo: combo,
+    totalPts: calcTotalPts(),
+    note: ''
+  };
+
+  try {
+    await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    return true;
+  } catch(e) {
+    console.warn('GAS sync error:', e);
+    return false;
+  }
+}
+
+// 全記録を一括同期
+async function syncAllToSheet() {
+  const url = localStorage.getItem('mk_gasurl');
+  if (!url) {
+    showGasMsg('❌ まずURLを保存してください', false);
+    return;
+  }
+  showGasMsg('📊 同期中…', true);
+  const keys = Object.keys(cal).filter(k => cal[k] && cal[k].pts !== undefined);
+  keys.sort(); // 日付順
+  let ok = 0;
+  for (const k of keys) {
+    const success = await syncRowToSheet(k, cal[k]);
+    if (success) ok++;
+    // レート制限を避けるため少し待つ
+    await new Promise(r => setTimeout(r, 300));
+  }
+  showGasMsg('✅ ' + ok + '件の記録をシートに同期しました！', true);
+}
+
+// スタンプ保存時に自動同期（addPtFromTab / stamp から呼ぶ）
+function autoSyncToSheet(dateKey) {
+  const url = localStorage.getItem('mk_gasurl');
+  if (!url) return;
+  const data = cal[dateKey];
+  if (data) syncRowToSheet(dateKey, data).catch(()=>{});
 }
 
 function saveEmailConfig() {
