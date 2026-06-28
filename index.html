@@ -519,39 +519,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
     <p id="exportMsg" style="font-size:12px;color:#1A5B8A;text-align:center;margin-top:6px;display:none"></p>
   </div>
 
-  <!-- 保護者メニュー（ポイント調整） -->
-  <div class="card" id="parentCard">
-    <div class="ctitle">👨‍👩‍👧 保護者メニュー（ポイント調整）</div>
-    <div id="pmLocked">
-      <p style="font-size:13px;color:#666;margin-bottom:10px">ポイントの追加・調整や、連続日数／週末ボーナスの再計算ができます。子どもが勝手に操作しないようPIN（暗証番号）でロックしています。</p>
-      <button class="bp" onclick="openParentMenu()" style="width:100%">🔓 保護者メニューを開く</button>
-    </div>
-    <div id="pmOpen" style="display:none">
-      <div style="background:#EBF5FF;border-radius:10px;padding:12px;margin-bottom:12px;font-size:13px;line-height:1.7;color:#1A5B8A" id="pmTotal"></div>
-
-      <div style="font-weight:700;color:#1A5B8A;margin-bottom:6px">➕ ポイントを追加・調整する</div>
-      <p style="font-size:12px;color:#666;margin-bottom:8px">反映されなかったぶんの埋め合わせや、ご褒美ボーナスを足せます。減らす場合はマイナス（例：-3）を入力。</p>
-      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px">
-        <input id="pmPts" type="number" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px" placeholder="ポイント数（例：5、-3）">
-        <input id="pmDate" type="date" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px">
-        <input id="pmNote" class="ta" style="min-height:unset;padding:8px 12px;font-size:13px" placeholder="メモ（例：週末ボーナスの反映もれ分）">
-      </div>
-      <button class="bp" onclick="submitAdjustment()" style="width:100%;margin-bottom:14px">🪙 この調整を追加する</button>
-
-      <div style="font-weight:700;color:#1A5B8A;margin-bottom:4px">📋 調整の履歴</div>
-      <div id="pmList" style="margin-bottom:14px"></div>
-
-      <div style="font-weight:700;color:#1A5B8A;margin-bottom:6px">🔧 ポイントの再計算</div>
-      <p style="font-size:12px;color:#666;margin-bottom:8px">連続日数（コンボ）と週末ボーナスを、記録の実態に合わせて計算し直します。過去の取りこぼしがあるときに使ってください（手動で足したポイントは残ります）。</p>
-      <button class="bs" onclick="parentRecompute()" style="width:100%;margin-bottom:14px">🔧 連続日数・週末ボーナスを再計算する</button>
-
-      <div class="brow" style="flex-wrap:wrap;gap:8px">
-        <button class="bs" onclick="resetParentPin()" style="flex:1;font-size:12px">🔑 PINを変更</button>
-        <button class="bs" onclick="lockParentMenu()" style="flex:1;font-size:12px">🔒 メニューを閉じる</button>
-      </div>
-    </div>
-  </div>
-
   <!-- メール・設定 -->
   <div class="card" id="emailCard">
     <div class="ctitle">📧 日報メール設定</div>
@@ -971,10 +938,7 @@ function resetKey(){localStorage.removeItem('mk_apikey');location.reload()}
 function init(){
   try{cal=JSON.parse(localStorage.getItem('mk_cal')||'{}');kanjiState=JSON.parse(localStorage.getItem('mk_kstate')||'{}')}catch(e){cal={};kanjiState={}}
   const t=new Date();cY=t.getFullYear();cM=t.getMonth()+1;
-  migrateCal();
-  recomputeAllDays();   // ★連続日数・週末ボーナスの取りこぼしを起動時に自動修正
-  countdown();renderCal();initSakubun();renderIQ();upStats();renderEarnBanner();renderBonusChips();initTodayButtons();
-  try { renderParentMenu(); } catch(e) {}
+  migrateCal();countdown();renderCal();initSakubun();renderIQ();upStats();renderEarnBanner();renderBonusChips();initTodayButtons();
   // 設定の読み込み＆自動処理の開始
   try { loadEmailConfig(); } catch(e) {}
   try { loadSheetConfig(); } catch(e) {}
@@ -987,7 +951,7 @@ async function callAPI(prompt,maxTokens=800){
   const res=await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
     headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:maxTokens,messages:[{role:'user',content:prompt}]})
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:maxTokens,messages:[{role:'user',content:prompt}]})
   });
   if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'APIエラー')}
   const data=await res.json();
@@ -1086,27 +1050,6 @@ function recomputeDay(k) {
   day.wbonus = getWeekendBonus(counts, k);     // 土日ボーナス
 }
 
-// その日に記録があるか
-function dayHasRecord(k) { return !!(cal[k] && cal[k].pts !== undefined); }
-// dateKey の前日キー（YYYY-M-D）
-function prevKey(k) {
-  const p = k.split('-').map(Number);
-  const d = new Date(p[0], p[1]-1, p[2]); d.setDate(d.getDate()-1);
-  return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
-}
-// ★全履歴の combo（連続日数）と pts/bonus/wbonus を実態から再計算する。
-//   - 途中の日を取り消したあとに後続日の combo が古いまま残る問題を修正
-//   - 週末ボーナス機能の導入前につけた土日記録の wbonus が 0 のままになる問題を修正
-//   起動時・復元時・記録取り消し時・保護者の「再計算」ボタンで呼ばれる。
-function recomputeAllDays() {
-  Object.keys(cal).filter(dayHasRecord).forEach(k => {
-    let streak = 1, pk = prevKey(k);
-    while (dayHasRecord(pk)) { streak++; pk = prevKey(pk); }
-    cal[k].combo = streak;       // 連続日数を確定
-    recomputeDay(k);             // counts から pts/bonus/wbonus を再計算（combo は確定済み）
-  });
-}
-
 function calcDayPts(subjs) {
   let base = 0;
   Object.keys(subjs).forEach(s => { if(subjs[s]) base += (SUBJ_PT[s]||1); });
@@ -1143,7 +1086,7 @@ function calcMonthEarnings(yr, mo) {
       pts += (d.pts||0) + (d.bonus||0);
     }
   });
-  return pts + calcAdjustMonth(yr, mo);
+  return pts;
 }
 
 function calcTotalYen() {
@@ -1442,7 +1385,6 @@ function cancelRecord(dateKey) {
   const isToday = dateKey === getTodayKey();
   if (!confirm((isToday ? '今日' : dateKey) + 'の記録を取り消しますか？\n-' + pts + 'pt 戻ります。')) return;
   delete cal[dateKey];
-  recomputeAllDays();   // ★取り消した日の後ろの連続日数を直す
   sv(); renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
   if (isToday) {
     Object.keys(SUBJ_PT).forEach(s => {
@@ -2066,7 +2008,6 @@ function exportData() {
     milestones: getAchievedMilestones(),
     mk_essays: localStorage.getItem('mk_essays')||'0',
     mk_qs: localStorage.getItem('mk_qs')||'0',
-    mk_adjust: localStorage.getItem('mk_adjust')||'[]',
     exported: new Date().toISOString()
   };
   const json = JSON.stringify(data);
@@ -2101,11 +2042,8 @@ function importData() {
     if (data.mk_essays) localStorage.setItem('mk_essays', data.mk_essays);
     if (data.mk_qs) localStorage.setItem('mk_qs', data.mk_qs);
     if (data.mk_logs) localStorage.setItem('mk_logs', data.mk_logs);
-    if (data.mk_adjust) localStorage.setItem('mk_adjust', data.mk_adjust);
-    recomputeAllDays();   // ★復元後に連続日数・週末ボーナスを整える
     sv();
     renderCal(); upStats(); renderEarnBanner(); renderBonusChips(); initTodayButtons();
-    try { renderParentLedger(); } catch(e) {}
     try { syncToSheet(true); } catch(e) {}
     const box = document.getElementById('importBox');
     if (box) box.style.display = 'none';
@@ -2123,7 +2061,7 @@ const MILESTONES = [10, 25, 50, 75, 100, 150, 200, 300];
 function getAchievedMilestones(){ try{return JSON.parse(localStorage.getItem('mk_milestones')||'[]');}catch(e){return[];} }
 function saveAchievedMilestones(arr){ localStorage.setItem('mk_milestones',JSON.stringify(arr)); }
 function getMonthCapPt(mo){ return (MONTH_CAPS_PT[mo]||130); }
-function calcTotalPts(){ let p=0; Object.keys(cal).forEach(k=>{ if(cal[k]&&cal[k].pts!==undefined) p+=(cal[k].pts||0)+(cal[k].bonus||0)+(cal[k].wbonus||0); }); return p + calcAdjustTotal(); }
+function calcTotalPts(){ let p=0; Object.keys(cal).forEach(k=>{ if(cal[k]&&cal[k].pts!==undefined) p+=(cal[k].pts||0)+(cal[k].bonus||0)+(cal[k].wbonus||0); }); return p; }
 function calcMilestoneInfo(){ const pts=calcTotalPts(); const next=MILESTONES.find(m=>m>pts)||null; const prev=[...MILESTONES].reverse().find(m=>m<=pts)||0; const pct=next?Math.round((pts-prev)/(next-prev)*100):100; return{pts,next,prev,pct}; }
 function checkMilestoneAchievement(pts) {
   const prev = getAchievedMilestones();
@@ -2138,150 +2076,6 @@ function checkMilestoneAchievement(pts) {
 }
 function showMilestoneToast(pts,yen){ const msgs=['🎉 '+pts+'pt 達成！','🪙 ¥'+yen+' 分のコインをゲット！','お父さん・お母さんに報告しよう！']; let i=0; const show=()=>{if(i>=msgs.length)return;showPtToast(msgs[i]);i++;setTimeout(show,1800);}; show(); }
 function ptToYen(pts){ const achieved=getAchievedMilestones(); const maxA=achieved.length>0?Math.max(...achieved):0; return maxA*10; }
-
-
-// ===== 保護者の手動ポイント調整（mk_adjust） =====
-// 「過去にポイントが反映されなかった」ぶんを保護者があとから足したり、
-// ご褒美ボーナスを足したりできる仕組み。マイナス（減点）も入力可。
-// 台帳形式（{id, ts, date, pts, note}）で別保存し、累計ptに合算される。
-function getAdjustments(){ try{ return JSON.parse(localStorage.getItem('mk_adjust')||'[]'); }catch(e){ return []; } }
-function saveAdjustments(arr){ try{ localStorage.setItem('mk_adjust', JSON.stringify(arr)); }catch(e){} }
-function calcAdjustTotal(){ return getAdjustments().reduce((s,a)=>s+(Number(a.pts)||0), 0); }
-function calcAdjustMonth(yr, mo){
-  return getAdjustments().reduce((s,a)=>{
-    const p=(a.date||'').split('-');
-    if (parseInt(p[0])===yr && parseInt(p[1])===mo) return s+(Number(a.pts)||0);
-    return s;
-  }, 0);
-}
-function addAdjustment(pts, note, dateKey){
-  const n = Math.round(Number(pts));
-  if (!n) { alert('1以上（または -1以下）のポイント数を入れてください。'); return false; }
-  const arr = getAdjustments();
-  arr.push({
-    id: Date.now()+'_'+Math.random().toString(36).slice(2,7),
-    ts: new Date().toISOString(),
-    date: dateKey || getTodayKey(),
-    pts: n,
-    note: (note||'').slice(0,120)
-  });
-  saveAdjustments(arr);
-  sv(); renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
-  renderParentLedger();
-  try { syncToSheet(true); } catch(e) {}
-  showPtToast((n>0?'+':'')+n+'pt を調整しました 🪙');
-  return true;
-}
-function removeAdjustment(id){
-  if (!confirm('この調整を取り消しますか？')) return;
-  saveAdjustments(getAdjustments().filter(a=>a.id!==id));
-  sv(); renderCal(); upStats(); renderEarnBanner(); renderBonusChips();
-  renderParentLedger();
-  try { syncToSheet(true); } catch(e) {}
-  showPtToast('調整を取り消しました');
-}
-
-// ----- PINロック（子どもが勝手にポイントを足せないように） -----
-let _parentUnlocked = false;
-function getParentPin(){ return localStorage.getItem('mk_parent_pin') || ''; }
-function openParentMenu(){
-  const pin = getParentPin();
-  if (!pin) {
-    const a = prompt('はじめに保護者用のPIN（4桁の数字）を決めてください。\n※子どもが勝手にポイントを足さないための暗証番号です。');
-    if (a===null) return;
-    if (!/^\d{4}$/.test(a)) { alert('4桁の数字で入力してください。'); return; }
-    const b = prompt('もう一度、同じPINを入力してください。');
-    if (b!==a) { alert('PINが一致しませんでした。'); return; }
-    localStorage.setItem('mk_parent_pin', a);
-    alert('PINを設定しました。次回からはこのPINで開けます。');
-    _parentUnlocked = true;
-  } else {
-    const a = prompt('保護者用PIN（4桁）を入力してください。');
-    if (a===null) return;
-    if (a!==pin) { alert('PINが違います。'); return; }
-    _parentUnlocked = true;
-  }
-  renderParentMenu();
-}
-function lockParentMenu(){ _parentUnlocked = false; renderParentMenu(); }
-function resetParentPin(){
-  const cur = getParentPin();
-  if (cur) { const a = prompt('現在のPINを入力してください。'); if (a!==cur) { alert('PINが違います。'); return; } }
-  const n = prompt('新しいPIN（4桁の数字）を入力してください。');
-  if (n===null) return;
-  if (!/^\d{4}$/.test(n)) { alert('4桁の数字で入力してください。'); return; }
-  localStorage.setItem('mk_parent_pin', n);
-  alert('PINを変更しました。');
-}
-
-function renderParentMenu(){
-  const locked = document.getElementById('pmLocked');
-  const open   = document.getElementById('pmOpen');
-  if (!locked || !open) return;
-  if (_parentUnlocked) {
-    locked.style.display = 'none';
-    open.style.display = 'block';
-    const dateEl = document.getElementById('pmDate');
-    if (dateEl && !dateEl.value) {
-      const p = getTodayKey().split('-');
-      dateEl.value = p[0]+'-'+String(p[1]).padStart(2,'0')+'-'+String(p[2]).padStart(2,'0');
-    }
-    renderParentLedger();
-  } else {
-    locked.style.display = 'block';
-    open.style.display = 'none';
-  }
-}
-// 入力欄から調整を追加
-function submitAdjustment(){
-  const ptsEl = document.getElementById('pmPts');
-  const noteEl = document.getElementById('pmNote');
-  const dateEl = document.getElementById('pmDate');
-  const pts = parseInt(ptsEl.value, 10);
-  if (isNaN(pts) || pts===0) { alert('ポイント数を入れてください（例：5、-3）。'); return; }
-  // 入力欄の YYYY-MM-DD を YYYY-M-D（ゼロ埋めなし）に変換して保存
-  let dk = getTodayKey();
-  if (dateEl && dateEl.value) {
-    const p = dateEl.value.split('-').map(Number);
-    if (p.length===3) dk = p[0]+'-'+p[1]+'-'+p[2];
-  }
-  if (addAdjustment(pts, noteEl.value, dk)) {
-    ptsEl.value = ''; noteEl.value = '';
-  }
-}
-function renderParentLedger(){
-  const totEl = document.getElementById('pmTotal');
-  if (totEl) {
-    const adj = calcAdjustTotal();
-    const studyPts = calcTotalPts() - adj;
-    totEl.innerHTML = '勉強で貯めたpt：<strong>'+studyPts+'pt</strong>　＋　手動調整：<strong>'+(adj>=0?'+':'')+adj+'pt</strong><br>'
-      + '＝ 累計 <strong style="color:#2D7DB3">'+calcTotalPts()+'pt</strong>';
-  }
-  const list = document.getElementById('pmList');
-  if (!list) return;
-  const arr = getAdjustments().slice().reverse();
-  if (arr.length===0) { list.innerHTML = '<p style="font-size:12px;color:#999;text-align:center;margin:8px 0">まだ手動調整はありません。</p>'; return; }
-  list.innerHTML = arr.map(a=>{
-    const sign = a.pts>0 ? '+' : '';
-    const color = a.pts>0 ? '#2D7DB3' : '#E24B4A';
-    const note = a.note ? ' <span style="color:#666">'+a.note.replace(/</g,'&lt;')+'</span>' : '';
-    return '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid #EBF5FF">'
-      + '<div style="font-size:13px"><strong style="color:'+color+'">'+sign+a.pts+'pt</strong>'
-      + ' <span style="color:#999;font-size:11px">'+(a.date||'')+'</span>'+note+'</div>'
-      + '<button class="bs" style="padding:2px 10px;font-size:11px;color:#E24B4A;border-color:#E24B4A" onclick="removeAdjustment(\''+a.id+'\')">取消</button>'
-      + '</div>';
-  }).join('');
-}
-// 保護者用：ポイントの再計算（連続日数・週末ボーナスの取りこぼしを直す）
-function parentRecompute(){
-  if (!confirm('連続日数（コンボ）と週末ボーナスを、記録の実態に合わせて計算し直します。\n（手動で足したポイントはそのまま残ります）\nよろしいですか？')) return;
-  recomputeAllDays();
-  sv(); renderCal(); upStats(); renderEarnBanner(); renderBonusChips(); initTodayButtons();
-  renderParentLedger();
-  try { syncToSheet(true); } catch(e) {}
-  showPtToast('ポイントを再計算しました 🔧');
-  alert('再計算が完了しました。現在の累計：'+calcTotalPts()+'pt');
-}
 
 
 // ===== 日報メール（EmailJS） =====
@@ -2521,7 +2315,6 @@ function buildSheetPayload(){
     questions:  localStorage.getItem('mk_qs')     || '0',
     milestones: getAchievedMilestones(),
     logs:       getLearningLogs(),
-    adjustments: getAdjustments(),
     // 端末データ全体のバックアップ（万一に備えて生JSONも保存）
     backup: {
       cal: cal,
@@ -2529,8 +2322,7 @@ function buildSheetPayload(){
       milestones: getAchievedMilestones(),
       mk_essays: localStorage.getItem('mk_essays') || '0',
       mk_qs: localStorage.getItem('mk_qs') || '0',
-      mk_logs: localStorage.getItem('mk_logs') || '[]',
-      mk_adjust: localStorage.getItem('mk_adjust') || '[]'
+      mk_logs: localStorage.getItem('mk_logs') || '[]'
     },
     syncedAt: new Date().toISOString()
   };
