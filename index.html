@@ -504,6 +504,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku
       <span style="color:#3A7BD5">🟢コンボ日</span><span style="color:#F0A030">🟡バランスボーナス日</span>
     </div>
   </div>
+  <!-- おうちの人がポイント追加 -->
+  <div class="card">
+    <div class="ctitle">🎁 おうちの人がポイントを追加</div>
+    <p style="font-size:13px;color:#666;margin-bottom:10px">テストや、記録しわすれた勉強などに、おうちの人がポイントをあげられます（マイナスも入力できます）。</p>
+    <div style="display:flex;gap:8px;margin-bottom:8px">
+      <input id="adjPts" type="number" inputmode="numeric" placeholder="例：30" class="ta" style="min-height:unset;padding:8px 12px;width:90px">
+      <input id="adjNote" placeholder="メモ（例：紙のテスト）" class="ta" style="min-height:unset;padding:8px 12px;flex:1">
+    </div>
+    <button class="bamb" onclick="addAdjustPoints()" style="width:100%">🎁 ポイントを追加する</button>
+    <div id="adjList" style="margin-top:10px"></div>
+  </div>
   <!-- データバックアップ -->
   <div class="card">
     <div class="ctitle">💾 スタディログ バックアップ</div>
@@ -939,6 +950,7 @@ function init(){
   try{cal=JSON.parse(localStorage.getItem('mk_cal')||'{}');kanjiState=JSON.parse(localStorage.getItem('mk_kstate')||'{}')}catch(e){cal={};kanjiState={}}
   const t=new Date();cY=t.getFullYear();cM=t.getMonth()+1;
   migrateCal();countdown();renderCal();initSakubun();renderIQ();upStats();renderEarnBanner();renderBonusChips();initTodayButtons();
+  try { renderAdjustList(); } catch(e) {}
   // 設定の読み込み＆自動処理の開始
   try { loadEmailConfig(); } catch(e) {}
   try { loadSheetConfig(); } catch(e) {}
@@ -1086,7 +1098,7 @@ function calcMonthEarnings(yr, mo) {
       pts += (d.pts||0) + (d.bonus||0);
     }
   });
-  return pts;
+  return pts + calcAdjustMonth(yr, mo);
 }
 
 function calcTotalYen() {
@@ -1096,7 +1108,7 @@ function calcTotalYen() {
       totalPts += (cal[k].pts||0) + (cal[k].bonus||0) + (cal[k].wbonus||0);
     }
   });
-  return totalPts * 10; // 10pt = 100円 → 1pt = 10円
+  return (totalPts + calcAdjustTotal()) * 10; // 10pt = 100円 → 1pt = 10円
 }
 
 function getCurrentStreak() {
@@ -2008,6 +2020,8 @@ function exportData() {
     milestones: getAchievedMilestones(),
     mk_essays: localStorage.getItem('mk_essays')||'0',
     mk_qs: localStorage.getItem('mk_qs')||'0',
+    mk_logs: localStorage.getItem('mk_logs')||'[]',
+    mk_adjust: localStorage.getItem('mk_adjust')||'[]',
     exported: new Date().toISOString()
   };
   const json = JSON.stringify(data);
@@ -2042,8 +2056,10 @@ function importData() {
     if (data.mk_essays) localStorage.setItem('mk_essays', data.mk_essays);
     if (data.mk_qs) localStorage.setItem('mk_qs', data.mk_qs);
     if (data.mk_logs) localStorage.setItem('mk_logs', data.mk_logs);
+    if (data.mk_adjust) localStorage.setItem('mk_adjust', data.mk_adjust);
     sv();
     renderCal(); upStats(); renderEarnBanner(); renderBonusChips(); initTodayButtons();
+    try { renderAdjustList(); } catch(e) {}
     try { syncToSheet(true); } catch(e) {}
     const box = document.getElementById('importBox');
     if (box) box.style.display = 'none';
@@ -2061,7 +2077,55 @@ const MILESTONES = [10, 25, 50, 75, 100, 150, 200, 300];
 function getAchievedMilestones(){ try{return JSON.parse(localStorage.getItem('mk_milestones')||'[]');}catch(e){return[];} }
 function saveAchievedMilestones(arr){ localStorage.setItem('mk_milestones',JSON.stringify(arr)); }
 function getMonthCapPt(mo){ return (MONTH_CAPS_PT[mo]||130); }
-function calcTotalPts(){ let p=0; Object.keys(cal).forEach(k=>{ if(cal[k]&&cal[k].pts!==undefined) p+=(cal[k].pts||0)+(cal[k].bonus||0)+(cal[k].wbonus||0); }); return p; }
+
+// ===== おうちの人による手動ポイント追加（mk_adjust） =====
+function getAdjustments(){ try{return JSON.parse(localStorage.getItem('mk_adjust')||'[]');}catch(e){return[];} }
+function saveAdjustments(arr){ try{localStorage.setItem('mk_adjust',JSON.stringify(arr));}catch(e){} }
+function calcAdjustTotal(){ return getAdjustments().reduce((s,a)=>s+(Number(a.pts)||0),0); }
+function calcAdjustMonth(yr,mo){ return getAdjustments().reduce((s,a)=>{ const p=String(a.date||'').split('-'); if(parseInt(p[0])===yr&&parseInt(p[1])===mo) return s+(Number(a.pts)||0); return s; },0); }
+
+function addAdjustPoints(){
+  const ptsEl=document.getElementById('adjPts');
+  const noteEl=document.getElementById('adjNote');
+  const pts=parseInt(ptsEl.value,10);
+  if(isNaN(pts)||pts===0){ alert('追加するポイントを入力してね（マイナスもOK）'); return; }
+  const note=noteEl?noteEl.value.trim():'';
+  const t=new Date();
+  const date=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
+  const arr=getAdjustments();
+  arr.push({ id: Date.now()+'_'+Math.random().toString(36).slice(2,7), ts:new Date().toISOString(), date, pts, note });
+  saveAdjustments(arr);
+  ptsEl.value=''; if(noteEl) noteEl.value='';
+  renderAdjustList(); upStats(); renderEarnBanner();
+  try{ checkMilestoneAchievement(calcTotalPts()); }catch(e){}
+  try{ syncToSheet(true); }catch(e){}
+  showPtToast((pts>0?'+':'')+pts+'pt を追加しました！🎁');
+}
+
+function deleteAdjust(id){
+  if(!confirm('この追加ポイントを取り消しますか？')) return;
+  saveAdjustments(getAdjustments().filter(a=>a.id!==id));
+  renderAdjustList(); upStats(); renderEarnBanner();
+  try{ syncToSheet(true); }catch(e){}
+}
+
+function renderAdjustList(){
+  const el=document.getElementById('adjList'); if(!el) return;
+  const arr=getAdjustments().slice().reverse();
+  if(arr.length===0){ el.innerHTML='<p style="font-size:12px;color:#999;text-align:center">まだ追加ポイントはありません</p>'; return; }
+  const total=calcAdjustTotal();
+  el.innerHTML='<p style="font-size:12px;color:#1A5B8A;margin-bottom:6px">追加ポイント合計：<strong>'+(total>0?'+':'')+total+'pt</strong></p>'+
+    arr.map(a=>{
+      const d=String(a.date||'').split('-'); const dstr=(d.length===3)?(d[1]+'/'+d[2]):'';
+      const safeNote=(a.note||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      return '<div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #eee;border-radius:8px;padding:6px 10px;margin-bottom:6px;font-size:13px">'
+        +'<span>'+dstr+'　<strong>'+(a.pts>0?'+':'')+a.pts+'pt</strong>'+(safeNote?'　<span style="color:#666">'+safeNote+'</span>':'')+'</span>'
+        +'<button onclick="deleteAdjust(\''+a.id+'\')" style="background:none;border:none;color:#E24B4A;font-size:16px;cursor:pointer" title="取り消す">🗑️</button>'
+        +'</div>';
+    }).join('');
+}
+
+function calcTotalPts(){ let p=0; Object.keys(cal).forEach(k=>{ if(cal[k]&&cal[k].pts!==undefined) p+=(cal[k].pts||0)+(cal[k].bonus||0)+(cal[k].wbonus||0); }); return p + calcAdjustTotal(); }
 function calcMilestoneInfo(){ const pts=calcTotalPts(); const next=MILESTONES.find(m=>m>pts)||null; const prev=[...MILESTONES].reverse().find(m=>m<=pts)||0; const pct=next?Math.round((pts-prev)/(next-prev)*100):100; return{pts,next,prev,pct}; }
 function checkMilestoneAchievement(pts) {
   const prev = getAchievedMilestones();
@@ -2322,7 +2386,8 @@ function buildSheetPayload(){
       milestones: getAchievedMilestones(),
       mk_essays: localStorage.getItem('mk_essays') || '0',
       mk_qs: localStorage.getItem('mk_qs') || '0',
-      mk_logs: localStorage.getItem('mk_logs') || '[]'
+      mk_logs: localStorage.getItem('mk_logs') || '[]',
+      mk_adjust: localStorage.getItem('mk_adjust') || '[]'
     },
     syncedAt: new Date().toISOString()
   };
